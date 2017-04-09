@@ -1,0 +1,14 @@
+SELECT * FROM
+(
+    SELECT
+        playerID, yearID, W, L, HR,
+        IPouts/3 AS IP,
+        SO, BB, 
+        TRUNCATE(SO/BB, 2) AS K_BB,
+        ERA,
+        TRUNCATE(((13*HR)+(3*(BB+HBP))-(2*SO))/(IPouts/3) + 3.147, 2) AS FIP
+    FROM 
+        Pitching 
+) AS DerivedTable
+WHERE 
+    yearID = 2016 AND (ERA - FIP) > 1 AND IP > 45 AND K_BB >2 AND ERA < 5;
