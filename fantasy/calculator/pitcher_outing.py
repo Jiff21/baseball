@@ -142,6 +142,6 @@ test_example = calculate_game(ExampleOuting.innings, ExampleOuting.earned_runs, 
 	ExampleOuting.saves, ExampleOuting.wins, ExampleOuting.losses, \
 	ExampleOuting.quality_starts)
 
-print test_example
+# print test_example
 
-new_season_total = inning_extrapolator()
+# new_season_total = inning_extrapolator()
