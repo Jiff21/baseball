@@ -28,6 +28,7 @@ class ExampleOuting(object):
 
 def calculate_game(innings, earned_runs, total_walks, hits_allowed, \
 	homeruns_allowed, strikeouts, saves, wins, losses, quality_starts):
+	print 'In Calculate game \nWins ' + str(wins) + '\nlosses: ' + str(losses)
 	total = (innings * ScoringSettings.INN) + (earned_runs \
 		* ScoringSettings.ER) + (total_walks * ScoringSettings.BBI) \
 		+ (hits_allowed * ScoringSettings.HA) \
