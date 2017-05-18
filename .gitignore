@@ -1,0 +1,17 @@
+out*/
+secrets/*
+!secrets/*.example.yaml
+.vagrant/*
+appengine.log
+node_modules/
+.DS_Store
+*.pyc
+*.swp
+*~
+.vimrc
+env/
+.sass-cache
+.tmp
+frontend/bower_components
+frontend/site/css
+.idea
