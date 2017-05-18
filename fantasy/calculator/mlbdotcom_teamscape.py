@@ -22,7 +22,11 @@ TEAM_VS_RIGHTY_URI = '/named.team_hitting_season_leader_sit.bam?season=2017&sort
 
 def get_team_stats():
     CURRENT_URL = BASE_URL + TEAM_STATS_URI
-    RESPONSE = requests.get(CURRENT_URL)
+    try:
+        RESPONSE = requests.get(CURRENT_URL)
+    except requests.exceptions.RequestException as e:
+        print e
+        sys.exit(1)
     TEXT = RESPONSE.text
     JSON_RESPONSE = json.loads(TEXT)
     TEAM_STATS_DICT = JSON_RESPONSE['team_hitting_season_leader_master']['queryResults']['row']
@@ -65,7 +69,11 @@ class Team(object):
 
 def get_splits_by_uri(uri):
     CURRENT_URL = BASE_URL + uri
-    RESPONSE = requests.get(CURRENT_URL)
+    try:
+        RESPONSE = requests.get(CURRENT_URL)
+    except requests.exceptions.RequestException as e:
+        print e
+        sys.exit(1)
     TEXT = RESPONSE.text
     JSON_RESPONSE = json.loads(TEXT)
     CURRENT_DICT = JSON_RESPONSE['team_hitting_season_leader_sit']['queryResults']['row']
@@ -81,7 +89,11 @@ def get_standings():
     today = datetime.now().strftime('%Y/%m/%d')
     TEAM_STANDING_URI = '/named.standings_schedule_date.bam?season=2017&schedule_game_date.game_date=%27' + today + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
     CURRENT_URL = BASE_URL + TEAM_STANDING_URI
-    TEAM_STANDING_RESPONSE = requests.get(CURRENT_URL)
+    try:
+        TEAM_STANDING_RESPONSE = requests.get(CURRENT_URL)
+    except requests.exceptions.RequestException as e:
+        print e
+        sys.exit(1)
     STANDING_TEXT = TEAM_STANDING_RESPONSE.text
     JSON_STANDINGS = json.loads(STANDING_TEXT)
     # Standings are in two blocks al and NL. This combines them.
@@ -93,12 +105,12 @@ TEAM_STANDING_DICT = get_standings()
 
 
 def return_wins_losses(j,s):
-    print '\n %s' % s
     for stand_team in j:
         if str(stand_team['team_short']) == s:
             wins = int(stand_team['w'])
             losses = int(stand_team['l'])
-            g = wins + losses
+            games = wins + losses
+            print games
             v_left = map(int, re.findall(r'\d+', stand_team['vs_left']))
             w_v_left = float(v_left[0]) / (float(v_left[0]) + float(v_left[1]))
             l_v_left = float(v_left[1]) / (float(v_left[0]) + float(v_left[1]))
@@ -115,15 +127,15 @@ def return_wins_losses(j,s):
             w_on_road = float(away_rec[0]) / (float(away_rec[0]) + float(away_rec[1]))
             l_on_road = float(away_rec[1]) / (float(away_rec[0]) + float(away_rec[1]))
             g_on_road = float(away_rec[0]) + float(away_rec[1])
-            win_avg = float(wins)/float(g)
-            loss_avg = float(losses)/float(g)
-            return win_avg, loss_avg, g, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road
+            win_avg = float(wins)/float(games)
+            loss_avg = float(losses)/float(games)
+            return win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road
 
 TEAM_RECORD_MAP = {}
 
 def create_teams(all_teams):
     for t in all_teams:
-        win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right,g_at_home, g_on_road = return_wins_losses(TEAM_STANDING_DICT, t)
+        win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road = return_wins_losses(TEAM_STANDING_DICT, t)
         team_object = Team(t, win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road)
         t = t.replace(" ", "_").lower()
         TEAM_RECORD_MAP[t] = team_object
@@ -147,6 +159,7 @@ for team in TEAM_STATS_DICT:
     win = records.win_avg
     loss = records.loss_avg
     games = records.games
+    print 'Games: %.2f \n runs_per_game: %.2f' % (games, runs_per_game)
     expected_game = calculate_game(7, runs_per_game, walks_per_game, hits_per_game, \
         homeruns_per_game, strikeouts_per_game, 0, win, loss, 0)
     TEAM_AVG_GAME[team_name] = expected_game
@@ -184,6 +197,7 @@ def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
         homeruns_per_game = float(team['hr']) / games
         strikeouts_per_game = float(team['so']) / games
         ts = short_name.lower().replace(' ', '_')
+        # print 'Games %.2f:\n' % (games)
         expected_game = calculate_game(7, runs_per_game, walks_per_game, hits_per_game, \
             homeruns_per_game, strikeouts_per_game, 0, w, l, 0)
         ADD_TO_DICT[team_name] = expected_game
