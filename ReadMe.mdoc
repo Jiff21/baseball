@@ -9,3 +9,30 @@ To boot Mysql:
 	mysql -u root -p
 
 To run queries:
+
+
+
+
+
+
+
+## CSV TO MYSQL
+
+### Install
+```
+brew install mysql
+sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/local/lib/libmysqlclient.18.dylib
+vitualenv -p python3 env
+pip install -r requirements.txt
+````
+Add this to bash profile
+```
+export PATH="/usr/local/Cellar/mysql/5.7.17/bin:$PATH"
+```
+
+### Running
+Import a Table
+```
+source env/bin/activate
+csvsql -v --db mysql://mysql_user:mysql_pass@localhost:3306/databasename --tables table_name --insert path/to/file.csv
+```

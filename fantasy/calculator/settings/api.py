@@ -1,0 +1,7 @@
+BASE_URL = 'http://mlb.mlb.com/lookup/json/'
+TEAM_STATS_URI = 'named.team_hitting_season_leader_master.bam?season=2017&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&recSP=1&recPP=50'
+TEAM_AT_HOME_URI = 'named.team_hitting_season_leader_sit.bam?season=2017&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27h%27&recSP=1&recPP=50'
+TEAM_AWAY_URI = '/named.team_hitting_season_leader_sit.bam?season=2017&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27a%27&recSP=1&recPP=50'
+TEAM_VS_LEFTY_URI = '/named.team_hitting_season_leader_sit.bam?season=2017&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27vl%27&recSP=1&recPP=50'
+TEAM_VS_RIGHTY_URI = '/named.team_hitting_season_leader_sit.bam?season=2017&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27vr%27&recSP=1&recPP=50'
+

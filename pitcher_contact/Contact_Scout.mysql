@@ -1,0 +1,8 @@
+SELECT
+    "\"Name\"",
+    "Contact%",
+    "Z-Contact%"
+FROM
+    pitcher_contact_example
+WHERE
+    "Z-Contact%">=75;
