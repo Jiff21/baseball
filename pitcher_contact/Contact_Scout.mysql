@@ -1,8 +1,0 @@
-SELECT
-    *
-FROM
-    pitcher_contact_example
-WHERE
-    `Z-Contact%`<84.0 AND `SwStr%`>=12.0 AND `F-Strike%`>60
-ORDER BY
-    `Contact%` ASC;
