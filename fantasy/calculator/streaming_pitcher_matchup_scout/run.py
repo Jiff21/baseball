@@ -41,7 +41,7 @@ TEAM_RECORD_MAP = get_record_map(Standings.ALL_TEAM_SHORT_NAMES, Standings.TEAM_
 def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
     for team in SPLITS_DICT:
         team_name = team['team_full']
-        short_name = team['team_short'].lower().replace(' ', '_')
+        short_name = team['team_short'].replace(" ", "_").lower()
         records = TEAM_RECORD_MAP[short_name]
         if type == 'home':
             w = records.w_at_home
@@ -61,29 +61,38 @@ def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
             games = records.g_v_right
         else:
             print 'error'
-        print 'In get expected. Losses ' + str(l)
-        inning = games * 8.75
+        # inning = games * 8.75
         runs_per_game = float(team['r']) / games
+        print ' Runs are ' + str(float(team['r']) ) + ' and games are ' + str(games)  + \
+            ' for ' +  team_name
         walks_per_game = float(team['bb']) / games
         hits_per_game = float(team['h']) / games
         homeruns_per_game = float(team['hr']) / games
         strikeouts_per_game = float(team['so']) / games
         ts = short_name.lower().replace(' ', '_')
+        print 'In get expected. ' + str(team_name) + \
+            ' \nruns_per_game: ' + str(runs_per_game) + \
+            ' \nLoss avg ' + str(walks_per_game) + \
+            ' \nhits_per_game ' + str(walks_per_game) + \
+            ' \nhomeruns_per_game ' + str(homeruns_per_game) + \
+            ' \nstrikeouts_per_game ' + str(strikeouts_per_game) + \
+            ' \nts ' + str(ts) + \
+            '\nand were at '  + type
         # print 'Games %.2f:\n' % (games)
         expected_game = calculate_game(7, runs_per_game, walks_per_game, hits_per_game, \
             homeruns_per_game, strikeouts_per_game, 0, w, l, 0)
         ADD_TO_DICT[team_name] = expected_game
 
 
-get_expected_game_by_dict(Standings.TEAM_AT_HOME_DICT, HOME_AVG_GAME, 'home')
-get_expected_game_by_dict(Standings.TEAM_AWAY_DICT, AWAY_AVG_GAME, 'away')
-get_expected_game_by_dict(Standings.TEAM_VS_LEFTY_DICT, LEFTY_AVG_GAME, 'lefty')
+
+# get_expected_game_by_dict(Standings.TEAM_AT_HOME_DICT, HOME_AVG_GAME, 'home')
+# get_expected_game_by_dict(Standings.TEAM_AWAY_DICT, AWAY_AVG_GAME, 'away')
+# get_expected_game_by_dict(Standings.TEAM_VS_LEFTY_DICT, LEFTY_AVG_GAME, 'lefty')
 get_expected_game_by_dict(Standings.TEAM_VS_RIGHTY_DICT, RIGHTY_AVG_GAME, 'righty')
 
 
-
-sorted_x = sorted(TEAM_AVG_GAME.items(), key=operator.itemgetter(1))
-for key, value in sorted_x:
-    # print 'Pitchers average %.2ipts against %s' % (value, key)
-    print 'Home: %.2f, Away %.2f, Lefty: %.2f, righty %f\n' % \
-        (LEFTY_AVG_GAME[key], RIGHTY_AVG_GAME[key], HOME_AVG_GAME[key], AWAY_AVG_GAME[key])
+# sorted_x = sorted(TEAM_AVG_GAME.items(), key=operator.itemgetter(1))
+# for key, value in sorted_x:
+#     print 'Pitchers average %.2ipts against %s' % (value, key)
+#     print 'Home: %.2f, Away %.2f, Lefty: %.2f, righty %f\n' % \
+#         (LEFTY_AVG_GAME[key], RIGHTY_AVG_GAME[key], HOME_AVG_GAME[key], AWAY_AVG_GAME[key])

@@ -7,7 +7,6 @@ def return_wins_losses(j,s):
             wins = int(stand_team['w'])
             losses = int(stand_team['l'])
             games = wins + losses
-            print games
             v_left = map(int, re.findall(r'\d+', stand_team['vs_left']))
             w_v_left = float(v_left[0]) / (float(v_left[0]) + float(v_left[1]))
             l_v_left = float(v_left[1]) / (float(v_left[0]) + float(v_left[1]))
@@ -26,14 +25,26 @@ def return_wins_losses(j,s):
             g_on_road = float(away_rec[0]) + float(away_rec[1])
             win_avg = float(wins)/float(games)
             loss_avg = float(losses)/float(games)
-            return win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road
+            print "return_wins_losses" + str(stand_team)
+            print g_at_home
+            return win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, \
+                l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road
 
 TEAM_RECORD_MAP = {}
 
 def create_teams(all_teams, TEAM_STANDING_DICT):
     for t in all_teams:
-        win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road = return_wins_losses(TEAM_STANDING_DICT, t)
-        team_object = Team(t, win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road)
+        win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, \
+                l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, \
+                g_on_road = return_wins_losses(TEAM_STANDING_DICT, t)
+        print "create_teams " + t
+        print g_at_home
+        team_object = Team(t, win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, \
+            l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, \
+            g_at_home, g_on_road)
+        print "create_teams " + t
+        print team_object.name
+        print team_object.g_at_home
         t = t.replace(" ", "_").lower()
         TEAM_RECORD_MAP[t] = team_object
     return TEAM_RECORD_MAP

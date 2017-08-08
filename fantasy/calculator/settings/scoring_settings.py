@@ -1,5 +1,5 @@
 class ScoringSettings(object):
-
+	
 	print 'Loaded scoring settings'
 
 	class Batting(object):
