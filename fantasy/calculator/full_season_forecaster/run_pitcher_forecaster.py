@@ -12,7 +12,7 @@ input_last_season_stats()
 		season_walk_total = float(raw_input('How Many Walks last season?\n                             '))
 		projected_starts = float(raw_input('How many starts next season?\n                           '))
 		projected_fip = float(raw_input('What was the FIP\n                           '))
-		return season_innings, season_starts, season_era, season_win_total, season_loss_total, 
+		return season_innings, season_starts, season_era, season_win_total, season_loss_total,
 			season_hits_allowed, season_home_runs, season_walk_total, season_strikeouts, projected_starts, projected_fip
 
 

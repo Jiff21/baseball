@@ -2,9 +2,9 @@ import json
 import re
 import requests
 from datetime import datetime
-from settings.team_object import Team
-from settings.team_record_map import get_record_map
-from settings.api import BASE_URL,TEAM_STATS_URI, TEAM_AT_HOME_URI, TEAM_AWAY_URI, TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
+from calculator.settings.team_object import Team
+from calculator.settings.team_record_map import get_record_map
+from calculator.settings.api import BASE_URL,TEAM_STATS_URI, TEAM_AT_HOME_URI, TEAM_AWAY_URI, TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
 
 def get_team_stats():
     CURRENT_URL = BASE_URL + TEAM_STATS_URI
@@ -63,6 +63,3 @@ class Standings(object):
     TEAM_VS_LEFTY_DICT = get_splits_by_uri(TEAM_VS_LEFTY_URI)
     TEAM_VS_RIGHTY_DICT = get_splits_by_uri(TEAM_VS_RIGHTY_URI)
     # From settings
-
-
- 

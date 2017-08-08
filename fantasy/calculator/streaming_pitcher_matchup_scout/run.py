@@ -1,8 +1,7 @@
 import requests
-from full_season_forecaster.pitcher_calaculator import calculate_game
-from settings.team_record_map import get_record_map
-
-from settings.standings import Standings
+from calculator.full_season_forecaster.pitcher_calaculator import calculate_game
+from calculator.settings.team_record_map import get_record_map
+from calculator.settings.standings import Standings
 from datetime import datetime
 import operator
 

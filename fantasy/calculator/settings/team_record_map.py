@@ -1,5 +1,5 @@
 import re
-from settings.team_object import Team
+from calculator.settings.team_object import Team
 
 def return_wins_losses(j,s):
     for stand_team in j:

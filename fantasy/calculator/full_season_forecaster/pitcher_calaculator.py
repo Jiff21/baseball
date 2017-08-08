@@ -1,4 +1,4 @@
-from scoring_settings import ScoringSettings
+from calculator.settings.scoring_settings import ScoringSettings
 ssp = ScoringSettings.Pitching
 
 def calculate_game(innings, earned_runs, total_walks, hits_allowed, \
