@@ -18,9 +18,10 @@ def get_team_stats():
     TEAM_STATS_DICT = JSON_RESPONSE['team_hitting_season_leader_master']['queryResults']['row']
     return TEAM_STATS_DICT
 
-def get_all_team_names(d):
+def get_all_team_names(passed_json):
     the_names = []
-    for t in d:
+    for t in passed_json:
+        print(t['team_short'])
         current_name = t['team_short']
         the_names.append(current_name)
     return the_names
