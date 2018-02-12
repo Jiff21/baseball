@@ -26,10 +26,10 @@ def input_last_outing_stats():
 		elif decision.lower().replace(' ', '') == "save":
 			outing_saves = 1
 		else:
-			print "error"
+			print("error")
 			sys.exit()
 		# projected_fip = float(raw_input('What was the FIP\n                           '))
-		projected_fip = 0 
+		projected_fip = 0
 		return outing_innings, outing_earned_runs, outing_win, outing_loss, outing_blown_saves, \
 			outing_saves, outing_quality_starts, outing_hits_allowed, outing_homeruns_allowed, \
 			outing_total_walks, outing_strikeouts, projected_fip
@@ -43,4 +43,4 @@ result = calculate_game(outing_innings, outing_earned_runs, \
 	outing_total_walks,outing_hits_allowed, outing_homeruns_allowed, outing_strikeouts, \
 	outing_saves, outing_win, outing_loss, outing_quality_starts)
 
-print result
+print(result)
