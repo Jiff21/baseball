@@ -116,10 +116,3 @@ def step_impl(context, number):
         'didn\'t get expected huns instead got %s' % (
             context.hits
         )
-
-
-#
-# @step('fail intentionally')
-# def step_impl(context):
-#     print(context.TEAM_HITTING_STATS)
-#     assert 1 == 2

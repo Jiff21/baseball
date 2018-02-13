@@ -1,4 +1,4 @@
-Feature: The stat retrieval is working properly
+Feature: The hitting stats retrieval is working properly
 
   Scenario: The team hitting data is where we think it should be
     Given we have stubbed hitting data

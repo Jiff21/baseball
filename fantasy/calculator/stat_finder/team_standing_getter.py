@@ -1,3 +1,4 @@
+import re
 import json
 import requests
 
@@ -9,13 +10,62 @@ def get_relevant_part_of_standings_dict(feed_me_json):
 def get_short_name_from_standing_dict(feed_me_json):
     return feed_me_json['team_short']
 
+def get_wins_from_standing_dict(feed_me_json):
+    print(feed_me_json['w'])
+    return int(feed_me_json['w'])
+
+def get_losses_from_standing_dict(feed_me_json):
+    return int(feed_me_json['l'])
+
+def get_games_from_standing_dict(feed_me_json):
+    return int(feed_me_json['l']) + int(feed_me_json['w'])
+
 def get_righty_from_standing_dict(feed_me_json):
-    return feed_me_json['vs_right']
+    ''' w_v_right & l_v_right return floats for win/loss percentage'''
+    v_right = map(int, re.findall(r'\d+', feed_me_json['vs_right']))
+    w_v_right = float(v_right[0]) / (float(v_right[0]) + float(v_right[1]))
+    l_v_right = float(v_right[1]) / (float(v_right[0]) + float(v_right[1]))
+    g_v_right = float(v_right[0]) + float(v_right[1])
+    return w_v_right, l_v_right, g_v_right
 
 def get_lefty_from_standing_dict(feed_me_json):
-    return feed_me_json['vs_left']
+    v_left = map(int, re.findall(r'\d+', feed_me_json['vs_left']))
+    w_v_left = float(v_left[0]) / (float(v_left[0]) + float(v_left[1]))
+    l_v_left = float(v_left[1]) / (float(v_left[0]) + float(v_left[1]))
+    g_v_left = float(v_left[0]) + float(v_left[1])
+    return w_v_left, l_v_left, g_v_left
 
 
+
+#
+# def return_wins_losses(j,s):
+#     for stand_team in j:
+#         if str(stand_team['team_short']) == s:
+#             # wins = int(stand_team['w'])
+#             # losses = int(stand_team['l'])
+#             # games = wins + losses
+#             # v_left = map(int, re.findall(r'\d+', stand_team['vs_left']))
+#             # w_v_left = float(v_left[0]) / (float(v_left[0]) + float(v_left[1]))
+#             # l_v_left = float(v_left[1]) / (float(v_left[0]) + float(v_left[1]))
+#             # g_v_left = float(v_left[0]) + float(v_left[1])
+#             # v_right = map(int, re.findall(r'\d+', stand_team['vs_right']))
+#             # w_v_right = float(v_right[0]) / (float(v_right[0]) + float(v_right[1]))
+#             # l_v_right = float(v_right[1]) / (float(v_right[0]) + float(v_right[1]))
+#             # g_v_right = float(v_right[0]) + float(v_right[1])
+#             home_rec = map(int, re.findall(r'\d+', stand_team['home']))
+#             w_at_home = float(home_rec[0]) / (float(home_rec[0]) + float(home_rec[1]))
+#             l_at_home = float(home_rec[1]) / (float(home_rec[0]) + float(home_rec[1]))
+#             g_at_home = float(home_rec[0]) + float(home_rec[1])
+#             away_rec = map(int, re.findall(r'\d+', stand_team['away']))
+#             w_on_road = float(away_rec[0]) / (float(away_rec[0]) + float(away_rec[1]))
+#             l_on_road = float(away_rec[1]) / (float(away_rec[0]) + float(away_rec[1]))
+#             g_on_road = float(away_rec[0]) + float(away_rec[1])
+#             win_avg = float(wins)/float(games)
+#             loss_avg = float(losses)/float(games)
+#             print "return_wins_losses" + str(stand_team)
+#             print g_at_home
+#             return win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, \
+#                 l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road
 
 # for team in Standings.TEAM_STATS_DICT:
 #     team_name = team['team_full']
