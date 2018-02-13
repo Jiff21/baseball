@@ -1,6 +1,18 @@
 import re
 from calculator.settings.team_object import Team
 
+## need a way to map back ab per games
+def ab_per_game(passed_json, passed_short_name):
+    # import pdb; pdb.set_trace()
+    for t in passed_json:
+        current_name = t['team_short']
+        if current_name == passed_short_name:
+            games = t['g']
+            at_bats = t['ab']
+            ab_per_game = float(at_bats)/float(games)
+            print('At bats per game is %i for %s' % (ab_per_game, t['team_short']))
+            return ab_per_game
+
 def return_wins_losses(j,s):
     for stand_team in j:
         if str(stand_team['team_short']) == s:
@@ -37,14 +49,14 @@ def create_teams(all_teams, TEAM_STANDING_DICT):
         win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, \
                 l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, \
                 g_on_road = return_wins_losses(TEAM_STANDING_DICT, t)
-        print "create_teams " + t
-        print g_at_home
+        # print("create_teams " + t)
+        # print(g_at_home)
         team_object = Team(t, win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, \
             l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, \
             g_at_home, g_on_road)
-        print "create_teams " + t
-        print team_object.name
-        print team_object.g_at_home
+        # print("create_teams " + t)
+        # print(team_object.name)
+        # print (team_object.g_at_home)
         t = t.replace(" ", "_").lower()
         TEAM_RECORD_MAP[t] = team_object
     return TEAM_RECORD_MAP

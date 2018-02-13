@@ -1,10 +1,9 @@
 import requests
-from calculator.full_season_forecaster.pitcher_calaculator import calculate_game
-from calculator.settings.team_record_map import get_record_map
+from calculator.full_season_forecaster.pitcher_calculator import calculate_game
+from calculator.settings.team_record_map import get_record_map, ab_per_game
 from calculator.settings.standings import Standings
 from datetime import datetime
 import operator
-
 
 TEAM_AVG_GAME = {}
 LEFTY_AVG_GAME = {}
@@ -18,7 +17,7 @@ TEAM_RECORD_MAP = get_record_map(Standings.ALL_TEAM_SHORT_NAMES, Standings.TEAM_
 # for team in Standings.TEAM_STATS_DICT:
 #     team_name = team['team_full']
 #     short_name = team['team_short']
-#     print 'Short Name in all run loop is %s' % short_name
+#     print('Short Name in all run loop is %s' % short_name)
 #     inning = float(team['g']) * 9.0
 #     games = float(team['g'])
 #     runs_per_game = float(team['r']) / games
@@ -34,7 +33,7 @@ TEAM_RECORD_MAP = get_record_map(Standings.ALL_TEAM_SHORT_NAMES, Standings.TEAM_
 #     expected_game = calculate_game(7, runs_per_game, walks_per_game, hits_per_game, \
 #         homeruns_per_game, strikeouts_per_game, 0, win, loss, 0)
 #     TEAM_AVG_GAME[team_name] = expected_game
-
+#
 
 
 def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
@@ -42,6 +41,7 @@ def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
         team_name = team['team_full']
         short_name = team['team_short'].replace(" ", "_").lower()
         records = TEAM_RECORD_MAP[short_name]
+        at_bats_per_game = ab_per_game(Standings.TEAM_STATS_DICT, short_name)
         if type == 'home':
             w = records.w_at_home
             l = records.l_at_home
@@ -59,11 +59,13 @@ def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
             l = records.l_v_right
             games = records.g_v_right
         else:
-            print 'error'
+            print('error')
         # inning = games * 8.75
+
+        print('In get_expected_game_by_dict')
         runs_per_game = float(team['r']) / games
-        print ' Runs are ' + str(float(team['r']) ) + ' and games are ' + str(games)  + \
-            ' for ' +  team_name
+        print(' Runs are ' + str(float(team['r']) ) + ' and games are ' + str(games)  + \
+            ' for ' +  team_name)
         walks_per_game = float(team['bb']) / games
         hits_per_game = float(team['h']) / games
         homeruns_per_game = float(team['hr']) / games

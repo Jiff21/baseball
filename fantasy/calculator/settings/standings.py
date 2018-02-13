@@ -26,6 +26,7 @@ def get_all_team_names(passed_json):
         the_names.append(current_name)
     return the_names
 
+
 def get_splits_by_uri(uri):
     CURRENT_URL = BASE_URL + uri
     try:

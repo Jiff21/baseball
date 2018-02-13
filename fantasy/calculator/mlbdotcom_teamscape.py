@@ -2,7 +2,7 @@ import requests
 import json
 import re
 
-from full_season_forecaster.pitcher_calaculator import calculate_game
+from full_season_forecaster.pitcher_calculator import calculate_game
 from datetime import datetime
 
 import operator

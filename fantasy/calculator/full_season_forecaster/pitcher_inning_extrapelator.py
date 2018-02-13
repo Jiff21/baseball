@@ -66,10 +66,10 @@ def inning_extrapolator(season_innings, season_starts, season_era, season_win_to
 	next_season_total = points_from_innings + points_from_strikeouts + points_from_wins \
 		+ points_from_losses + points_from_hits + points_from_walks + points_from_home_runs \
 		+ points_from_earned_runs
-	print 'Next Seasons Total based on ERA would be: ' + str(next_season_total)
+	print ('Next Seasons Total based on ERA would be: ' + str(next_season_total))
 
 	points_from_fip_runs = round((innings_projection * (projected_fip/9)), 2) * ssp.ER
 	next_season_total = points_from_innings + points_from_strikeouts + points_from_wins \
 		+ points_from_losses + points_from_hits + points_from_walks + points_from_home_runs \
 		+ points_from_fip_runs
-	print 'Next Seasons Total based on ERA would be: ' + str(next_season_total)
+	print( 'Next Seasons Total based on ERA would be: ' + str(next_season_total) )

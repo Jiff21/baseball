@@ -1,4 +1,4 @@
-from full_season_forecaster.pitcher_calaculator import calculate_game
+from full_season_forecaster.pitcher_calculator import calculate_game
 from os import sys
 
 def input_last_outing_stats():
