@@ -45,7 +45,7 @@ def step_impl(context):
 
 @step('the pitcher goes "{number}" innings')
 def step_impl(context, number):
-    context.innings = number
+    context.innings = float(number)
 
 @step('the pitcher allows "{number}" earned runs')
 def step_impl(context, number):
@@ -63,7 +63,7 @@ def step_impl(context, number):
 def step_impl(context, number):
     context.home_runs = number
 
-@step('the pitcher stikes out "{number}" batters')
+@step('the pitcher strikes out "{number}" batters')
 def step_impl(context, number):
     context.strikeouts = number
 
