@@ -87,8 +87,71 @@ def step_impl(context, number):
             context.g_v_right
         )
 
+@step('get verse lefties team standings')
+def step_impl(context):
+    context.w_v_left, context.l_v_left, context.g_v_left = \
+        get_lefty_from_standing_dict(context.TEAM_STANDING_DICT[1])
 
-# @step('fail intentionally')
-# def step_impl(context):
-#     # print(context.TEAM_STANDING_JSON)
-#     assert 1 == 2
+@step('win percentage verse lefties should be "{number:f}"')
+def step_impl(context, number):
+    assert round(context.w_v_left,6) ==  round(number,6), \
+        'didn\'t get expected wins instead got %f' % (
+            round(context.w_v_left,6)
+        )
+
+@step('loss percentage verse lefties should be "{number:f}"')
+def step_impl(context, number):
+    assert round(context.l_v_left,6) ==  round(number,6), \
+        'didn\'t get expected losses instead got %f' % (
+            round(context.l_v_left,6)
+        )
+
+@step('team game verse lefties should be "{number:d}"')
+def step_impl(context, number):
+    assert context.g_v_left ==  number, \
+        'didn\'t get expected games instead got %i' % (
+            context.g_v_left
+        )
+
+@step('get all win/loss data from standings')
+def step_impl(context):
+    context.win_avg, context.loss_avg, context.games, context.w_v_left, \
+    context.l_v_left, context.w_v_right, context.l_v_right, context.w_at_home, \
+    context.l_at_home, context.w_on_road, context.l_on_road, context.g_v_left, \
+    context.g_v_right, context.g_at_home, context.g_on_road = \
+    return_wins_losses(context.TEAM_STANDING_DICT[1])
+
+@step('general win average should be "{number:f}"')
+def step_impl(context, number):
+    assert round(context.win_avg,4) ==  round(number,4), \
+        'didn\'t get expected wins instead got %f' % (
+            round(context.win_avg,4)
+        )
+
+@step('general loss average should be "{number:f}"')
+def step_impl(context, number):
+    assert round(context.loss_avg,4) ==  round(number,4), \
+        'didn\'t get expected losses instead got %f' % (
+            round(context.loss_avg,4)
+        )
+
+@step('team games at home should be "{number:d}"')
+def step_impl(context, number):
+    assert context.g_at_home ==  number, \
+        'didn\'t get expected games instead got %i' % (
+            context.g_at_home
+        )
+
+@step('road win average should be "{number:f}"')
+def step_impl(context, number):
+    assert round(context.w_on_road,4) ==  round(number,4), \
+        'didn\'t get expected win average instead got %f' % (
+            round(context.w_on_road,4)
+        )
+
+@step('road loss average should be "{number:f}"')
+def step_impl(context, number):
+    assert round(context.l_on_road,4) ==  round(number,4), \
+        'didn\'t get expected loss average instead got %f' % (
+            round(context.l_on_road,4)
+        )

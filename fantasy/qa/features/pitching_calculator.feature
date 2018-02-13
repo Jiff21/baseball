@@ -1,4 +1,4 @@
-Feature: Example.com should have a head
+Feature: Single game calculation should work properly
 
   Scenario: The Pitcher gets a no decision
     Given Scoring Settings are set to default
