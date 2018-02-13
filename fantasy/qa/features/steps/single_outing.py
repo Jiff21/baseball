@@ -38,10 +38,10 @@ def step_impl(context):
 
     ssp = ScoringSettings.Pitching
     # Defaults
-    context.saves = 0
-    context.wins = 0
-    context.losses = 0
-    context.quality_starts = 0
+    context.saves = 0.0
+    context.wins = 0.0
+    context.losses = 0.0
+    context.quality_starts = 0.0
 
 @step('the pitcher goes "{number}" innings')
 def step_impl(context, number):
@@ -88,7 +88,11 @@ def step_impl(context):
     context.game_total = calculate_game(context.innings, context.earned_runs, \
         context.walks, context.hits, context.home_runs, context.strikeouts, \
         context.saves, context.wins, context.losses, context.quality_starts)
+    print(context.game_total)
 
 @step('we expect his score to be "{number}"')
 def step_impl(context, number):
-    assert round(float(number),2) == context.game_total, 'Didn\'t get expected score, got %f' % round(float(number),2)
+    print(context.game_total)
+    print(round(float(number),1))
+    assert round(float(number),1) == float(context.game_total), \
+        'Didn\'t get expected score, got %f' % context.game_total
