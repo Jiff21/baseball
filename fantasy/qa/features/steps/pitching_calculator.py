@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-from calculator.full_season_forecaster.pitcher_calaculator import calculate_game
+from calculator.full_season_forecaster.pitcher_calculator import calculate_game
 
 @given('Scoring Settings are set to default')
 def step_impl(context):
