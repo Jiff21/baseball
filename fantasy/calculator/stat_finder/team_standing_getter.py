@@ -1,6 +1,9 @@
+import os
 import re
 import json
 import requests
+from calculator.settings.api import BASE_URL, TEAM_STANDING_URI
+
 
 def get_relevant_part_of_standings_dict(feed_me_json):
     TEAM_STANDING_DICT = feed_me_json['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][0]['queryResults']['row']
@@ -61,3 +64,18 @@ def return_wins_losses(feed_me_json):
     loss_avg = float(losses)/float(games)
     return win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, \
         l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road
+
+
+def get_standings():
+    CURRENT_URL = BASE_URL + TEAM_STANDING_URI
+    try:
+        TEAM_STANDING_RESPONSE = requests.get(CURRENT_URL)
+    except requests.exceptions.RequestException as e:
+        print e
+        sys.exit(1)
+    STANDING_TEXT = TEAM_STANDING_RESPONSE.text
+    JSON_STANDINGS = json.loads(STANDING_TEXT)
+    # Standings are in two blocks al and NL. This combines them.
+    TEAM_STANDING_DICT = JSON_STANDINGS['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][0]['queryResults']['row']
+    TEAM_STANDING_DICT.extend(JSON_STANDINGS['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][1]['queryResults']['row'])
+    return TEAM_STANDING_DICT

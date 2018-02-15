@@ -155,3 +155,10 @@ def step_impl(context, number):
         'didn\'t get expected loss average instead got %f' % (
             round(context.l_on_road,4)
         )
+
+
+@step('When I create a team')
+def step_impl(context):
+    team_object = Team('Miami', win_avg, loss_avg, games, w_v_left, l_v_left,
+        g_v_left, w_v_right, l_v_right,g_v_right, w_at_home, l_at_home, \
+        g_at_home, w_on_road, l_on_road, g_on_road)

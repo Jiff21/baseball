@@ -1,7 +1,9 @@
 class Team(object):
-    def __init__(self, name, win_avg, games, loss_avg, w_v_left, l_v_left, w_v_right, \
-        l_v_right, w_at_home, l_at_home, w_on_road, l_on_road,  g_v_left, g_v_right, \
-        g_at_home, g_on_road):
+    def __init__(self, name=None, win_avg=None, loss_avg=None, games=None, \
+        w_v_left=None, l_v_left=None, g_v_left=None, \
+        w_v_right=None, l_v_right=None,g_v_right=None, \
+        w_at_home=None, l_at_home=None, g_at_home=None, \
+        w_on_road=None, l_on_road=None, g_on_road=None, team_id=None):
         """Return a team and there win loss splits."""
         self.name = name
         self.win_avg = win_avg
@@ -19,3 +21,4 @@ class Team(object):
         self.g_v_right = g_v_left
         self.g_at_home = g_v_left
         self.g_on_road = g_v_left
+        self.team_id = team_id

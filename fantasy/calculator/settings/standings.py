@@ -27,34 +27,6 @@ def get_all_team_names(passed_json):
     return the_names
 
 
-def get_splits_by_uri(uri):
-    CURRENT_URL = BASE_URL + uri
-    try:
-        RESPONSE = requests.get(CURRENT_URL)
-    except requests.exceptions.RequestException as e:
-        print e
-        sys.exit(1)
-    TEXT = RESPONSE.text
-    JSON_RESPONSE = json.loads(TEXT)
-    CURRENT_DICT = JSON_RESPONSE['team_hitting_season_leader_sit']['queryResults']['row']
-    return CURRENT_DICT
-
-def get_standings():
-    today = datetime.now().strftime('%Y/%m/%d')
-    TEAM_STANDING_URI = '/named.standings_schedule_date.bam?season=2017&schedule_game_date.game_date=%27' + today + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
-    CURRENT_URL = BASE_URL + TEAM_STANDING_URI
-    try:
-        TEAM_STANDING_RESPONSE = requests.get(CURRENT_URL)
-    except requests.exceptions.RequestException as e:
-        print e
-        sys.exit(1)
-    STANDING_TEXT = TEAM_STANDING_RESPONSE.text
-    JSON_STANDINGS = json.loads(STANDING_TEXT)
-    # Standings are in two blocks al and NL. This combines them.
-    TEAM_STANDING_DICT = JSON_STANDINGS['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][0]['queryResults']['row']
-    TEAM_STANDING_DICT.extend(JSON_STANDINGS['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][1]['queryResults']['row'])
-    return TEAM_STANDING_DICT
-
 
 class Standings(object):
     TEAM_STATS_DICT = get_team_stats()
