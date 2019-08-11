@@ -88,12 +88,12 @@ def get_all_team_names(d):
         team = Team()
         team.short_name = t['team_short']
         team.abbr = t['team_abbrev']
-        mlb[team.short_name] = team
+        mlb[team.abbr] = team
     return mlb
 
 mlb = get_all_team_names(TEAM_STATS_DICT)
 
-print(mlb['Houston'].short_name)
+print(mlb['COL'].short_name)
 
 def get_splits_by_uri(uri):
     CURRENT_URL = BASE_URL + uri
@@ -109,12 +109,38 @@ def get_splits_by_uri(uri):
 
 TEAM_AT_HOME_DICT = get_splits_by_uri(TEAM_AT_HOME_URI)
 
-for stats in TEAM_AT_HOME_DICT:
-    mlb[stats['team_short']].home_hr = stats['hr']
-    print(stats)
-    assert 1 == 2
+def get_avg(number, total):
+    return number / total
 
-print(mlb['Colorado'].home_hr)
+def get_relevant_splits_per_dict(splits_dict):
+    r = int(splits_dict['r'])
+    g = int(splits_dict['g'])
+    runs_per_game = get_avg(r, g)
+
+    h = int(splits_dict['h'])
+    hits_per_game = get_avg(h, g)
+
+    hr = int(splits_dict['hr'])
+    hr_per_game = get_avg(hr, g)
+
+    bb = int(splits_dict['bb'])
+    waks_per_game = get_avg(bb, g)
+
+    return runs_per_game, hits_per_game, hr_per_game, waks_per_game
+
+# print(TEAM_AT_HOME_DICT)
+
+for stats in TEAM_AT_HOME_DICT:
+    # print(stats)
+    # assert 1 == 2
+    runs_per_game, hits_per_game, hr_per_game, waks_per_game = get_relevant_splits_per_dict(stats)
+    mlb[stats['name_abbrev']].home_r_pg = runs_per_game
+    mlb[stats['name_abbrev']].home_h_pg = hits_per_game
+    mlb[stats['name_abbrev']].home_hr_pg = hr_per_game
+    mlb[stats['name_abbrev']].home_hr_pg = waks_per_game
+
+
+print(mlb['COL'].home_r_pg)
 # for team in mlb:
 
 # print(TEAM_AT_HOME_DICT)
