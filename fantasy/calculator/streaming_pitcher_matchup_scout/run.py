@@ -71,7 +71,7 @@ def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
         homeruns_per_game = float(team['hr']) / games
         strikeouts_per_game = float(team['so']) / games
         ts = short_name.lower().replace(' ', '_')
-        print 'In get expected. ' + str(team_name) + \
+        print('In get expected. ' + str(team_name) + \
             ' \nruns_per_game: ' + str(runs_per_game) + \
             ' \nLoss avg ' + str(walks_per_game) + \
             ' \nhits_per_game ' + str(walks_per_game) + \
@@ -79,6 +79,7 @@ def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
             ' \nstrikeouts_per_game ' + str(strikeouts_per_game) + \
             ' \nts ' + str(ts) + \
             '\nand were at '  + type
+        )
         # print 'Games %.2f:\n' % (games)
         expected_game = calculate_game(7, runs_per_game, walks_per_game, hits_per_game, \
             homeruns_per_game, strikeouts_per_game, 0, w, l, 0)

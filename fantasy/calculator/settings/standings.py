@@ -5,13 +5,16 @@ from datetime import datetime
 from calculator.settings.team_object import Team
 from calculator.settings.team_record_map import get_record_map
 from calculator.settings.api import BASE_URL,TEAM_STATS_URI, TEAM_AT_HOME_URI, TEAM_AWAY_URI, TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
+from calculator.stat_finder.team_standing_getter import get_standings
+from calculator.mlbdotcom_teamscape import get_splits_by_uri
+
 
 def get_team_stats():
     CURRENT_URL = BASE_URL + TEAM_STATS_URI
     try:
         RESPONSE = requests.get(CURRENT_URL)
     except requests.exceptions.RequestException as e:
-        print e
+        print (e)
         sys.exit(1)
     TEXT = RESPONSE.text
     JSON_RESPONSE = json.loads(TEXT)

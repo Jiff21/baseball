@@ -19,6 +19,9 @@ TEAM_VS_LEFTY_URI  = SPLITS_URI + '&sit_code=%27vl%27&recSP=1&recPP=50'
 TEAM_VS_RIGHTY_URI = SPLITS_URI + '&sit_code=%27vr%27&recSP=1&recPP=50'
 
 TEAM_STANDING_URI = \
-    'named.standings_schedule_date.bam?season=2017&schedule_game_date.game_date=%27' \
+    'named.standings_schedule_date.bam?season=2019&schedule_game_date.game_date=%27' \
     + DATE_FOR_STANDINGS \
     + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
+
+STATS_API = 'https://statsapi.mlb.com/api/v1/'
+STANDINGS_URI = 'standings?leagueId=103,104&season=2019&standingsTypes=regularSeason,springTraining,firstHalf,secondHalf&hydrate=division,conference,sport,league,team(nextSchedule(team,gameType=[R,F,D,L,W,C],inclusive=false),previousSchedule(team,gameType=[R,F,D,L,W,C],inclusive=true))'

@@ -1,5 +1,6 @@
 import json
 import requests
+from calculator.settings.api import BASE_URL
 from calculator.settings.api import TEAM_AT_HOME_URI, TEAM_AWAY_URI
 from calculator.settings.api import TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
 
@@ -37,7 +38,7 @@ def get_splits_by_uri(uri):
     try:
         RESPONSE = requests.get(CURRENT_URL)
     except requests.exceptions.RequestException as e:
-        print e
+        print (e)
         sys.exit(1)
     TEXT = RESPONSE.text
     JSON_RESPONSE = json.loads(TEXT)
