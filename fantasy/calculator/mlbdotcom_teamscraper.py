@@ -297,68 +297,31 @@ for current_standings in TEAM_STANDING_DICT:
     mlb[current_standings['team_abbrev']].l_avg_road = l_avg_road
     mlb[current_standings['team_abbrev']].g_at_road = g_at_road
 
-#
-# print(mlb['HOU'].win_avg)
-# print(mlb['HOU'].loss_avg)
+
+print(mlb['HOU'].win_avg)
+print(mlb['HOU'].loss_avg)
 
 
-#
-# def return_wins_losses(j,s):
-#     print('You are here. J was a string, changed to json now. ')
-#     # j = json. s is team name we're looking for.
-#     for stand_team in j:
-#         # why is this vs_left
-#         print(stand_team)
-#         stand_team = json.loads(stand_team)
-#
-#         print(str(stand_team['team_short']))
-#         if str(stand_team['team_short']) == s:
-#             wins = int(stand_team['w'])
-#             losses = int(stand_team['l'])
-#             games = wins + losses
-            # v_left = list(map(int, re.findall(r'\d+', stand_team['vs_left'])))
-            # w_v_left = float(v_left[0]) / (float(v_left[0]) + float(v_left[1]))
-            # l_v_left = float(v_left[1]) / (float(v_left[0]) + float(v_left[1]))
-            # g_v_left = float(v_left[0]) + float(v_left[1])
-#             v_right = list(map(int, re.findall(r'\d+', stand_team['vs_right'])))
-#             w_v_right = float(v_right[0]) / (float(v_right[0]) + float(v_right[1]))
-#             l_v_right = float(v_right[1]) / (float(v_right[0]) + float(v_right[1]))
-#             g_v_right = float(v_right[0]) + float(v_right[1])
-#             home_rec = list(map(int, re.findall(r'\d+', stand_team['home'])))
-#             w_at_home = float(home_rec[0]) / (float(home_rec[0]) + float(home_rec[1]))
-#             l_at_home = float(home_rec[1]) / (float(home_rec[0]) + float(home_rec[1]))
-#             g_at_home = float(home_rec[0]) + float(home_rec[1])
-#             away_rec = list(map(int, re.findall(r'\d+', stand_team['away'])))
-#             w_on_road = float(away_rec[0]) / (float(away_rec[0]) + float(away_rec[1]))
-#             l_on_road = float(away_rec[1]) / (float(away_rec[0]) + float(away_rec[1]))
-#             g_on_road = float(away_rec[0]) + float(away_rec[1])
-#             win_avg = float(wins)/float(games)
-#             loss_avg = float(losses)/float(games)
-#             return win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road
-#
-# TEAM_RECORD_MAP = {}
-#
-# def create_teams(all_teams):
-#     for t in all_teams:
-#         print('creating ' + t)
-#         win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road = return_wins_losses(TEAM_STANDING_DICT, t)
-#         team_object = Team(t, win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road)
-#         t = t.replace(" ", "_").lower()
-#         TEAM_RECORD_MAP[t] = team_object
-#     return TEAM_RECORD_MAP
-#
-# TEAM_RECORD_MAP = create_teams(ALL_TEAM_SHORT_NAMES)
-#
-# # TODO Why is this here?
-# create_teams(ALL_TEAM_SHORT_NAMES)
-#
-# for team in TEAM_STATS_DICT:
-#     team = Team()
-#     team.name = s
-#     team_name = team['team_full']
-#     short_name = team['team_short']
-#     inning = float(team['g']) * 9.0
-#     games = float(team['g'])
+
+
+class SelfCalculated(object):
+
+    def __init__(self):
+        """get necessary data from standings."""
+        pass
+
+    def get_total_innings(self, team):
+        innings = team.games * 9
+        return innings
+
+    def get_losses(self, current_dict):
+        return int(current_dict['l'])
+
+## Finish these just in case
+self_calc = SelfCalculated()
+innings = self_calc.get_total_innings(mlb['HOU'])
+assert innings == 1062, innings
+
 #     runs_per_game = float(team['r']) / games
 #     walks_per_game = float(team['bb']) / games
 #     hits_per_game = float(team['h']) / games
