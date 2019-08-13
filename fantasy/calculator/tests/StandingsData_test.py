@@ -40,5 +40,8 @@ class FunctionalTest(unittest.TestCase):
         loss_avg = standings.set_loss_avg(standings_data)
         assert loss_avg == 0.4067796610169492, 'Didn\'t get expected loss_avg'
 
+        run_avg = standings.get_run_avg(standings_data)
+        assert run_avg == 5.533898305084746, 'Didn\'t get expected run_avg'
+
 if __name__ == '__main__':
     unittest.main()

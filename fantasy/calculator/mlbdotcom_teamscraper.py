@@ -259,6 +259,10 @@ class StandingsData(object):
         total = self.get_games_total(current_dict)
         return wins / total
 
+    def get_run_avg(self, current_dict):
+        games = self.get_games_total(current_dict)
+        return int(current_dict['runs']) / games
+
 standings_data = StandingsData()
 
 for current_standings in TEAM_STANDING_DICT:
@@ -297,11 +301,7 @@ for current_standings in TEAM_STANDING_DICT:
     mlb[current_standings['team_abbrev']].l_avg_road = l_avg_road
     mlb[current_standings['team_abbrev']].g_at_road = g_at_road
 
-
-print(mlb['HOU'].win_avg)
-print(mlb['HOU'].loss_avg)
-
-
+    mlb[current_standings['team_abbrev']].run_avg = standings_data.get_run_avg(current_standings)
 
 
 class SelfCalculated(object):
