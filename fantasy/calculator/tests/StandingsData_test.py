@@ -31,5 +31,14 @@ class FunctionalTest(unittest.TestCase):
         assert l_avg_road == 0.43333333333333335, 'did not get expected l_avg_road %d' % l_avg_road
         assert g_at_road == 60, 'did not get expected g_at_road %d' % g_at_road
 
+        games = standings.get_games_total(standings_data)
+        assert games == 118, 'Didn\'t get expected total games'
+
+        win_avg = standings.set_win_avg(standings_data)
+        assert win_avg == 0.652542372881356, 'Didn\'t get expected win_avg'
+
+        loss_avg = standings.set_loss_avg(standings_data)
+        assert loss_avg == 0.4067796610169492, 'Didn\'t get expected loss_avg'
+
 if __name__ == '__main__':
     unittest.main()

@@ -244,14 +244,38 @@ class StandingsData(object):
         w_avg_road, l_avg_road, g_at_road = self.break_dash_record_split(current_dict, 'away')
         return w_avg_road, l_avg_road, g_at_road
 
+    def get_games_total(self, current_dict):
+        wins = self.get_wins(current_dict)
+        losses = self.get_losses(current_dict)
+        return wins + losses
+
+    def set_win_avg(self, current_dict):
+        wins = self.get_wins(current_dict)
+        total = self.get_games_total(current_dict)
+        return wins / total
+
+    def set_loss_avg(self, current_dict):
+        losses = self.get_losses(current_dict)
+        total = self.get_games_total(current_dict)
+        return wins / total
+
 standings_data = StandingsData()
 
 for current_standings in TEAM_STANDING_DICT:
     log.debug('getting standings data')
     assert isinstance(current_standings, dict), type(current_standings)
+
     wins = standings_data.get_wins(current_standings)
     mlb[current_standings['team_abbrev']].wins = wins
+
+    losses = standings_data.get_losses(current_standings)
     mlb[current_standings['team_abbrev']].losses = standings_data.get_losses(current_standings)
+
+    mlb[current_standings['team_abbrev']].games = standings_data.get_games_total(current_standings)
+
+    mlb[current_standings['team_abbrev']].win_avg = standings_data.set_win_avg(current_standings)
+
+    mlb[current_standings['team_abbrev']].loss_avg = standings_data.set_loss_avg(current_standings)
 
     wins_avg_left, loss_avg_left, g_v_left = standings_data.get_vs_left(current_standings)
     mlb[current_standings['team_abbrev']].wins_avg_left = wins_avg_left
@@ -273,8 +297,9 @@ for current_standings in TEAM_STANDING_DICT:
     mlb[current_standings['team_abbrev']].l_avg_road = l_avg_road
     mlb[current_standings['team_abbrev']].g_at_road = g_at_road
 
-
-
+#
+# print(mlb['HOU'].win_avg)
+# print(mlb['HOU'].loss_avg)
 
 
 #
