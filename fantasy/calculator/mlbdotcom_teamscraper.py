@@ -106,12 +106,15 @@ def get_relevant_splits_per_dict(splits_dict):
     bb = int(splits_dict['bb'])
     waks_per_game = get_avg(bb, g)
 
-    return runs_per_game, hits_per_game, hr_per_game, waks_per_game
+    so = int(splits_dict['so'])
+    so_per_game = get_avg(so, g)
+
+    return runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game
 
 def get_pitcher_splits_per_dict(splits_dict):
     log.debug('running get_pitcher_splits_per_dict')
     r = int(splits_dict['r'])
-    # import pdb; pdb.set_trace()
+
     plate_appearances = int(splits_dict['tpa'])
     runs_per_pa = get_avg(r, plate_appearances)
 
@@ -123,47 +126,53 @@ def get_pitcher_splits_per_dict(splits_dict):
 
     bb = int(splits_dict['bb'])
     walks_per_pa = get_avg(bb, plate_appearances)
-    # import pdb; pdb.set_trace()
 
-    return runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa
+    so = int(splits_dict['so'])
+    so_per_pa = get_avg(so, plate_appearances)
+
+    return runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa
 
 for stats in TEAM_AT_HOME_DICT:
     log.debug('getting home splits')
-    runs_per_game, hits_per_game, hr_per_game, waks_per_game = get_relevant_splits_per_dict(stats)
+    runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game = get_relevant_splits_per_dict(stats)
     mlb[stats['name_abbrev']].home_r_pg = runs_per_game
     mlb[stats['name_abbrev']].home_h_pg = hits_per_game
     mlb[stats['name_abbrev']].home_hr_pg = hr_per_game
     mlb[stats['name_abbrev']].home_bb_pg = waks_per_game
+    mlb[stats['name_abbrev']].home_so_pg = so_per_game
 
 TEAM_AWAY_DICT = get_splits_by_uri(TEAM_AWAY_URI)
 
 for stats in TEAM_AWAY_DICT:
     log.debug('getting away splits')
-    runs_per_game, hits_per_game, hr_per_game, waks_per_game = get_relevant_splits_per_dict(stats)
+    runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game = get_relevant_splits_per_dict(stats)
     mlb[stats['name_abbrev']].away_r_pg = runs_per_game
     mlb[stats['name_abbrev']].away_h_pg = hits_per_game
     mlb[stats['name_abbrev']].away_hr_pg = hr_per_game
     mlb[stats['name_abbrev']].away_bb_pg = waks_per_game
+    mlb[stats['name_abbrev']].away_so_pg = so_per_game
 
 TEAM_VS_LEFTY_DICT = get_splits_by_uri(TEAM_VS_LEFTY_URI)
 
 for stats in TEAM_VS_LEFTY_DICT:
     log.debug('getting lefty splits')
-    runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa = get_pitcher_splits_per_dict(stats)
-    mlb[stats['name_abbrev']].vs_l_r_per_pa = runs_per_game
-    mlb[stats['name_abbrev']].vs_l_h_per_pa = hits_per_game
-    mlb[stats['name_abbrev']].vs_l_hr_per_pa = hr_per_game
-    mlb[stats['name_abbrev']].vs_l_bb_per_pa = waks_per_game
+    runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa = get_pitcher_splits_per_dict(stats)
+    mlb[stats['name_abbrev']].vs_l_r_per_pa = runs_per_pa
+    mlb[stats['name_abbrev']].vs_l_h_per_pa = hits_per_pa
+    mlb[stats['name_abbrev']].vs_l_hr_per_pa = hr_per_pa
+    mlb[stats['name_abbrev']].vs_l_bb_per_pa = walks_per_pa
+    mlb[stats['name_abbrev']].vs_l_so_per_pa = so_per_pa
 
 TEAM_VS_RIGHTY_DICT = get_splits_by_uri(TEAM_VS_RIGHTY_URI)
 
 for stats in TEAM_VS_RIGHTY_DICT:
     log.debug('getting righty splits')
-    runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa = get_pitcher_splits_per_dict(stats)
-    mlb[stats['name_abbrev']].vs_r_r_per_pa = runs_per_game
-    mlb[stats['name_abbrev']].vs_r_h_per_pa = hits_per_game
-    mlb[stats['name_abbrev']].vs_r_hr_per_pa = hr_per_game
-    mlb[stats['name_abbrev']].vs_r_bb_per_pa = waks_per_game
+    runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa = get_pitcher_splits_per_dict(stats)
+    mlb[stats['name_abbrev']].vs_r_r_per_pa = runs_per_pa
+    mlb[stats['name_abbrev']].vs_r_h_per_pa = hits_per_pa
+    mlb[stats['name_abbrev']].vs_r_hr_per_pa = hr_per_pa
+    mlb[stats['name_abbrev']].vs_r_bb_per_pa = walks_per_pa
+    mlb[stats['name_abbrev']].vs_r_so_per_pa = so_per_pa
 
 def get_standings():
     today = datetime.now().strftime('%Y/%m/%d')
@@ -235,6 +244,7 @@ class StandingsData(object):
         total = self.get_games_total(current_dict)
         return wins / total
 
+    ## TODO think I have 2
     def get_run_avg(self, current_dict):
         games = self.get_games_total(current_dict)
         return int(current_dict['runs']) / games
@@ -290,6 +300,11 @@ class SelfCalculated(object):
         innings = team.games * 9
         return innings
 
+    def plate_appearances_per_game(self, team):
+        innings = team.games * 9
+
+        return innings
+
 
 ## Finish these just in case
 self_calc = SelfCalculated()
@@ -317,6 +332,13 @@ class TeamStatsNoSplit(object):
     def get_strikeouts_per_game(self, current_dict):
         return int(current_dict['so']) / int(current_dict['g'])
 
+    def get_total_plate_appearance(self, current_dict):
+        return int(current_dict['tpa'])
+
+    def get_plate_appearences_per_game(self, current_dict):
+        return int(current_dict['tpa']) / int(current_dict['g'])
+
+
 team_stats = TeamStatsNoSplit()
 
 print(TEAM_STATS_DICT[0])
@@ -340,66 +362,103 @@ for t_stat in TEAM_STATS_DICT:
     strikeouts_per_game = team_stats.get_strikeouts_per_game(t_stat)
     mlb[t_stat['team_abbrev']].strikeouts_per_game = strikeouts_per_game
 
-# TODO: Write tests
+    total_plate_appearances = team_stats.get_total_plate_appearance(t_stat)
+    mlb[t_stat['team_abbrev']].total_plate_appearances = total_plate_appearances
 
-# TODO: Better loop
-for team in TEAM_STATS_DICT:
-    log.debug('expected_game_no_spit')
+    plate_appearences_per_game = team_stats.get_plate_appearences_per_game(t_stat)
+    mlb[t_stat['team_abbrev']].plate_appearences_per_game = plate_appearences_per_game
+
+
+# TODO: Write tests all of above
+# print(mlb['HOU'].total_plate_appearances)
+# print(mlb['HOU'].plate_appearences_per_game)
+
+for team in mlb:
+    log.debug('calculating expected_game_no_spit')
     expected_game = calculate_game(
         7, # AVG innings starter (could improve)
-        mlb[team['team_abbrev']].runs_per_game,
-        mlb[team['team_abbrev']].walks_per_game,
-        mlb[team['team_abbrev']].hits_per_game,
-        mlb[team['team_abbrev']].homeruns_per_game,
-        mlb[team['team_abbrev']].strikeouts_per_game,
+        mlb[team].runs_per_game,
+        mlb[team].walks_per_game,
+        mlb[team].hits_per_game,
+        mlb[team].homeruns_per_game,
+        mlb[team].strikeouts_per_game,
         0, # Saves
-        mlb[team['team_abbrev']].win_avg,
-        mlb[team['team_abbrev']].loss_avg,
+        mlb[team].win_avg,
+        mlb[team].loss_avg,
         0 # quality_starts
     )
-    mlb[team['team_abbrev']].expected_game_no_spit = expected_game
+    mlb[team].expected_game_no_spit = expected_game
 
 # TODO: Write tests
-print(mlb['MIA'].expected_game_no_spit)
-#
-#
-# def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
-#     for team in SPLITS_DICT:
-#         team_name = team['team_full']
-#         short_name = team['team_short'].lower().replace(' ', '_')
-#         records = TEAM_RECORD_MAP[short_name]
-#         if type == 'home':
-#             w = records.w_at_home
-#             l = records.l_at_home
-#             games = records.g_at_home
-#         elif type == 'away':
-#             w = records.w_on_road
-#             l = records.l_on_road
-#             games = records.g_on_road
-#         elif type == 'lefty':
-#             w = records.w_v_left
-#             l = records.l_v_left
-#             games = records.g_v_left
-#         elif type == 'righty':
-#             w = records.w_v_right
-#             l = records.l_v_right
-#             games = records.g_v_right
-#         else:
-#             assert 1 == 2, 'got to else in get_expected_game_by_dict'
-#         print('In get expected. Losses ' + str(l))
-#         inning = games * 8.75
-#         runs_per_game = float(team['r']) / games
-#         walks_per_game = float(team['bb']) / games
-#         hits_per_game = float(team['h']) / games
-#         homeruns_per_game = float(team['hr']) / games
-#         strikeouts_per_game = float(team['so']) / games
-#         ts = short_name.lower().replace(' ', '_')
-#         # print 'Games %.2f:\n' % (games)
-#         expected_game = calculate_game(7, runs_per_game, walks_per_game, hits_per_game, \
-#             homeruns_per_game, strikeouts_per_game, 0, w, l, 0)
-#         ADD_TO_DICT[team_name] = expected_game
-#
-#
+print(mlb['HOU'].expected_game_no_spit)
+
+
+# TODO: Make this work for all 4
+for team in mlb:
+    log.debug('calculating expected_game_vs_left')
+    started_expected_innings = 7
+    expected_starter_plate_appearance = (started_expected_innings/float(9)) * mlb[team].plate_appearences_per_game
+    splits_r_expected = mlb[team].vs_l_r_per_pa * expected_starter_plate_appearance
+    splits_h_expected = mlb[team].vs_l_h_per_pa * expected_starter_plate_appearance
+    splits_hr_expected = mlb[team].vs_l_hr_per_pa * expected_starter_plate_appearance
+    splits_bb_expected = mlb[team].vs_l_bb_per_pa * expected_starter_plate_appearance
+    splits_so_expected = mlb[team].vs_l_so_per_pa * expected_starter_plate_appearance
+    expected_game = calculate_game(
+        started_expected_innings, # AVG innings starter (could improve)
+        splits_r_expected,
+        splits_bb_expected,
+        splits_h_expected,
+        splits_hr_expected,
+        splits_so_expected,
+        0, # Saves
+        mlb[team].wins_avg_left,
+        mlb[team].losses_avg_left,
+        0 # quality_starts
+    )
+    mlb[team].expected_game_lefty_spit = expected_game
+
+print(mlb['HOU'].expected_game_lefty_spit)
+    # mlb[stats['name_abbrev']].home_r_pg = runs_per_game
+    # mlb[stats['name_abbrev']].home_h_pg = hits_per_game
+    # mlb[stats['name_abbrev']].home_hr_pg = hr_per_game
+    # mlb[stats['name_abbrev']].home_bb_pg = waks_per_game
+
+    # for team in SPLITS_DICT:
+        # team_name = team['team_full']
+        # short_name = team['team_short'].lower().replace(' ', '_')
+        # records = TEAM_RECORD_MAP[short_name]
+        # if type == 'home':
+        #     w = records.w_at_home
+        #     l = records.l_at_home
+        #     games = records.g_at_home
+        # elif type == 'away':
+        #     w = records.w_on_road
+        #     l = records.l_on_road
+        #     games = records.g_on_road
+        # elif type == 'lefty':
+        #     w = records.w_v_left
+        #     l = records.l_v_left
+        #     games = records.g_v_left
+        # elif type == 'righty':
+        #     w = records.w_v_right
+        #     l = records.l_v_right
+        #     games = records.g_v_right
+        # else:
+        #     assert 1 == 2, 'got to else in get_expected_game_by_dict'
+        # print('In get expected. Losses ' + str(l))
+        # inning = games * 8.75
+        # runs_per_game = float(team['r']) / games
+        # walks_per_game = float(team['bb']) / games
+        # hits_per_game = float(team['h']) / games
+        # homeruns_per_game = float(team['hr']) / games
+        # strikeouts_per_game = float(team['so']) / games
+        # ts = short_name.lower().replace(' ', '_')
+        # # print 'Games %.2f:\n' % (games)
+        # expected_game = calculate_game(7, runs_per_game, walks_per_game, hits_per_game, \
+        #     homeruns_per_game, strikeouts_per_game, 0, w, l, 0)
+        # ADD_TO_DICT[team_name] = expected_game
+
+
 # get_expected_game_by_dict(TEAM_AT_HOME_DICT, HOME_AVG_GAME, 'home')
 # get_expected_game_by_dict(TEAM_AWAY_DICT, AWAY_AVG_GAME, 'away')
 # get_expected_game_by_dict(TEAM_VS_LEFTY_DICT, LEFTY_AVG_GAME, 'lefty')
