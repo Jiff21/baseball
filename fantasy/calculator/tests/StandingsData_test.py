@@ -21,6 +21,15 @@ class FunctionalTest(unittest.TestCase):
         losses = standings.get_losses(standings_data)
         assert losses == 41, 'did not get expected losses %d' % losses
 
+        wins_avg_right, loss_avg_right, g_v_right = standings.get_vs_right(standings_data)
+        assert wins_avg_right == 0.6046511627906976, 'did not get expected wins_avg_right %d' % wins_avg_right
+        assert loss_avg_right == 0.3953488372093023, 'did not get expected loss_avg_right %d' % loss_avg_right
+        assert g_v_right == 86, 'did not get expected g_v_right %d' % g_v_right
+
+        w_avg_road, l_avg_road, g_at_road = standings.get_at_road(standings_data)
+        assert w_avg_road == 0.5666666666666667, 'did not get expected w_avg_road %d' % w_avg_road
+        assert l_avg_road == 0.43333333333333335, 'did not get expected l_avg_road %d' % l_avg_road
+        assert g_at_road == 60, 'did not get expected g_at_road %d' % g_at_road
 
 if __name__ == '__main__':
     unittest.main()

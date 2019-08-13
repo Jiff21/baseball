@@ -221,18 +221,58 @@ class StandingsData(object):
     def get_losses(self, current_dict):
         return int(current_dict['l'])
 
+    def break_dash_record_split(self, current_dict, string):
+        record_split = list(map(int, re.findall(r'\d+', current_dict[string])))
+        first_number = float(record_split[0]) / (float(record_split[0]) + float(record_split[1]))
+        second_number = float(record_split[1]) / (float(record_split[0]) + float(record_split[1]))
+        total = float(record_split[0]) + float(record_split[1])
+        return first_number, second_number, total
+
+    def get_vs_left(self, current_dict):
+        w_v_left, l_v_left, g_v_left = self.break_dash_record_split(current_dict, 'vs_left')
+        return w_v_left, l_v_left, g_v_left
+
+    def get_vs_right(self, current_dict):
+        w_v_left, l_v_left, g_v_left = self.break_dash_record_split(current_dict, 'vs_right')
+        return w_v_left, l_v_left, g_v_left
+
+    def get_at_home(self, current_dict):
+        w_avg_home, w_avg_home, g_at_home = self.break_dash_record_split(current_dict, 'home')
+        return w_avg_home, w_avg_home, g_at_home
+
+    def get_at_road(self, current_dict):
+        w_avg_road, l_avg_road, g_at_road = self.break_dash_record_split(current_dict, 'away')
+        return w_avg_road, l_avg_road, g_at_road
+
 standings_data = StandingsData()
 
 for current_standings in TEAM_STANDING_DICT:
     log.debug('getting standings data')
-    print(current_standings)
     assert isinstance(current_standings, dict), type(current_standings)
     wins = standings_data.get_wins(current_standings)
     mlb[current_standings['team_abbrev']].wins = wins
     mlb[current_standings['team_abbrev']].losses = standings_data.get_losses(current_standings)
 
+    wins_avg_left, loss_avg_left, g_v_left = standings_data.get_vs_left(current_standings)
+    mlb[current_standings['team_abbrev']].wins_avg_left = wins_avg_left
+    mlb[current_standings['team_abbrev']].losses_avg_left = loss_avg_left
+    mlb[current_standings['team_abbrev']].g_v_left = g_v_left
 
-assert mlb['HOU'].wins == 77, mlb['HOU'].wins
+    wins_avg_right, loss_avg_right, g_v_right = standings_data.get_vs_right(current_standings)
+    mlb[current_standings['team_abbrev']].wins_avg_right = wins_avg_right
+    mlb[current_standings['team_abbrev']].loss_avg_right = loss_avg_right
+    mlb[current_standings['team_abbrev']].g_v_right = g_v_right
+
+    w_avg_home, l_avg_home, g_at_home = standings_data.get_at_home(current_standings)
+    mlb[current_standings['team_abbrev']].w_avg_home = wins_avg_right
+    mlb[current_standings['team_abbrev']].l_avg_home = l_avg_home
+    mlb[current_standings['team_abbrev']].g_at_home = g_at_home
+
+    w_avg_road, l_avg_road, g_at_road = standings_data.get_at_road(current_standings)
+    mlb[current_standings['team_abbrev']].w_avg_road = w_avg_road
+    mlb[current_standings['team_abbrev']].l_avg_road = l_avg_road
+    mlb[current_standings['team_abbrev']].g_at_road = g_at_road
+
 
 
 
@@ -251,10 +291,10 @@ assert mlb['HOU'].wins == 77, mlb['HOU'].wins
 #             wins = int(stand_team['w'])
 #             losses = int(stand_team['l'])
 #             games = wins + losses
-#             v_left = list(map(int, re.findall(r'\d+', stand_team['vs_left'])))
-#             w_v_left = float(v_left[0]) / (float(v_left[0]) + float(v_left[1]))
-#             l_v_left = float(v_left[1]) / (float(v_left[0]) + float(v_left[1]))
-#             g_v_left = float(v_left[0]) + float(v_left[1])
+            # v_left = list(map(int, re.findall(r'\d+', stand_team['vs_left'])))
+            # w_v_left = float(v_left[0]) / (float(v_left[0]) + float(v_left[1]))
+            # l_v_left = float(v_left[1]) / (float(v_left[0]) + float(v_left[1]))
+            # g_v_left = float(v_left[0]) + float(v_left[1])
 #             v_right = list(map(int, re.findall(r'\d+', stand_team['vs_right'])))
 #             w_v_right = float(v_right[0]) / (float(v_right[0]) + float(v_right[1]))
 #             l_v_right = float(v_right[1]) / (float(v_right[0]) + float(v_right[1]))
