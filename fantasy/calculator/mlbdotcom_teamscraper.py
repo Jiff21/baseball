@@ -17,6 +17,7 @@ AWAY_AVG_GAME = {}
 
 from calculator.settings.api import BASE_URL, UPDATED_BASE_URL, TEAM_AWAY_URI, TEAM_AT_HOME_URI
 from calculator.settings.api import TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
+from calculator.settings.api import TEAM_STANDING_URI
 # TODO : FIX URL Here
 # from calculator.settings.api import TEAM_STATS_URI
 TEAM_STATS_URI = 'named.team_hitting_season_leader_master.bam?season=2019&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&recSP=1&recPP=50'
@@ -97,8 +98,6 @@ def get_all_team_names(d):
 
 mlb = get_all_team_names(TEAM_STATS_DICT)
 
-print(mlb['COL'].short_name)
-
 def get_splits_by_uri(uri):
     CURRENT_URL = UPDATED_BASE_URL + uri
     try:
@@ -115,85 +114,86 @@ TEAM_AT_HOME_DICT = get_splits_by_uri(TEAM_AT_HOME_URI)
 
 def get_avg(number, total):
     return number / total
-
-def get_relevant_splits_per_dict(splits_dict):
-    log.debug('running get_relevant_splits_per_dict')
-    r = int(splits_dict['r'])
-    g = int(splits_dict['g'])
-    runs_per_game = get_avg(r, g)
-
-    h = int(splits_dict['h'])
-    hits_per_game = get_avg(h, g)
-
-    hr = int(splits_dict['hr'])
-    hr_per_game = get_avg(hr, g)
-
-    bb = int(splits_dict['bb'])
-    waks_per_game = get_avg(bb, g)
-
-    return runs_per_game, hits_per_game, hr_per_game, waks_per_game
-
-def get_pitcher_splits_per_dict(splits_dict):
-    log.debug('running get_pitcher_splits_per_dict')
-    r = int(splits_dict['r'])
-    # import pdb; pdb.set_trace()
-    plate_appearances = int(splits_dict['tpa'])
-    runs_per_pa = get_avg(r, plate_appearances)
-
-    h = int(splits_dict['h'])
-    hits_per_pa = get_avg(h, plate_appearances)
-
-    hr = int(splits_dict['hr'])
-    hr_per_pa = get_avg(hr, plate_appearances)
-
-    bb = int(splits_dict['bb'])
-    walks_per_pa = get_avg(bb, plate_appearances)
-    # import pdb; pdb.set_trace()
-
-    return runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa
-
-for stats in TEAM_AT_HOME_DICT:
-    log.debug('getting home splits')
-    runs_per_game, hits_per_game, hr_per_game, waks_per_game = get_relevant_splits_per_dict(stats)
-    mlb[stats['name_abbrev']].home_r_pg = runs_per_game
-    mlb[stats['name_abbrev']].home_h_pg = hits_per_game
-    mlb[stats['name_abbrev']].home_hr_pg = hr_per_game
-    mlb[stats['name_abbrev']].home_bb_pg = waks_per_game
-
-TEAM_AWAY_DICT = get_splits_by_uri(TEAM_AWAY_URI)
-
-for stats in TEAM_AWAY_DICT:
-    log.debug('getting away splits')
-    runs_per_game, hits_per_game, hr_per_game, waks_per_game = get_relevant_splits_per_dict(stats)
-    mlb[stats['name_abbrev']].away_r_pg = runs_per_game
-    mlb[stats['name_abbrev']].away_h_pg = hits_per_game
-    mlb[stats['name_abbrev']].away_hr_pg = hr_per_game
-    mlb[stats['name_abbrev']].away_bb_pg = waks_per_game
-
-TEAM_VS_LEFTY_DICT = get_splits_by_uri(TEAM_VS_LEFTY_URI)
-
-for stats in TEAM_VS_LEFTY_DICT:
-    log.debug('getting lefty splits')
-    runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa = get_pitcher_splits_per_dict(stats)
-    mlb[stats['name_abbrev']].vs_l_r_per_pa = runs_per_game
-    mlb[stats['name_abbrev']].vs_l_h_per_pa = hits_per_game
-    mlb[stats['name_abbrev']].vs_l_hr_per_pa = hr_per_game
-    mlb[stats['name_abbrev']].vs_l_bb_per_pa = waks_per_game
-
-TEAM_VS_RIGHTY_DICT = get_splits_by_uri(TEAM_VS_RIGHTY_URI)
-
-for stats in TEAM_VS_RIGHTY_DICT:
-    log.debug('getting righty splits')
-    runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa = get_pitcher_splits_per_dict(stats)
-    mlb[stats['name_abbrev']].vs_r_r_per_pa = runs_per_game
-    mlb[stats['name_abbrev']].vs_r_h_per_pa = hits_per_game
-    mlb[stats['name_abbrev']].vs_r_hr_per_pa = hr_per_game
-    mlb[stats['name_abbrev']].vs_r_bb_per_pa = waks_per_game
-
+#
+# def get_relevant_splits_per_dict(splits_dict):
+#     log.debug('running get_relevant_splits_per_dict')
+#     r = int(splits_dict['r'])
+#     g = int(splits_dict['g'])
+#     runs_per_game = get_avg(r, g)
+#
+#     h = int(splits_dict['h'])
+#     hits_per_game = get_avg(h, g)
+#
+#     hr = int(splits_dict['hr'])
+#     hr_per_game = get_avg(hr, g)
+#
+#     bb = int(splits_dict['bb'])
+#     waks_per_game = get_avg(bb, g)
+#
+#     return runs_per_game, hits_per_game, hr_per_game, waks_per_game
+#
+# def get_pitcher_splits_per_dict(splits_dict):
+#     log.debug('running get_pitcher_splits_per_dict')
+#     r = int(splits_dict['r'])
+#     # import pdb; pdb.set_trace()
+#     plate_appearances = int(splits_dict['tpa'])
+#     runs_per_pa = get_avg(r, plate_appearances)
+#
+#     h = int(splits_dict['h'])
+#     hits_per_pa = get_avg(h, plate_appearances)
+#
+#     hr = int(splits_dict['hr'])
+#     hr_per_pa = get_avg(hr, plate_appearances)
+#
+#     bb = int(splits_dict['bb'])
+#     walks_per_pa = get_avg(bb, plate_appearances)
+#     # import pdb; pdb.set_trace()
+#
+#     return runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa
+#
+# for stats in TEAM_AT_HOME_DICT:
+#     log.debug('getting home splits')
+#     runs_per_game, hits_per_game, hr_per_game, waks_per_game = get_relevant_splits_per_dict(stats)
+#     mlb[stats['name_abbrev']].home_r_pg = runs_per_game
+#     mlb[stats['name_abbrev']].home_h_pg = hits_per_game
+#     mlb[stats['name_abbrev']].home_hr_pg = hr_per_game
+#     mlb[stats['name_abbrev']].home_bb_pg = waks_per_game
+#
+# TEAM_AWAY_DICT = get_splits_by_uri(TEAM_AWAY_URI)
+#
+# for stats in TEAM_AWAY_DICT:
+#     log.debug('getting away splits')
+#     runs_per_game, hits_per_game, hr_per_game, waks_per_game = get_relevant_splits_per_dict(stats)
+#     mlb[stats['name_abbrev']].away_r_pg = runs_per_game
+#     mlb[stats['name_abbrev']].away_h_pg = hits_per_game
+#     mlb[stats['name_abbrev']].away_hr_pg = hr_per_game
+#     mlb[stats['name_abbrev']].away_bb_pg = waks_per_game
+#
+# TEAM_VS_LEFTY_DICT = get_splits_by_uri(TEAM_VS_LEFTY_URI)
+#
+# for stats in TEAM_VS_LEFTY_DICT:
+#     log.debug('getting lefty splits')
+#     runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa = get_pitcher_splits_per_dict(stats)
+#     mlb[stats['name_abbrev']].vs_l_r_per_pa = runs_per_game
+#     mlb[stats['name_abbrev']].vs_l_h_per_pa = hits_per_game
+#     mlb[stats['name_abbrev']].vs_l_hr_per_pa = hr_per_game
+#     mlb[stats['name_abbrev']].vs_l_bb_per_pa = waks_per_game
+#
+# TEAM_VS_RIGHTY_DICT = get_splits_by_uri(TEAM_VS_RIGHTY_URI)
+#
+# for stats in TEAM_VS_RIGHTY_DICT:
+#     log.debug('getting righty splits')
+#     runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa = get_pitcher_splits_per_dict(stats)
+#     mlb[stats['name_abbrev']].vs_r_r_per_pa = runs_per_game
+#     mlb[stats['name_abbrev']].vs_r_h_per_pa = hits_per_game
+#     mlb[stats['name_abbrev']].vs_r_hr_per_pa = hr_per_game
+#     mlb[stats['name_abbrev']].vs_r_bb_per_pa = waks_per_game
+#
 def get_standings():
     today = datetime.now().strftime('%Y/%m/%d')
-    TEAM_STANDING_URI = '/named.standings_schedule_date.bam?season=2019&schedule_game_date.game_date=%27' + today + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
+    # TEAM_STANDING_URI = '/named.standings_schedule_date.bam?season=2019&schedule_game_date.game_date=%27' + today + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
     CURRENT_URL = BASE_URL + TEAM_STANDING_URI
+    # CURRENT_URL = UPDATED_BASE_URL + TEAM_STANDING_URI
     try:
         TEAM_STANDING_RESPONSE = requests.get(CURRENT_URL)
     except requests.exceptions.RequestException as e:
@@ -204,15 +204,38 @@ def get_standings():
     # Standings are in two blocks al and NL. This combines them.
     tsd = JSON_STANDINGS['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][0]['queryResults']['row']
     tsd.extend(JSON_STANDINGS['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][1]['queryResults']['row'])
-    return tsd[0]
+    return tsd
 
 
 TEAM_STANDING_DICT = get_standings()
 
-# print(mlb['COL'].vs_r_r_per_pa)
-# print(mlb['COL'].vs_r_h_per_pa)
-# print(mlb['COL'].vs_r_hr_per_pa)
-# print(mlb['COL'].vs_r_bb_per_pa)
+class StandingsData(object):
+
+    def __init__(self):
+        """get necessary data from standings."""
+        pass
+
+    def get_wins(self, current_dict):
+        return int(current_dict['w'])
+
+    def get_losses(self, current_dict):
+        return int(current_dict['l'])
+
+standings_data = StandingsData()
+
+for current_standings in TEAM_STANDING_DICT:
+    log.debug('getting standings data')
+    print(current_standings)
+    assert isinstance(current_standings, dict), type(current_standings)
+    wins = standings_data.get_wins(current_standings)
+    mlb[current_standings['team_abbrev']].wins = wins
+    mlb[current_standings['team_abbrev']].losses = standings_data.get_losses(current_standings)
+
+
+assert mlb['HOU'].wins == 77, mlb['HOU'].wins
+
+
+
 
 #
 # def return_wins_losses(j,s):
