@@ -4,7 +4,7 @@
 From fantasy folder.
 
 ```bash
-virtualenv -p python3 env
+virtualenv -p python3.6 env
 . env/bin/activate
 ```
 
