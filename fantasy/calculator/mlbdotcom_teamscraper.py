@@ -1,23 +1,15 @@
-import requests
 import json
-import re
-
-from calculator.settings.logger import log
-
-from calculator.full_season_forecaster.pitcher_calculator import calculate_game
-from datetime import datetime
-
 import operator
-
-TEAM_AVG_GAME = {}
-LEFTY_AVG_GAME = {}
-RIGHTY_AVG_GAME = {}
-HOME_AVG_GAME = {}
-AWAY_AVG_GAME = {}
-
+import re
+import requests
+from datetime import datetime
+from calculator.settings.logger import log
+from calculator.settings.team_object import Team
 from calculator.settings.api import BASE_URL, UPDATED_BASE_URL, TEAM_AWAY_URI, TEAM_AT_HOME_URI
 from calculator.settings.api import TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
 from calculator.settings.api import TEAM_STANDING_URI
+from calculator.full_season_forecaster.pitcher_calculator import calculate_game
+
 
 # TODO : FIX URL Here
 # from calculator.settings.api import TEAM_STATS_URI
@@ -39,29 +31,6 @@ TEAM_STATS_DICT = get_team_stats()
 
 ALL_TEAM_SHORT_NAMES = []
 
-class Team(object):
-    def __init__(self):
-        """Return a team and there win loss splits."""
-        self.standings = None
-
-        def set_wins(wins):
-            self.wins = wins
-
-        def set_losses(losses):
-            self.losses = losses
-
-        def set_games(games_played):
-            self.games_played = games_played
-
-        def set_win_avg(win_avg):
-            self.win_avg = get_avg(self.wins, self.losses)
-
-        def set_loss_avg(loss_avg):
-            self.loss_avg = loss_avg
-
-        def get_avg(avg_to_get, other_half):
-            avg = avg_to_get / avg_to_get + other_half
-            return get_avg
 
 def get_all_team_names(d):
     mlb = {}
@@ -341,7 +310,7 @@ class TeamStatsNoSplit(object):
 
 team_stats = TeamStatsNoSplit()
 
-print(TEAM_STATS_DICT[0])
+# print(TEAM_STATS_DICT[0])
 
 for t_stat in TEAM_STATS_DICT:
     log.debug('getting team stats (no split)')
