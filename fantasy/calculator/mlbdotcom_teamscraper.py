@@ -459,32 +459,33 @@ class SplitExpectedGame(object):
 
 split_expected_game_calculator = SplitExpectedGame()
 
-# TODO: Make this work for all 4
-for team in mlb:
-    split_expected_game_calculator.calculate_lefty_expected_game(team)
-    split_expected_game_calculator.calculate_righty_expected_game(team)
-    split_expected_game_calculator.calculate_home_expected_game(team)
-    split_expected_game_calculator.calculate_away_expected_game(team)
-    print('TODO: Write test for expected splits lefty. %s %f' % (
-        team,
-        mlb[team].expected_game_lefty_spit
+def calculate_all_team_expections():
+    for team in mlb:
+        split_expected_game_calculator.calculate_lefty_expected_game(team)
+        split_expected_game_calculator.calculate_righty_expected_game(team)
+        split_expected_game_calculator.calculate_home_expected_game(team)
+        split_expected_game_calculator.calculate_away_expected_game(team)
+        print('TODO: Write test for expected splits lefty. %s %f' % (
+            team,
+            mlb[team].expected_game_lefty_spit
+            )
         )
-    )
-    print('TODO: Write test for expected splits righty. %s %f' % (
-        team,
-        mlb[team].expected_game_righty_spit
+        print('TODO: Write test for expected splits righty. %s %f' % (
+            team,
+            mlb[team].expected_game_righty_spit
+            )
         )
-    )
-    print('TODO: Write test for expected splits home. %s %f' % (
-        team,
-        mlb[team].expected_game_home_spit
+        print('TODO: Write test for expected splits home. %s %f' % (
+            team,
+            mlb[team].expected_game_home_spit
+            )
         )
-    )
 
-    print('TODO: Write test for expected splits away. %s %f' % (
-        team,
-        mlb[team].expected_game_away_spit
+        print('TODO: Write test for expected splits away. %s %f' % (
+            team,
+            mlb[team].expected_game_away_spit
+            )
         )
-    )
 
+calculate_all_team_expections()
 ## Something is off, home road splits produce higher projects then left right splits. should even out
