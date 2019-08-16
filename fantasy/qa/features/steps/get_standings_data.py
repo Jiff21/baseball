@@ -2,7 +2,6 @@ import time
 from behave import given, when, then, step
 from calculator.scraper.standings_data import StandingsData, get_standings
 
-
 @step('we load the test data for single team standings')
 def step_impl(context):
     context.execute_steps(u'''Given we load the test data "single_team_standings"''')
@@ -82,13 +81,20 @@ def step_impl(context):
 
 @step('we get the standings from mlb api')
 def step_impl(context):
-    context.standings_response = get_standings()
+    context.standings_api_data = get_standings()
 
+# Move this to scraper.standings
+from calculator.mlbdotcom_teamscraper import set_league_standings_data
 @step('we map standings to teams')
 def step_impl(context):
-    # context.standings_data = StandingsData()
-    assert 1 == 2, 'Still to do'
+    standings_data = StandingsData()
+    set_league_standings_data(context.standings_api_data)
+    print(context.league['HOU'].wins)
+#     for text in context.standings_data:
+#         print(text)
+    # assert 1 == 2, 'Still to do'
 
 @step('standings should have set "{games}" to "{expected_value}" for "{team_abbrev}"')
 def step_impl(context, games, expected_value, team_abbrev):
-    assert mlb[team_abbrev].games == expected_value, mlb[team_abbrev].games
+    assert context.league['HOU'].abbr == 'HOU', context.mlb['HOU'].abbr
+    # assert context.league[team_abbrev].wins == expected_value, mlb[team_abbrev].wins

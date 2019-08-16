@@ -80,9 +80,10 @@ Feature: We can scrape standings data
     When we set the loss avg
     Then the current stat should be a float equal to "0.3474576271186441"
 
+  @wip
   Scenario: Standings data produces
     Given we get the standings from mlb api
+      And we create the MLB league map
       And we create a standings object
-#      And we create a league object
 #    When we map standings to teams
 #    Then standings should have set "games" to "118" for "HOU"

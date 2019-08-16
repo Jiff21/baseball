@@ -4,29 +4,19 @@ import re
 import requests
 from datetime import datetime
 from calculator.settings.logger import log
-from calculator.settings.team_object import Team
 from calculator.settings.api import BASE_URL, UPDATED_BASE_URL, TEAM_AWAY_URI, TEAM_AT_HOME_URI
 from calculator.settings.api import TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
 from calculator.settings.api import TEAM_STANDING_URI
 from calculator.full_season_forecaster.pitcher_calculator import calculate_game
 from calculator.scraper.standings_data import get_standings, StandingsData
 
+from calculator.scraper.league import get_all_team_names
 from static.team_map import TEAM_MAP
 
-
-def get_all_team_names(d):
-    mlb = {}
-    for t in d:
-        print(t)
-        team = Team()
-        team.abbr = t
-        team.id = d[t]
-        mlb[team.abbr] = team
-    return mlb
-
+# Todo Test that find by ID gets correct team from api
 mlb = get_all_team_names(TEAM_MAP)
 
-import pdb; pdb.set_trace()
+# import pdb; pdb.set_trace()
 
 # TODO : FIX URL Here
 # from calculator.settings.api import TEAM_STATS_URI
@@ -49,18 +39,6 @@ def get_team_stats():
 TEAM_STATS_DICT = get_team_stats()
 
 ALL_TEAM_SHORT_NAMES = []
-
-
-# def get_all_team_names(d):
-#     mlb = {}
-#     for t in d:
-#         team = Team()
-#         team.short_name = t['team_short']
-#         team.abbr = t['team_abbrev']
-#         mlb[team.abbr] = team
-#     return mlb
-#
-# mlb = get_all_team_names(TEAM_STATS_DICT)
 
 def get_splits_by_uri(uri):
     CURRENT_URL = UPDATED_BASE_URL + uri
@@ -166,8 +144,9 @@ for stats in TEAM_VS_RIGHTY_DICT:
 TEAM_STANDING_DICT = get_standings()
 standings_data = StandingsData()
 
-def set_league_standings_data():
-    for current_standings in TEAM_STANDING_DICT:
+def set_league_standings_data(current_standings_dict):
+    assert isinstance(current_standings_dict, list), type(current_standings_dict)
+    for current_standings in current_standings_dict:
         log.debug('getting standings data')
         assert isinstance(current_standings, dict), type(current_standings)
 
@@ -205,7 +184,7 @@ def set_league_standings_data():
 
         mlb[current_standings['team_abbrev']].run_avg = standings_data.get_run_avg(current_standings)
 
-set_league_standings_data()
+set_league_standings_data(TEAM_STANDING_DICT)
 
 class SelfCalculated(object):
 
@@ -226,7 +205,7 @@ class SelfCalculated(object):
 ## Finish these just in case
 self_calc = SelfCalculated()
 innings = self_calc.get_total_innings(mlb['HOU'])
-assert innings == 1089, 'TODO: Write test for innings %d' % innings
+# assert innings == 1089, 'TODO: Write test for innings %d' % innings
 
 
 class TeamStatsNoSplit(object):
