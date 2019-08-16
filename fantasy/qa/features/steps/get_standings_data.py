@@ -15,15 +15,16 @@ def step_impl(context):
 def step_impl(context):
     context.standings = StandingsData()
 
-@step('the current stat should be a float equal to "{current_float}"')
+@step('the current stat should be a float equal to "{current_float:g}"')
 def step_impl(context, current_float):
     context.current_float = float(current_float)
-    assert context.current_stat == context.current_float, 'Did not get expected float '\
-        'of %.16f instead %.16f' % (context.current_float, context.current_stat)
+    context.current_stat = float(context.current_stat)
+    assert context.current_stat == current_float, 'Did not get expected float '\
+        'of %.16f instead %.16f' % (current_float, context.current_stat)
 
-@step('the current stat should be an int equal to "{number}"')
+@step('the current stat should be an int equal to "{number:d}"')
 def step_impl(context, number):
-    number = int(number)
+    # number = int(number)
     assert context.current_stat == number, 'Did not get expected int '\
         'of %d instead %d' % (number, context.current_stat)
 
@@ -35,14 +36,21 @@ def step_impl(context):
 def step_impl(context):
     context.current_stat = context.standings.get_losses(context.current_data)
 
-@step('we get standings for a righty pitching split')
+@step('we get standings for a righty pitching splits')
 def step_impl(context):
     context.win_avg_split, context.loss_avg_split, context.game_avg_split  = context.standings.get_vs_right(context.current_data)
 
-
-@step('we get standings for a lefty pitching split')
+@step('we get standings for a lefty pitching splits')
 def step_impl(context):
     context.win_avg_split, context.loss_avg_split, context.game_avg_split  = context.standings.get_vs_left(context.current_data)
+
+@step('we get standings for home pitching splits')
+def step_impl(context):
+    context.win_avg_split, context.loss_avg_split, context.game_avg_split  = context.standings.get_at_home(context.current_data)
+
+@step('we get standings for road pitching splits')
+def step_impl(context):
+    context.win_avg_split, context.loss_avg_split, context.game_avg_split  = context.standings.get_at_road(context.current_data)
 
 @step('we set the win avg to the current stat')
 def step_impl(context):
