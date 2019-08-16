@@ -1,4 +1,4 @@
-from scoring_settings import ScoringSettings
+from calculator.settings.scoring_settings import ScoringSettings
 ssp = ScoringSettings.Pitching
 
 def inning_extrapolator(season_innings, season_starts, season_era, season_win_total, \

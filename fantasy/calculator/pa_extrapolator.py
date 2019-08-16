@@ -20,21 +20,21 @@ def pa_extrapolator():
 	projected_plate_appearences = 600.0
 
 
-	# season_plate_appearances = float(raw_input('How many Plate Appearences Last Season?\n                                  '))
-	# season_walks = float(raw_input('How many Walks Last Season?\n                    '))
-	# season_IBB = float(raw_input('How many Intentional Walks  Last Season?\n                    '))
-	# season_HBP =float(raw_input('How many Hit By Pitches Last Season?\n                    '))
-	# season_hits = float(raw_input('How many Hits Last Season?\n                    '))
-	# season_doubles = float(raw_input('How many Doubles Last Season?\n                    '))
-	# season_triples = float(raw_input('How many Triples Last Season?\n                    '))
-	# season_home_runs = float(raw_input('How many Home Runs Last Season?\n                    '))
+	# season_plate_appearances = float(input('How many Plate Appearences Last Season?\n                                  '))
+	# season_walks = float(input('How many Walks Last Season?\n                    '))
+	# season_IBB = float(input('How many Intentional Walks  Last Season?\n                    '))
+	# season_HBP =float(input('How many Hit By Pitches Last Season?\n                    '))
+	# season_hits = float(input('How many Hits Last Season?\n                    '))
+	# season_doubles = float(input('How many Doubles Last Season?\n                    '))
+	# season_triples = float(input('How many Triples Last Season?\n                    '))
+	# season_home_runs = float(input('How many Home Runs Last Season?\n                    '))
 	# season_singles = season_hits - season_doubles - season_triples - season_home_runs
-	# season_runs = float(raw_input('How many Runs Last Season?\n                    '))
-	# season_rbis = float(raw_input('How many RBI\'s Last Season?\n                    '))
-	# season_strikeouts = float(raw_input('How many Strikeouts Last Season?\n                    '))
-	# season_stolen_bases = float(raw_input('How many Stolen Bases Last Season?\n                    '))
-	# season_caught_stealing = float(raw_input('How many Caught Stealings Last Season?\n                    '))
-	# projected_plate_appearences = float(raw_input(('How many Plate Appearances next Season?\n                    '))
+	# season_runs = float(input('How many Runs Last Season?\n                    '))
+	# season_rbis = float(input('How many RBI\'s Last Season?\n                    '))
+	# season_strikeouts = float(input('How many Strikeouts Last Season?\n                    '))
+	# season_stolen_bases = float(input('How many Stolen Bases Last Season?\n                    '))
+	# season_caught_stealing = float(input('How many Caught Stealings Last Season?\n                    '))
+	# projected_plate_appearences = float(input(('How many Plate Appearances next Season?\n                    '))
 
 
 	walk_rate = season_walks/season_plate_appearances
