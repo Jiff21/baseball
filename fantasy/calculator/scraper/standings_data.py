@@ -28,8 +28,8 @@ class StandingsData():
         return w_v_left, l_v_left, g_v_left
 
     def get_at_home(self, current_dict):
-        w_avg_home, w_avg_home, g_at_home = self.break_dash_record_split(current_dict, 'home')
-        return w_avg_home, w_avg_home, g_at_home
+        w_avg_home, l_avg_home, g_at_home = self.break_dash_record_split(current_dict, 'home')
+        return w_avg_home, l_avg_home, g_at_home
 
     def get_at_road(self, current_dict):
         w_avg_road, l_avg_road, g_at_road = self.break_dash_record_split(current_dict, 'away')

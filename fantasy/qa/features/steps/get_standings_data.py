@@ -17,8 +17,8 @@ def step_impl(context):
 
 @step('the current stat should be a float equal to "{current_float:g}"')
 def step_impl(context, current_float):
-    context.current_float = float(current_float)
-    context.current_stat = float(context.current_stat)
+    context.current_float = round(current_float, 16)
+    context.current_stat = round(context.current_stat, 16)
     assert context.current_stat == current_float, 'Did not get expected float '\
         'of %.16f instead %.16f' % (current_float, context.current_stat)
 

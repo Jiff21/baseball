@@ -39,9 +39,9 @@ Feature: We can scrape standings data
       And we create a standings object
     When we get standings for home pitching splits
       And we set the win avg to the current stat
-    Then the current stat should be a float equal to "0.2586206896551724"
+    Then the current stat should be a float equal to "0.7413793103448276"
     When we set the loss avg to the current stat
-    Then the current stat should be a float equal to "0.258620689655"
+    Then the current stat should be a float equal to "0.2586206896551724"
     When we set the game avg to the current stat
     Then the current stat should be an int equal to "58"
 
