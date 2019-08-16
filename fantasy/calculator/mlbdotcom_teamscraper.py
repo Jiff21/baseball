@@ -11,6 +11,22 @@ from calculator.settings.api import TEAM_STANDING_URI
 from calculator.full_season_forecaster.pitcher_calculator import calculate_game
 from calculator.scraper.standings_data import get_standings, StandingsData
 
+from static.team_map import TEAM_MAP
+
+
+def get_all_team_names(d):
+    mlb = {}
+    for t in d:
+        print(t)
+        team = Team()
+        team.abbr = t
+        team.id = d[t]
+        mlb[team.abbr] = team
+    return mlb
+
+mlb = get_all_team_names(TEAM_MAP)
+
+import pdb; pdb.set_trace()
 
 # TODO : FIX URL Here
 # from calculator.settings.api import TEAM_STATS_URI
@@ -35,16 +51,16 @@ TEAM_STATS_DICT = get_team_stats()
 ALL_TEAM_SHORT_NAMES = []
 
 
-def get_all_team_names(d):
-    mlb = {}
-    for t in d:
-        team = Team()
-        team.short_name = t['team_short']
-        team.abbr = t['team_abbrev']
-        mlb[team.abbr] = team
-    return mlb
-
-mlb = get_all_team_names(TEAM_STATS_DICT)
+# def get_all_team_names(d):
+#     mlb = {}
+#     for t in d:
+#         team = Team()
+#         team.short_name = t['team_short']
+#         team.abbr = t['team_abbrev']
+#         mlb[team.abbr] = team
+#     return mlb
+#
+# mlb = get_all_team_names(TEAM_STATS_DICT)
 
 def get_splits_by_uri(uri):
     CURRENT_URL = UPDATED_BASE_URL + uri
