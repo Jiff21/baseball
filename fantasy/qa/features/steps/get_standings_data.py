@@ -1,15 +1,15 @@
 import time
 from behave import given, when, then, step
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-
-from calculator.scraper.standings_data import StandingsData
+from calculator.scraper.standings_data import StandingsData, get_standings
 
 
 @step('we load the test data for single team standings')
 def step_impl(context):
     context.execute_steps(u'''Given we load the test data "single_team_standings"''')
+#
+# @step('we load the August 2018 standings test data')
+# def step_impl(context):
+#     context.execute_steps(u'''Given we load the test data "team_standings_2018_08_07"''')
 
 @step('we create a standings object')
 def step_impl(context):
@@ -64,26 +64,31 @@ def step_impl(context):
 def step_impl(context):
     context.current_stat = context.game_avg_split
 
+@step('we get total games')
+def step_impl(context):
+    context.current_stat = context.standings.get_games_total(context.current_data)
 
-        #
-        # wins_avg_right, loss_avg_right, g_v_right = standings.get_vs_right(standings_data)
-        # assert wins_avg_right == 0.6046511627906976, 'did not get expected wins_avg_right %d' % wins_avg_right
-        # assert loss_avg_right == 0.3953488372093023, 'did not get expected loss_avg_right %d' % loss_avg_right
-        # assert g_v_right == 86, 'did not get expected g_v_right %d' % g_v_right
-        #
-        # w_avg_road, l_avg_road, g_at_road = standings.get_at_road(standings_data)
-        # assert w_avg_road == 0.5666666666666667, 'did not get expected w_avg_road %d' % w_avg_road
-        # assert l_avg_road == 0.43333333333333335, 'did not get expected l_avg_road %d' % l_avg_road
-        # assert g_at_road == 60, 'did not get expected g_at_road %d' % g_at_road
-        #
-        # games = standings.get_games_total(standings_data)
-        # assert games == 118, 'Didn\'t get expected total games'
-        #
-        # win_avg = standings.set_win_avg(standings_data)
-        # assert win_avg == 0.652542372881356, 'Didn\'t get expected win_avg'
-        #
-        # loss_avg = standings.set_loss_avg(standings_data)
-        # assert loss_avg == 0.4067796610169492, 'Didn\'t get expected loss_avg'
-        #
-        # run_avg = standings.get_run_avg(standings_data)
-        # assert run_avg == 5.533898305084746, 'Didn\'t get expected run_avg'
+@step('we set the win avg')
+def step_impl(context):
+    context.current_stat = context.standings.set_win_avg(context.current_data)
+
+@step('we set the loss avg')
+def step_impl(context):
+    context.current_stat = context.standings.set_loss_avg(context.current_data)
+
+@step('we get run avg')
+def step_impl(context):
+    context.current_stat = context.standings.get_run_avg(context.current_data)
+
+@step('we get the standings from mlb api')
+def step_impl(context):
+    context.standings_response = get_standings()
+
+@step('we map standings to teams')
+def step_impl(context):
+    # context.standings_data = StandingsData()
+    assert 1 == 2, 'Still to do'
+
+@step('standings should have set "{games}" to "{expected_value}" for "{team_abbrev}"')
+def step_impl(context, games, expected_value, team_abbrev):
+    assert mlb[team_abbrev].games == expected_value, mlb[team_abbrev].games

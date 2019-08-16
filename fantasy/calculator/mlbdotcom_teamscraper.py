@@ -9,6 +9,7 @@ from calculator.settings.api import BASE_URL, UPDATED_BASE_URL, TEAM_AWAY_URI, T
 from calculator.settings.api import TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
 from calculator.settings.api import TEAM_STANDING_URI
 from calculator.full_season_forecaster.pitcher_calculator import calculate_game
+from calculator.scraper.standings_data import get_standings, StandingsData
 
 
 # TODO : FIX URL Here
@@ -145,122 +146,50 @@ for stats in TEAM_VS_RIGHTY_DICT:
     mlb[stats['name_abbrev']].vs_r_bb_per_pa = walks_per_pa
     mlb[stats['name_abbrev']].vs_r_so_per_pa = so_per_pa
 
-def get_standings():
-    today = datetime.now().strftime('%Y/%m/%d')
-    # TEAM_STANDING_URI = '/named.standings_schedule_date.bam?season=2019&schedule_game_date.game_date=%27' + today + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
-    CURRENT_URL = BASE_URL + TEAM_STANDING_URI
-    # CURRENT_URL = UPDATED_BASE_URL + TEAM_STANDING_URI
-    try:
-        TEAM_STANDING_RESPONSE = requests.get(CURRENT_URL)
-    except requests.exceptions.RequestException as e:
-        print(e)
-        sys.exit(1)
-    STANDING_TEXT = TEAM_STANDING_RESPONSE.text
-    JSON_STANDINGS = json.loads(STANDING_TEXT)
-    # Standings are in two blocks al and NL. This combines them.
-    tsd = JSON_STANDINGS['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][0]['queryResults']['row']
-    tsd.extend(JSON_STANDINGS['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][1]['queryResults']['row'])
-    return tsd
-
-
+# Get standings and win loss for splits
 TEAM_STANDING_DICT = get_standings()
-
-from scraper.standings_data import StandingsData
-# class StandingsData(object):
-#
-#     def __init__(self):
-#         """get necessary data from standings."""
-#         pass
-#
-#     def get_wins(self, current_dict):
-#         return int(current_dict['w'])
-#
-#     def get_losses(self, current_dict):
-#         return int(current_dict['l'])
-#
-#     def break_dash_record_split(self, current_dict, string):
-#         record_split = list(map(int, re.findall(r'\d+', current_dict[string])))
-#         first_number = float(record_split[0]) / (float(record_split[0]) + float(record_split[1]))
-#         second_number = float(record_split[1]) / (float(record_split[0]) + float(record_split[1]))
-#         total = float(record_split[0]) + float(record_split[1])
-#         return first_number, second_number, total
-#
-#     def get_vs_left(self, current_dict):
-#         w_v_left, l_v_left, g_v_left = self.break_dash_record_split(current_dict, 'vs_left')
-#         return w_v_left, l_v_left, g_v_left
-#
-#     def get_vs_right(self, current_dict):
-#         w_v_left, l_v_left, g_v_left = self.break_dash_record_split(current_dict, 'vs_right')
-#         return w_v_left, l_v_left, g_v_left
-#
-#     def get_at_home(self, current_dict):
-#         w_avg_home, w_avg_home, g_at_home = self.break_dash_record_split(current_dict, 'home')
-#         return w_avg_home, w_avg_home, g_at_home
-#
-#     def get_at_road(self, current_dict):
-#         w_avg_road, l_avg_road, g_at_road = self.break_dash_record_split(current_dict, 'away')
-#         return w_avg_road, l_avg_road, g_at_road
-#
-#     def get_games_total(self, current_dict):
-#         wins = self.get_wins(current_dict)
-#         losses = self.get_losses(current_dict)
-#         return wins + losses
-#
-#     def set_win_avg(self, current_dict):
-#         wins = self.get_wins(current_dict)
-#         total = self.get_games_total(current_dict)
-#         return wins / total
-#
-#     def set_loss_avg(self, current_dict):
-#         losses = self.get_losses(current_dict)
-#         total = self.get_games_total(current_dict)
-#         return wins / total
-#
-#     ## TODO think I have 2
-#     def get_run_avg(self, current_dict):
-#         games = self.get_games_total(current_dict)
-#         return int(current_dict['runs']) / games
-
 standings_data = StandingsData()
 
-for current_standings in TEAM_STANDING_DICT:
-    log.debug('getting standings data')
-    assert isinstance(current_standings, dict), type(current_standings)
+def set_league_standings_data():
+    for current_standings in TEAM_STANDING_DICT:
+        log.debug('getting standings data')
+        assert isinstance(current_standings, dict), type(current_standings)
 
-    wins = standings_data.get_wins(current_standings)
-    mlb[current_standings['team_abbrev']].wins = wins
+        wins = standings_data.get_wins(current_standings)
+        mlb[current_standings['team_abbrev']].wins = wins
 
-    losses = standings_data.get_losses(current_standings)
-    mlb[current_standings['team_abbrev']].losses = standings_data.get_losses(current_standings)
+        losses = standings_data.get_losses(current_standings)
+        mlb[current_standings['team_abbrev']].losses = standings_data.get_losses(current_standings)
 
-    mlb[current_standings['team_abbrev']].games = standings_data.get_games_total(current_standings)
+        mlb[current_standings['team_abbrev']].games = standings_data.get_games_total(current_standings)
 
-    mlb[current_standings['team_abbrev']].win_avg = standings_data.set_win_avg(current_standings)
+        mlb[current_standings['team_abbrev']].win_avg = standings_data.set_win_avg(current_standings)
 
-    mlb[current_standings['team_abbrev']].loss_avg = standings_data.set_loss_avg(current_standings)
+        mlb[current_standings['team_abbrev']].loss_avg = standings_data.set_loss_avg(current_standings)
 
-    wins_avg_left, loss_avg_left, g_v_left = standings_data.get_vs_left(current_standings)
-    mlb[current_standings['team_abbrev']].wins_avg_left = wins_avg_left
-    mlb[current_standings['team_abbrev']].losses_avg_left = loss_avg_left
-    mlb[current_standings['team_abbrev']].g_v_left = g_v_left
+        wins_avg_left, loss_avg_left, g_v_left = standings_data.get_vs_left(current_standings)
+        mlb[current_standings['team_abbrev']].wins_avg_left = wins_avg_left
+        mlb[current_standings['team_abbrev']].losses_avg_left = loss_avg_left
+        mlb[current_standings['team_abbrev']].g_v_left = g_v_left
 
-    wins_avg_right, loss_avg_right, g_v_right = standings_data.get_vs_right(current_standings)
-    mlb[current_standings['team_abbrev']].wins_avg_right = wins_avg_right
-    mlb[current_standings['team_abbrev']].loss_avg_right = loss_avg_right
-    mlb[current_standings['team_abbrev']].g_v_right = g_v_right
+        wins_avg_right, loss_avg_right, g_v_right = standings_data.get_vs_right(current_standings)
+        mlb[current_standings['team_abbrev']].wins_avg_right = wins_avg_right
+        mlb[current_standings['team_abbrev']].loss_avg_right = loss_avg_right
+        mlb[current_standings['team_abbrev']].g_v_right = g_v_right
 
-    w_avg_home, l_avg_home, g_at_home = standings_data.get_at_home(current_standings)
-    mlb[current_standings['team_abbrev']].w_avg_home = wins_avg_right
-    mlb[current_standings['team_abbrev']].l_avg_home = l_avg_home
-    mlb[current_standings['team_abbrev']].g_at_home = g_at_home
+        w_avg_home, l_avg_home, g_at_home = standings_data.get_at_home(current_standings)
+        mlb[current_standings['team_abbrev']].w_avg_home = wins_avg_right
+        mlb[current_standings['team_abbrev']].l_avg_home = l_avg_home
+        mlb[current_standings['team_abbrev']].g_at_home = g_at_home
 
-    w_avg_road, l_avg_road, g_at_road = standings_data.get_at_road(current_standings)
-    mlb[current_standings['team_abbrev']].w_avg_road = w_avg_road
-    mlb[current_standings['team_abbrev']].l_avg_road = l_avg_road
-    mlb[current_standings['team_abbrev']].g_at_road = g_at_road
+        w_avg_road, l_avg_road, g_at_road = standings_data.get_at_road(current_standings)
+        mlb[current_standings['team_abbrev']].w_avg_road = w_avg_road
+        mlb[current_standings['team_abbrev']].l_avg_road = l_avg_road
+        mlb[current_standings['team_abbrev']].g_at_road = g_at_road
 
-    mlb[current_standings['team_abbrev']].run_avg = standings_data.get_run_avg(current_standings)
+        mlb[current_standings['team_abbrev']].run_avg = standings_data.get_run_avg(current_standings)
 
+set_league_standings_data()
 
 class SelfCalculated(object):
 

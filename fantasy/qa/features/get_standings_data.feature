@@ -55,3 +55,34 @@ Feature: We can scrape standings data
     Then the current stat should be a float equal to "0.4333333333333333"
     When we set the game avg to the current stat
     Then the current stat should be an int equal to "60"
+
+  Scenario: Standings get total games
+    Given we load the test data for single team standings
+      And we create a standings object
+    When we get total games
+    Then the current stat should be an int equal to "118"
+
+  Scenario: Standings get run average
+    Given we load the test data for single team standings
+      And we create a standings object
+    When we get run avg
+    Then the current stat should be a float equal to "5.533898305084746"
+
+  Scenario: Standings get win averages
+    Given we load the test data for single team standings
+      And we create a standings object
+    When we set the win avg
+    Then the current stat should be a float equal to "0.6525423728813560"
+
+  Scenario: Standings get loss averages
+    Given we load the test data for single team standings
+      And we create a standings object
+    When we set the loss avg
+    Then the current stat should be a float equal to "0.3474576271186441"
+
+  Scenario: Standings data produces
+    Given we get the standings from mlb api
+      And we create a standings object
+#      And we create a league object
+#    When we map standings to teams
+#    Then standings should have set "games" to "118" for "HOU"

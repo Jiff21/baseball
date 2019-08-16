@@ -2,9 +2,9 @@ import json
 import os
 import time
 from behave import given, when, then, step
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.support.ui import WebDriverWait
 
 @step('we load the test data "{file_name}"')
 def step_impl(context, file_name):

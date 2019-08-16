@@ -1,4 +1,8 @@
+import json
 import re
+import requests
+from datetime import datetime
+from calculator.settings.api import BASE_URL, TEAM_STANDING_URI
 
 class StandingsData():
 
@@ -54,3 +58,24 @@ class StandingsData():
     def get_run_avg(self, current_dict):
         games = self.get_games_total(current_dict)
         return int(current_dict['runs']) / games
+
+
+
+def get_standings():
+    today = datetime.now().strftime('%Y/%m/%d')
+    # TEAM_STANDING_URI = '/named.standings_schedule_date.bam?season=2019&schedule_game_date.game_date=%27' + today + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
+    CURRENT_URL = BASE_URL + TEAM_STANDING_URI
+    # CURRENT_URL = UPDATED_BASE_URL + TEAM_STANDING_URI
+    try:
+        TEAM_STANDING_RESPONSE = requests.get(CURRENT_URL)
+    except requests.exceptions.RequestException as e:
+        print(e)
+        sys.exit(1)
+    STANDING_TEXT = TEAM_STANDING_RESPONSE.text
+    # Text is cheating a comma in last, first, could load whole data otherwise
+    # STANDING_TEXT = re.sub(r'\"[,]"', lambda x: x.group(0).replace(",", "\,"),  STANDING_TEXT)
+    JSON_STANDINGS = json.loads(STANDING_TEXT)
+    # Standings are in two blocks al and NL. This combines them.
+    tsd = JSON_STANDINGS['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][0]['queryResults']['row']
+    tsd.extend(JSON_STANDINGS['standings_schedule_date']['standings_all_date_rptr']['standings_all_date'][1]['queryResults']['row'])
+    return tsd
