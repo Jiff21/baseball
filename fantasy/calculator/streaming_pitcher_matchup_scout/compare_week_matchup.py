@@ -47,11 +47,11 @@ def get_expected_week_outcomes(matchups_list, arm_side, league):
         for matchup in matchups_list:
             add = expected_matchup_lefty(matchup, league)
             # import pdb; pdb.set_trace()
-            expected = expected + add
+            expected += add
     elif arm_side == 'right':
         for matchup in matchups_list:
             add = expected_matchup_righty(matchup, league)
-            expected = expected + add
+            expected += add
     else:
         assert 1 == 2, 'How did I get here??\n'
     return expected
