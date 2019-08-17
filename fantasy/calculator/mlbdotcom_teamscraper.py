@@ -271,7 +271,7 @@ print('TODO: Write test for total_plate_appearances %f' % mlb['HOU'].total_plate
 # print(mlb['HOU'].plate_appearences_per_game)
 
 for team in mlb:
-    log.debug('calculating expected_game_no_spit')
+    log.debug('calculating expected_game_no_split')
     expected_game = calculate_game(
         7, # AVG innings starter (could improve)
         mlb[team].runs_per_game,
@@ -284,7 +284,7 @@ for team in mlb:
         mlb[team].loss_avg,
         0 # quality_starts
     )
-    mlb[team].expected_game_no_spit = expected_game
+    mlb[team].expected_game_no_split = expected_game
 
 # TODO Random stats to get for future/ general _expected
 # mlb[stats['name_abbrev']].home_r_pg = runs_per_game
@@ -293,7 +293,7 @@ for team in mlb:
 # mlb[stats['name_abbrev']].home_bb_pg = waks_per_game
 
 # TODO: Write tests
-print('TODO: Write test for expected game all %f' % mlb['HOU'].expected_game_no_spit)
+print('TODO: Write test for expected game all %f' % mlb['HOU'].expected_game_no_split)
 
 class SplitExpectedGame(object):
 
@@ -322,7 +322,7 @@ class SplitExpectedGame(object):
             mlb[team].losses_avg_left,
             0 # quality_starts
         )
-        mlb[team].expected_game_lefty_spit = expected_game
+        mlb[team].expected_game_lefty_split = expected_game
 
     def calculate_righty_expected_game(self, team):
         log.debug('calculating righty expected game')
@@ -345,7 +345,7 @@ class SplitExpectedGame(object):
             mlb[team].loss_avg_right,
             0 # quality_starts
         )
-        mlb[team].expected_game_righty_spit = expected_game
+        mlb[team].expected_game_righty_split = expected_game
 
     def calculate_home_expected_game(self, team):
         log.debug('calculating home expected game')
@@ -362,7 +362,7 @@ class SplitExpectedGame(object):
             mlb[team].l_avg_home,
             0 # quality_starts
         )
-        mlb[team].expected_game_home_spit = expected_game
+        mlb[team].expected_game_home_split = expected_game
 
 
     def calculate_away_expected_game(self, team):
@@ -380,7 +380,7 @@ class SplitExpectedGame(object):
             mlb[team].l_avg_road,
             0 # quality_starts
         )
-        mlb[team].expected_game_away_spit = expected_game
+        mlb[team].expected_game_away_split = expected_game
 
 split_expected_game_calculator = SplitExpectedGame()
 
@@ -392,25 +392,26 @@ def calculate_all_team_expections():
         split_expected_game_calculator.calculate_away_expected_game(team)
         print('TODO: Write test for expected splits lefty. %s %f' % (
             team,
-            mlb[team].expected_game_lefty_spit
+            mlb[team].expected_game_lefty_split
             )
         )
         print('TODO: Write test for expected splits righty. %s %f' % (
             team,
-            mlb[team].expected_game_righty_spit
+            mlb[team].expected_game_righty_split
             )
         )
         print('TODO: Write test for expected splits home. %s %f' % (
             team,
-            mlb[team].expected_game_home_spit
+            mlb[team].expected_game_home_split
             )
         )
 
         print('TODO: Write test for expected splits away. %s %f' % (
             team,
-            mlb[team].expected_game_away_spit
+            mlb[team].expected_game_away_split
             )
         )
+    return mlb
 
-calculate_all_team_expections()
+# calculate_all_team_expections()
 ## Something is off, home road splits produce higher projects then left right splits. should even out
