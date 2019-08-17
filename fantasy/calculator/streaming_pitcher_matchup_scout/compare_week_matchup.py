@@ -1,3 +1,4 @@
+from calculator.settings.logger import log
 from calculator.mlbdotcom_teamscraper import calculate_all_team_expections
 
 def get_arm_side():
@@ -16,7 +17,9 @@ def get_arm_side():
 
 def check_matchups_recognized(matchups_list, league):
     for team in matchups_list:
-        if team not in league:
+        if any(team == list_team for list_team in league):
+            continue
+        else:
             print('Unrecognized team in matchups. Start Over.\n')
             ask_for_matchups(league)
 
@@ -34,15 +37,28 @@ def ask_for_matchups(league):
     return pitcher_1_matchups_list, pitcher_1_arm_side, pitcher_2_matchups_list, pitcher_2_arm_side
 
 
-def expected_matchup_righty(team_abbr, league):
-    return league[team_abbr].expected_game_righty_split
+def expected_matchup_righty(matchup, league):
+    log.debug(
+        'Adding righty split for %s with value of %f' % (
+            league[matchup],
+            league[matchup].expected_game_righty_split
+        )
+    )
+    return league[matchup].expected_game_righty_split
 
-def expected_matchup_lefty(team_abbr, league):
-    return league[team_abbr].expected_game_lefty_split
+def expected_matchup_lefty(matchup, league):
+    log.debug(
+        'Adding righty split for %s with value of %f' % (
+            league[matchup],
+            league[matchup].expected_game_lefty_split
+        )
+    )
+    return league[matchup].expected_game_lefty_split
 
 
-def get_expected_week_outcomes(matchups_list, arm_side, league):
+def get_expected_week_outcomes_split(matchups_list, arm_side, league):
     expected = 0.0
+    generic_expected = 0.0
     if arm_side == 'left':
         for matchup in matchups_list:
             add = expected_matchup_lefty(matchup, league)
@@ -57,10 +73,61 @@ def get_expected_week_outcomes(matchups_list, arm_side, league):
     return expected
 
 
+
+def get_expected_week_outcomes_generic(matchups_list, league):
+    expected = 0.0
+    for matchup in matchups_list:
+        log.debug(
+            'Adding generic split for %s with value of %f' % (
+                league[matchup],
+                league[matchup].expected_game_no_split
+            )
+        )
+        expected += league[matchup].expected_game_no_split
+    return expected
+
+
 def print_expected_matchups():
     mlb = calculate_all_team_expections()
-    pitcher_1_matchups_list, pitcher_1_arm_side, pitcher_2_matchups_list, pitcher_2_arm_side = ask_for_matchups(mlb)
-    pitcher_1_total = get_expected_week_outcomes(pitcher_1_matchups_list, pitcher_1_arm_side, mlb)
-    pitcher_2_total = get_expected_week_outcomes(pitcher_2_matchups_list, pitcher_2_arm_side, mlb)
-    print('Pitcher 1s total for his arm side is %f' % pitcher_1_total)
-    print('Pitcher 2s total for his arm side is %f' % pitcher_2_total)
+    pitcher_1_matchups_list, pitcher_1_arm_side, pitcher_2_matchups_list, \
+        pitcher_2_arm_side = ask_for_matchups(mlb)
+    pitcher_1_split_total = get_expected_week_outcomes_split(
+        pitcher_1_matchups_list,
+        pitcher_1_arm_side,
+        mlb
+    )
+    pitcher_2_split_total = get_expected_week_outcomes_split(
+        pitcher_2_matchups_list,
+        pitcher_2_arm_side,
+        mlb
+    )
+    print('Pitcher 1s total for his arm split is %f' % pitcher_1_split_total)
+    print('Pitcher 2s total for his arm split is %f' % pitcher_2_split_total)
+
+def print_expected_matchups_detailed():
+    mlb = calculate_all_team_expections()
+    pitcher_1_matchups_list, pitcher_1_arm_side, pitcher_2_matchups_list, \
+        pitcher_2_arm_side = ask_for_matchups(mlb)
+    pitcher_1_split_total = get_expected_week_outcomes_split(
+        pitcher_1_matchups_list,
+        pitcher_1_arm_side,
+        mlb
+    )
+    pitcher_2_split_total = get_expected_week_outcomes_split(
+        pitcher_2_matchups_list,
+        pitcher_2_arm_side,
+        mlb
+    )
+    print('Pitcher 1s total for his arm split is %f' % pitcher_1_split_total)
+    print('Pitcher 2s total for his arm split is %f' % pitcher_2_split_total)
+    pitcher_1_total = get_expected_week_outcomes_generic(
+        pitcher_1_matchups_list,
+        mlb
+    )
+    pitcher_2_total = get_expected_week_outcomes_generic(
+        pitcher_2_matchups_list,
+        mlb
+    )
+    print('Pitcher 1s generic expected total is %f' % pitcher_1_total)
+    print('Pitcher 2s generic expected total is %f' % pitcher_2_total)
+    print('TODO: Average with Pitcher avarage')
