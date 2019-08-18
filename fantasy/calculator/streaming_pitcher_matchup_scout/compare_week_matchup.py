@@ -1,6 +1,7 @@
 from calculator.settings.logger import log
 from calculator.mlbdotcom_teamscraper import calculate_all_team_expections
 
+
 def get_arm_side():
     pitcher_arm_side_input = input('Is the pitcher a lefty or righty?\n')
     pitcher_arm_side_input = pitcher_arm_side_input.lower().strip()
@@ -15,6 +16,7 @@ def get_arm_side():
         get_arm_side()
     return pitcher_arm_side
 
+
 def check_matchups_recognized(matchups_list, league):
     for team in matchups_list:
         if any(team == list_team for list_team in league):
@@ -22,6 +24,7 @@ def check_matchups_recognized(matchups_list, league):
         else:
             print('Unrecognized team in matchups. Start Over.\n')
             ask_for_matchups(league)
+
 
 def ask_for_matchups(league):
     pitcher_1_matchups_list = []
@@ -45,6 +48,7 @@ def expected_matchup_righty(matchup, league):
         )
     )
     return league[matchup].expected_game_righty_split
+
 
 def expected_matchup_lefty(matchup, league):
     log.debug(
@@ -71,7 +75,6 @@ def get_expected_week_outcomes_split(matchups_list, arm_side, league):
     else:
         assert 1 == 2, 'How did I get here??\n'
     return expected
-
 
 
 def get_expected_week_outcomes_generic(matchups_list, league):
@@ -103,6 +106,7 @@ def print_expected_matchups():
     )
     print('Pitcher 1s total for his arm split is %f' % pitcher_1_split_total)
     print('Pitcher 2s total for his arm split is %f' % pitcher_2_split_total)
+
 
 def print_expected_matchups_detailed():
     mlb = calculate_all_team_expections()
