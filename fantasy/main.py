@@ -17,13 +17,13 @@ def main():
     elif input_response_1 == '2' or 'calculate all splits' in input_response_1:
         calculate_all_team_expections()
     elif input_response_1 == '3' or \
-    'compare 2 sp matchup detailed' in input_response_1 or \
-    'compare sp detail' in input_response_1:
-        print_expected_matchups_detailed()
-    elif input_response_1 == '4' or \
     'compare 2 sp matchup' in input_response_1 or \
     'compare sp' in input_response_1:
         print_expected_matchups()
+    elif input_response_1 == '4' or \
+    'compare 2 sp matchup detailed' in input_response_1 or \
+    'compare sp detail' in input_response_1:
+        print_expected_matchups_detailed()
     elif input_response_1 == '5' or 'pitcher extrapolator' in input_response_1:
         inning_extrapolator()
     elif input_response_1 == '6' or 'batter extrapolator' in input_response_1:

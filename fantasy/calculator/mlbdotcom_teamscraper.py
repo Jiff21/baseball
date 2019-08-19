@@ -270,126 +270,42 @@ for t_stat in TEAM_STATS_DICT:
 print('TODO: Write test for total_plate_appearances %f' % mlb['HOU'].total_plate_appearances)
 # print(mlb['HOU'].plate_appearences_per_game)
 
-for team in mlb:
-    log.debug('calculating expected_game_no_split')
-    expected_game = calculate_game(
-        7, # AVG innings starter (could improve)
-        mlb[team].runs_per_game,
-        mlb[team].walks_per_game,
-        mlb[team].hits_per_game,
-        mlb[team].homeruns_per_game,
-        mlb[team].strikeouts_per_game,
-        0, # Saves
-        mlb[team].win_avg,
-        mlb[team].loss_avg,
-        0 # quality_starts
-    )
-    mlb[team].expected_game_no_split = expected_game
-
 # TODO Random stats to get for future/ general _expected
 # mlb[stats['name_abbrev']].home_r_pg = runs_per_game
 # mlb[stats['name_abbrev']].home_h_pg = hits_per_game
 # mlb[stats['name_abbrev']].home_hr_pg = hr_per_game
 # mlb[stats['name_abbrev']].home_bb_pg = waks_per_game
 
-# TODO: Write tests
-print('TODO: Write test for expected game all %f' % mlb['HOU'].expected_game_no_split)
-
-class SplitExpectedGame(object):
-
-    def __init__(self):
-        """get necessary data from standings."""
-        pass
-
-    def calculate_lefty_expected_game(self, team):
-        log.debug('calculating expected_game_vs_left')
-        started_expected_innings = 9
-        expected_starter_plate_appearance = (started_expected_innings/float(9)) * mlb[team].plate_appearences_per_game
-        splits_r_expected = mlb[team].vs_l_r_per_pa * expected_starter_plate_appearance
-        splits_h_expected = mlb[team].vs_l_h_per_pa * expected_starter_plate_appearance
-        splits_hr_expected = mlb[team].vs_l_hr_per_pa * expected_starter_plate_appearance
-        splits_bb_expected = mlb[team].vs_l_bb_per_pa * expected_starter_plate_appearance
-        splits_so_expected = mlb[team].vs_l_so_per_pa * expected_starter_plate_appearance
-        expected_game = calculate_game(
-            started_expected_innings, # AVG innings starter (could improve)
-            splits_r_expected,
-            splits_bb_expected,
-            splits_h_expected,
-            splits_hr_expected,
-            splits_so_expected,
-            0, # Saves
-            mlb[team].wins_avg_left,
-            mlb[team].losses_avg_left,
-            0 # quality_starts
-        )
-        mlb[team].expected_game_lefty_split = expected_game
-
-    def calculate_righty_expected_game(self, team):
-        log.debug('calculating righty expected game')
-        started_expected_innings = 9
-        expected_starter_plate_appearance = (started_expected_innings/float(9)) * mlb[team].plate_appearences_per_game
-        splits_r_expected = mlb[team].vs_r_r_per_pa * expected_starter_plate_appearance
-        splits_h_expected = mlb[team].vs_r_h_per_pa * expected_starter_plate_appearance
-        splits_hr_expected = mlb[team].vs_r_hr_per_pa * expected_starter_plate_appearance
-        splits_bb_expected = mlb[team].vs_r_bb_per_pa * expected_starter_plate_appearance
-        splits_so_expected = mlb[team].vs_r_so_per_pa * expected_starter_plate_appearance
-        expected_game = calculate_game(
-            started_expected_innings, # AVG innings starter (could improve)
-            splits_r_expected,
-            splits_bb_expected,
-            splits_h_expected,
-            splits_hr_expected,
-            splits_so_expected,
-            0, # Saves
-            mlb[team].wins_avg_right,
-            mlb[team].loss_avg_right,
-            0 # quality_starts
-        )
-        mlb[team].expected_game_righty_split = expected_game
-
-    def calculate_home_expected_game(self, team):
-        log.debug('calculating home expected game')
-        started_expected_innings = 9
-        expected_game = calculate_game(
-            started_expected_innings, # AVG innings starter (could improve)
-            mlb[stats['name_abbrev']].home_r_pg,
-            mlb[stats['name_abbrev']].home_bb_pg,
-            mlb[stats['name_abbrev']].home_h_pg,
-            mlb[stats['name_abbrev']].home_hr_pg,
-            mlb[stats['name_abbrev']].home_so_pg,
-            0, # Saves
-            mlb[team].w_avg_home,
-            mlb[team].l_avg_home,
-            0 # quality_starts
-        )
-        mlb[team].expected_game_home_split = expected_game
-
-
-    def calculate_away_expected_game(self, team):
-        log.debug('calculating home expected game')
-        started_expected_innings = 9
-        expected_game = calculate_game(
-            started_expected_innings, # AVG innings starter (could improve)
-            mlb[stats['name_abbrev']].away_r_pg,
-            mlb[stats['name_abbrev']].away_bb_pg,
-            mlb[stats['name_abbrev']].away_h_pg,
-            mlb[stats['name_abbrev']].away_hr_pg,
-            mlb[stats['name_abbrev']].away_so_pg,
-            0, # Saves
-            mlb[team].w_avg_road,
-            mlb[team].l_avg_road,
-            0 # quality_starts
-        )
-        mlb[team].expected_game_away_split = expected_game
-
+from calculator.expected_game.split_expected import SplitExpectedGame
 split_expected_game_calculator = SplitExpectedGame()
+
+#
+# for team in mlb:
+#     log.debug('calculating expected_game_no_split')
+#     expected_game = calculate_game(
+#         7, # AVG innings starter (could improve)
+#         mlb[team].runs_per_game,
+#         mlb[team].walks_per_game,
+#         mlb[team].hits_per_game,
+#         mlb[team].homeruns_per_game,
+#         mlb[team].strikeouts_per_game,
+#         0, # Saves
+#         mlb[team].win_avg,
+#         mlb[team].loss_avg,
+#         0 # quality_starts
+#     )
+#     mlb[team].expected_game_no_split = expected_game
+
+
 
 def calculate_all_team_expections():
     for team in mlb:
-        split_expected_game_calculator.calculate_lefty_expected_game(team)
-        split_expected_game_calculator.calculate_righty_expected_game(team)
-        split_expected_game_calculator.calculate_home_expected_game(team)
-        split_expected_game_calculator.calculate_away_expected_game(team)
+        split_expected_game_calculator.calculate_generic_expected_game(team, mlb, 9)
+        split_expected_game_calculator.calculate_lefty_expected_game(team, mlb, 9)
+        split_expected_game_calculator.calculate_righty_expected_game(team, mlb, 9)
+        split_expected_game_calculator.calculate_home_expected_game(team, mlb, 9)
+        split_expected_game_calculator.calculate_away_expected_game(team, mlb, 9)
+        print('TODO: Write test for expected game all %f' % mlb[team].expected_game_no_split)
         print('TODO: Write test for expected splits lefty. %s %f' % (
             team,
             mlb[team].expected_game_lefty_split

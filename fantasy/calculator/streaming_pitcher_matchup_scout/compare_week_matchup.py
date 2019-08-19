@@ -134,4 +134,5 @@ def print_expected_matchups_detailed():
     )
     print('Pitcher 1s generic expected total is %f' % pitcher_1_total)
     print('Pitcher 2s generic expected total is %f' % pitcher_2_total)
-    print('TODO: Average with Pitcher avarage')
+    print('TODO: Average with Pitcher avarage points factored in , or do we factor in innings pitched')
+    print('TODO: Ask Home Away. Average in with splits')
