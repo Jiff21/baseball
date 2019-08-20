@@ -1,4 +1,5 @@
 from calculator.full_season_forecaster.pitcher_inning_extrapelator import inning_extrapolator
+from calculator.full_season_forecaster.batter_forecaster import BatterExtrapolator
 from calculator.mlbdotcom_teamscraper import calculate_all_team_expections
 from calculator.streaming_pitcher_matchup_scout.compare_week_matchup import print_expected_matchups
 from calculator.streaming_pitcher_matchup_scout.compare_week_matchup import print_expected_matchups_detailed
@@ -27,9 +28,10 @@ def main():
     elif input_response_1 == '5' or 'pitcher extrapolator' in input_response_1:
         inning_extrapolator()
     elif input_response_1 == '6' or 'batter extrapolator' in input_response_1:
-        assert 1 == 2, 'TODO write batter extrapolator'
+        batter_extrapolator = BatterExtrapolator()
+        batter_extrapolator.run()
     elif 'exit' in input_response_1 or input_response_1 == 'e':
-        pass
+        exit()
     else:
         print('Unrecognized option. Try again\n')
         main()
