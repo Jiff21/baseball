@@ -1,6 +1,6 @@
 from calculator.settings.logger import log
 from calculator.settings.scoring_settings import ScoringSettings
-# import main
+import main
 
 # ssp = ScoringSettings.Batting
 
@@ -42,12 +42,12 @@ class BatterExtrapolator(object):
             expected_pas = self.get_expected_pas()
             expected_pts = points_per_pa * expected_pas
             averaged = (previous_total + expected_pts) / 2
-            print('The batter would score %.2f next year.\n' % averaged)
-        # e_prompt = input('exit?\n\t\t\t\t\t\t')
-        # if e_prompt == 'y' or e_prompt == 'yes':
-        #     exit()
-        # else:
-        #     main.main()
+            print('\nThe batter would score %.2f next year.\n' % averaged)
+        e_prompt = input('\nExit?\n\t\t\t\t\t\t')
+        if e_prompt == 'y' or e_prompt == 'yes':
+            exit()
+        else:
+            main.main()
 
 
     def run(self):

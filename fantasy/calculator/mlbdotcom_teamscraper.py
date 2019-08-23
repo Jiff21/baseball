@@ -3,56 +3,25 @@ import operator
 import re
 import requests
 from datetime import datetime
-from calculator.settings.logger import log
+from calculator.full_season_forecaster.pitcher_calculator import calculate_game
+from calculator.scraper.league import get_all_team_names
+from calculator.scraper.standings_data import get_standings, StandingsData
 from calculator.settings.api import BASE_URL, UPDATED_BASE_URL, TEAM_AWAY_URI, TEAM_AT_HOME_URI
 from calculator.settings.api import TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
 from calculator.settings.api import TEAM_STANDING_URI
-from calculator.full_season_forecaster.pitcher_calculator import calculate_game
-from calculator.scraper.standings_data import get_standings, StandingsData
-
-from calculator.scraper.league import get_all_team_names
+from calculator.settings.logger import log
 from static.team_map import TEAM_MAP
 
 # Todo Test that find by ID gets correct team from api
 mlb = get_all_team_names(TEAM_MAP)
 
 # import pdb; pdb.set_trace()
-
-# TODO : FIX URL Here
-# from calculator.settings.api import TEAM_STATS_URI
-TEAM_STATS_URI = 'named.team_hitting_season_leader_master.bam?season=2019&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&recSP=1&recPP=50'
-
-def get_team_stats():
-    CURRENT_URL = BASE_URL + TEAM_STATS_URI
-    try:
-        RESPONSE = requests.get(CURRENT_URL)
-    except requests.exceptions.RequestException as e:
-        print(e)
-        sys.exit(1)
-    # print(RESPONSE.text)
-    # TEXT = RESPONSE.text.replace('\'', "\"")
-    TEXT = RESPONSE.text
-    JSON_RESPONSE = json.loads(TEXT)
-    TEAM_STATS_DICT = JSON_RESPONSE['team_hitting_season_leader_master']['queryResults']['row']
-    return TEAM_STATS_DICT
-
+from calculator.scraper.team_hitting_stats import get_team_stats
 TEAM_STATS_DICT = get_team_stats()
 
-ALL_TEAM_SHORT_NAMES = []
-
-def get_splits_by_uri(uri):
-    CURRENT_URL = UPDATED_BASE_URL + uri
-    try:
-        RESPONSE = requests.get(CURRENT_URL)
-    except requests.exceptions.RequestException as e:
-        print(e)
-        sys.exit(1)
-    TEXT = RESPONSE.text
-    JSON_RESPONSE = json.loads(TEXT)
-    CURRENT_DICT = JSON_RESPONSE['team_hitting_season_leader_sit']['queryResults']['row']
-    return CURRENT_DICT
-
+from calculator.scraper.team_splits_stats import get_splits_by_uri
 TEAM_AT_HOME_DICT = get_splits_by_uri(TEAM_AT_HOME_URI)
+
 
 def get_avg(number, total):
     return number / total

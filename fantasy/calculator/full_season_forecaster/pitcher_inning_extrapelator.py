@@ -80,3 +80,5 @@ def inning_extrapolator(season_innings, season_starts, season_era, season_win_to
 		+ points_from_losses + points_from_hits + points_from_walks + points_from_home_runs \
 		+ points_from_fip_runs
 	log.debug( 'Next Seasons Total based on ERA would be: ' + str(next_season_total) )
+
+	return next_season_total

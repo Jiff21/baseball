@@ -1,5 +1,6 @@
 from calculator.settings.logger import log
 from calculator.mlbdotcom_teamscraper import calculate_all_team_expections
+import main
 
 
 mlb = calculate_all_team_expections()
@@ -95,7 +96,7 @@ def leaderboard_controller():
     leaderboard_resp_1 = input(
         'What Leaderboard would you like to see?\n\t1. General Expected Game\n' \
         '\t2. Righty Splits\n\t3. Lefty Splits\n\t4. Home Splits\n' \
-        '\t5. Road Splits\n'
+        '\t5. Road Splits\n\t6. Exit\n\t7. Main Menu\n'
     ).lower()
     if leaderboard_resp_1 == '1' or 'general' in leaderboard_resp_1:
         print_generic_leaderboard()
@@ -107,18 +108,10 @@ def leaderboard_controller():
         print_home_leaderboard()
     elif leaderboard_resp_1 == '5' or 'away' in leaderboard_resp_1 or 'road' in leaderboard_resp_1:
         print_road_leaderboard()
-    elif 'exit':
-        pass
+    elif leaderboard_resp_1 == 'exit' or leaderboard_resp_1 == '6':
+        exit()
+    elif leaderboard_resp_1 == 'main' or leaderboard_resp_1 == '7':
+        main.main()
     else:
         print('Unrecognized option.\n')
-        leaderboard_controller()
-    leaderboard_resp_2 = input(
-        'Choose next option.\n\t1. Get Another split\n\t2. Return to main\n\t' \
-        '3. Exit\n'
-    )
-    if leaderboard_resp_2 == '1' or 'another' in leaderboard_resp_2:
-        leaderboard_controller()
-    elif leaderboard_resp_2 == '2' or 'main' in leaderboard_resp_2:
-        pass
-    else:
-        pass
+    leaderboard_controller()
