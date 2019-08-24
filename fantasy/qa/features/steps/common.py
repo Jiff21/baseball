@@ -24,3 +24,19 @@ def step_impl(context, file_name):
 @step('we create the MLB league map')
 def step_impl(context):
     context.league = get_all_team_names(TEAM_MAP)
+
+
+@step('the current stat should be an int equal to {number:d}')
+def step_impl(context, number):
+    assert isinstance(number, int)
+    assert context.current_stat == number, 'Did not get expected int '\
+        'of %d instead %d' % (number, context.current_stat)
+
+
+@step('the current stat should be a float equal to {current_float:g}')
+def step_impl(context, current_float):
+    assert isinstance(current_float, float)
+    context.current_float = round(current_float, 16)
+    context.current_stat = round(context.current_stat, 16)
+    assert context.current_stat == current_float, 'Did not get expected float '\
+        'of %.16f instead %.16f' % (current_float, context.current_stat)

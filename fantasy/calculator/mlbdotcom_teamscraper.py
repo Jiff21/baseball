@@ -19,90 +19,71 @@ mlb = get_all_team_names(TEAM_MAP)
 from calculator.scraper.team_hitting_stats import get_team_stats
 TEAM_STATS_DICT = get_team_stats()
 
-from calculator.scraper.team_splits_stats import get_splits_by_uri
-TEAM_AT_HOME_DICT = get_splits_by_uri(TEAM_AT_HOME_URI)
+from calculator.scraper.team_splits_stats import SplitsScraper
+
+split_scraper = SplitsScraper()
+TEAM_AT_HOME_DICT = split_scraper.get_splits_by_uri(TEAM_AT_HOME_URI)
 
 
-def get_avg(number, total):
-    return number / total
+#
+# def get_relevant_splits_per_dict(splits_dict):
+#     log.debug('running get_relevant_splits_per_dict')
+#     r = int(splits_dict['r'])
+#     g = int(splits_dict['g'])
+#     runs_per_game = get_avg(r, g)
+#
+#     h = int(splits_dict['h'])
+#     hits_per_game = get_avg(h, g)
+#
+#     hr = int(splits_dict['hr'])
+#     hr_per_game = get_avg(hr, g)
+#
+#     bb = int(splits_dict['bb'])
+#     waks_per_game = get_avg(bb, g)
+#
+#     so = int(splits_dict['so'])
+#     so_per_game = get_avg(so, g)
+#
+#     return runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game
 
-def get_relevant_splits_per_dict(splits_dict):
-    log.debug('running get_relevant_splits_per_dict')
-    r = int(splits_dict['r'])
-    g = int(splits_dict['g'])
-    runs_per_game = get_avg(r, g)
-
-    h = int(splits_dict['h'])
-    hits_per_game = get_avg(h, g)
-
-    hr = int(splits_dict['hr'])
-    hr_per_game = get_avg(hr, g)
-
-    bb = int(splits_dict['bb'])
-    waks_per_game = get_avg(bb, g)
-
-    so = int(splits_dict['so'])
-    so_per_game = get_avg(so, g)
-
-    return runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game
-
-def get_pitcher_splits_per_dict(splits_dict):
-    log.debug('running get_pitcher_splits_per_dict')
-    r = int(splits_dict['r'])
-
-    plate_appearances = int(splits_dict['tpa'])
-    runs_per_pa = get_avg(r, plate_appearances)
-
-    h = int(splits_dict['h'])
-    hits_per_pa = get_avg(h, plate_appearances)
-
-    hr = int(splits_dict['hr'])
-    hr_per_pa = get_avg(hr, plate_appearances)
-
-    bb = int(splits_dict['bb'])
-    walks_per_pa = get_avg(bb, plate_appearances)
-
-    so = int(splits_dict['so'])
-    so_per_pa = get_avg(so, plate_appearances)
-
-    return runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa
 
 for stats in TEAM_AT_HOME_DICT:
     log.debug('getting home splits')
-    runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game = get_relevant_splits_per_dict(stats)
+    runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game = split_scraper.get_relevant_splits_per_dict(stats)
     mlb[stats['name_abbrev']].home_r_pg = runs_per_game
     mlb[stats['name_abbrev']].home_h_pg = hits_per_game
     mlb[stats['name_abbrev']].home_hr_pg = hr_per_game
     mlb[stats['name_abbrev']].home_bb_pg = waks_per_game
     mlb[stats['name_abbrev']].home_so_pg = so_per_game
 
-TEAM_AWAY_DICT = get_splits_by_uri(TEAM_AWAY_URI)
+TEAM_AWAY_DICT = split_scraper.get_splits_by_uri(TEAM_AWAY_URI)
 
 for stats in TEAM_AWAY_DICT:
     log.debug('getting away splits')
-    runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game = get_relevant_splits_per_dict(stats)
+    runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game = split_scraper.get_relevant_splits_per_dict(stats)
     mlb[stats['name_abbrev']].away_r_pg = runs_per_game
     mlb[stats['name_abbrev']].away_h_pg = hits_per_game
     mlb[stats['name_abbrev']].away_hr_pg = hr_per_game
     mlb[stats['name_abbrev']].away_bb_pg = waks_per_game
     mlb[stats['name_abbrev']].away_so_pg = so_per_game
 
-TEAM_VS_LEFTY_DICT = get_splits_by_uri(TEAM_VS_LEFTY_URI)
+TEAM_VS_LEFTY_DICT = split_scraper.get_splits_by_uri(TEAM_VS_LEFTY_URI)
+
 
 for stats in TEAM_VS_LEFTY_DICT:
     log.debug('getting lefty splits')
-    runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa = get_pitcher_splits_per_dict(stats)
+    runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa = split_scraper.get_pitcher_splits_per_dict(stats)
     mlb[stats['name_abbrev']].vs_l_r_per_pa = runs_per_pa
     mlb[stats['name_abbrev']].vs_l_h_per_pa = hits_per_pa
     mlb[stats['name_abbrev']].vs_l_hr_per_pa = hr_per_pa
     mlb[stats['name_abbrev']].vs_l_bb_per_pa = walks_per_pa
     mlb[stats['name_abbrev']].vs_l_so_per_pa = so_per_pa
 
-TEAM_VS_RIGHTY_DICT = get_splits_by_uri(TEAM_VS_RIGHTY_URI)
+TEAM_VS_RIGHTY_DICT = split_scraper.get_splits_by_uri(TEAM_VS_RIGHTY_URI)
 
 for stats in TEAM_VS_RIGHTY_DICT:
     log.debug('getting righty splits')
-    runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa = get_pitcher_splits_per_dict(stats)
+    runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa = split_scraper.get_pitcher_splits_per_dict(stats)
     mlb[stats['name_abbrev']].vs_r_r_per_pa = runs_per_pa
     mlb[stats['name_abbrev']].vs_r_h_per_pa = hits_per_pa
     mlb[stats['name_abbrev']].vs_r_hr_per_pa = hr_per_pa

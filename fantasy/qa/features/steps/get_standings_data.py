@@ -14,19 +14,6 @@ def step_impl(context):
 def step_impl(context):
     context.standings = StandingsData()
 
-@step('the current stat should be a float equal to "{current_float:g}"')
-def step_impl(context, current_float):
-    context.current_float = round(current_float, 16)
-    context.current_stat = round(context.current_stat, 16)
-    assert context.current_stat == current_float, 'Did not get expected float '\
-        'of %.16f instead %.16f' % (current_float, context.current_stat)
-
-@step('the current stat should be an int equal to "{number:d}"')
-def step_impl(context, number):
-    # number = int(number)
-    assert context.current_stat == number, 'Did not get expected int '\
-        'of %d instead %d' % (number, context.current_stat)
-
 @step('we get wins')
 def step_impl(context):
     context.current_stat = context.standings.get_wins(context.current_data)
