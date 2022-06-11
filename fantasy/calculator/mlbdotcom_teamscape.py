@@ -13,13 +13,14 @@ RIGHTY_AVG_GAME = {}
 HOME_AVG_GAME = {}
 AWAY_AVG_GAME = {}
 
+#TODO UPDAT YEAR IN URL to be from 1 var.
 
 BASE_URL = 'http://mlb.mlb.com/lookup/json/'
-TEAM_STATS_URI = 'named.team_hitting_season_leader_master.bam?season=2019&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&recSP=1&recPP=50'
-TEAM_AT_HOME_URI = 'named.team_hitting_season_leader_sit.bam?season=2019&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27h%27&recSP=1&recPP=50'
-TEAM_AWAY_URI = '/named.team_hitting_season_leader_sit.bam?season=2019&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27a%27&recSP=1&recPP=50'
-TEAM_VS_LEFTY_URI = '/named.team_hitting_season_leader_sit.bam?season=2019&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27vl%27&recSP=1&recPP=50'
-TEAM_VS_RIGHTY_URI = '/named.team_hitting_season_leader_sit.bam?season=2019&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27vr%27&recSP=1&recPP=50'
+TEAM_STATS_URI = 'named.team_hitting_season_leader_master.bam?season=2022&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&recSP=1&recPP=50'
+TEAM_AT_HOME_URI = 'named.team_hitting_season_leader_sit.bam?season=2022&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27h%27&recSP=1&recPP=50'
+TEAM_AWAY_URI = '/named.team_hitting_season_leader_sit.bam?season=2022&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27a%27&recSP=1&recPP=50'
+TEAM_VS_LEFTY_URI = '/named.team_hitting_season_leader_sit.bam?season=2022&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27vl%27&recSP=1&recPP=50'
+TEAM_VS_RIGHTY_URI = '/named.team_hitting_season_leader_sit.bam?season=2022&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27&sit_code=%27vr%27&recSP=1&recPP=50'
 
 
 def get_team_stats():
@@ -91,6 +92,7 @@ class Team(object):
 
 def get_splits_by_uri(uri):
     CURRENT_URL = BASE_URL + uri
+    print('Getting splits from %s' CURRENT_URL)
     try:
         RESPONSE = requests.get(CURRENT_URL)
     except requests.exceptions.RequestException as e:

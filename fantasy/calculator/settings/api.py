@@ -1,22 +1,25 @@
 import os
 from datetime import datetime
 
-
 year = datetime.now().strftime('%Y')
 today = datetime.now().strftime('%Y/%m/%d')
+year = '2019'
+# today = '2019/10/30'
 
-# YEAR_FOR_HITTING_STATS = os.getenv('YEAR_FOR_HITTING_STATS', year)
 YEAR_FOR_HITTING_STATS = os.getenv('YEAR_FOR_HITTING_STATS', year)
 DATE_FOR_STANDINGS = os.getenv('DATE_FOR_STANDINGS', today)
 
 BASE_URL = 'http://mlb.mlb.com/lookup/json/'
 UPDATED_BASE_URL = 'http://lookup-service-prod.mlb.com/json/'
 
-TEAM_STATS_URI     = 'named.team_hitting_season_leader_sit.bam?season=' \
+TEAM_HITTING_JSON_BLOCK = 'team_hitting_season_leader_master'
+
+TEAM_STATS_URI = TEAM_HITTING_JSON_BLOCK + '?season=' \
     + YEAR_FOR_HITTING_STATS \
     + '&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27'
 
-SPLITS_URI = 'named.team_hitting_season_leader_sit.bam?season=' \
+# SPLITS_URI = 'named.team_hitting_season_leader_sit.bam?season=' \
+SPLITS_URI =  TEAM_HITTING_JSON_BLOCK + '?season=' \
     + YEAR_FOR_HITTING_STATS \
     + '&sort_order=%27desc%27&sort_column=%27avg%27&game_type=%27R%27&sport_code=%27mlb%27'
 END_QUAL = '&recSP=1&recPP=50'

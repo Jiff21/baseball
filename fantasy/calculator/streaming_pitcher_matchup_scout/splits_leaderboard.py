@@ -21,7 +21,7 @@ def get_righty_leaderboard(league):
     list = []
     for team in league:
         list.append((
-            league[team].expected_game_lefty_split,
+            league[team].expected_game_righty_split,
             team
         ))
     list.sort(reverse=True)
@@ -98,15 +98,21 @@ def leaderboard_controller():
         '\t2. Righty Splits\n\t3. Lefty Splits\n\t4. Home Splits\n' \
         '\t5. Road Splits\n\t6. Exit\n\t7. Main Menu\n'
     ).lower()
+    import pdb;pdb.set_trace()
     if leaderboard_resp_1 == '1' or 'general' in leaderboard_resp_1:
+        print('\n\nGeneric expected game:\n')
         print_generic_leaderboard()
     elif leaderboard_resp_1 == '2' or 'right' in leaderboard_resp_1:
+        print('\n\nRighty Splits:\n')
         print_righty_leaderboard()
     elif leaderboard_resp_1 == '3' or 'left' in leaderboard_resp_1:
+        print('\n\nLefty Splits:\n')
         print_lefty_leaderboard()
     elif leaderboard_resp_1 == '4' or 'home' in leaderboard_resp_1:
+        print('\n\nHome Splits:\n')
         print_home_leaderboard()
     elif leaderboard_resp_1 == '5' or 'away' in leaderboard_resp_1 or 'road' in leaderboard_resp_1:
+        print('\n\nHome Splits:\n')
         print_road_leaderboard()
     elif leaderboard_resp_1 == 'exit' or leaderboard_resp_1 == '6':
         exit()

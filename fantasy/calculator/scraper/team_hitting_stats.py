@@ -9,7 +9,7 @@ TEAM_STATS_URI = 'named.team_hitting_season_leader_master.bam?season=2019&sort_o
 
 
 def get_team_stats():
-    print("TODO WRITE TESTS")
+    print("TODO WRITE TESTS, get_team_stats")
     current_url = BASE_URL + TEAM_STATS_URI
     try:
         response = requests.get(current_url)
