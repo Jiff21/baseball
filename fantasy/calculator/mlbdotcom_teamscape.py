@@ -115,6 +115,7 @@ TEAM_VS_RIGHTY_DICT = get_splits_by_uri(TEAM_VS_LEFTY_URI)
 
 
 def get_standings():
+    log.debug('get_standings')
     today = datetime.now().strftime('%Y/%m/%d')
     TEAM_STANDING_URL = '/named.standings_schedule_date.bam?season=2019&schedule_game_date.game_date=%27' + today + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
     CURRENT_URL = BASE_URL + TEAM_STANDING_URL
@@ -134,14 +135,10 @@ def get_standings():
 TEAM_STANDING_DICT = get_standings()
 
 def return_wins_losses(j,s):
-    print('You are here. J was a string, changed to json now. ')
-    # j = json. s is team name we're looking for.
+    log.debug('return_wins_losses')
     for stand_team in j:
-        # why is this vs_left
-        print(stand_team)
         stand_team = json.loads(stand_team)
 
-        print(str(stand_team['team_short']))
         if str(stand_team['team_short']) == s:
             wins = int(stand_team['w'])
             losses = int(stand_team['l'])
@@ -170,7 +167,7 @@ TEAM_RECORD_MAP = {}
 
 def create_teams(all_teams):
     for t in all_teams:
-        print('creating ' + t)
+        log.debug('creating ' + t)
         win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road = return_wins_losses(TEAM_STANDING_DICT, t)
         team_object = Team(t, win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, g_at_home, g_on_road)
         t = t.replace(" ", "_").lower()
@@ -211,7 +208,7 @@ def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
         team_name = team['teamName']
 
         short_name = team['teamShortName'].lower().replace(' ', '_')
-        print('maybe this should have been teamAbbrev')
+        log.debug('maybe this should have been teamAbbrev')
         records = TEAM_RECORD_MAP[short_name]
         if type == 'home':
             w = records.w_at_home

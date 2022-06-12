@@ -97,43 +97,46 @@ standings_data = StandingsData()
 def set_league_standings_data(current_standings_dict):
     assert isinstance(current_standings_dict, list), type(current_standings_dict)
     for current_standings in current_standings_dict:
-        log.debug('getting standings data')
-        log.debug(current_standings)
+        log.debug('\n\n getting set_league_standings_data data')
+        print(current_standings['team']['abbreviation'])
+        log.debug('\n\n')
         assert isinstance(current_standings, dict), type(current_standings)
 
         wins = standings_data.get_wins(current_standings)
-        mlb[current_standings['teamAbbrev']].wins = wins
+        log.debug(wins)
+
+        mlb[current_standings['team']['abbreviation']].wins = wins
 
         losses = standings_data.get_losses(current_standings)
-        mlb[current_standings['teamAbbrev']].losses = standings_data.get_losses(current_standings)
+        mlb[current_standings['team']['abbreviation']].losses = standings_data.get_losses(current_standings)
 
-        mlb[current_standings['teamAbbrev']].games = standings_data.get_games_total(current_standings)
+        mlb[current_standings['team']['abbreviation']].games = standings_data.get_games_total(current_standings)
 
-        mlb[current_standings['teamAbbrev']].win_avg = standings_data.set_win_avg(current_standings)
+        mlb[current_standings['team']['abbreviation']].win_avg = standings_data.set_win_avg(current_standings)
 
-        mlb[current_standings['teamAbbrev']].loss_avg = standings_data.set_loss_avg(current_standings)
+        mlb[current_standings['team']['abbreviation']].loss_avg = standings_data.set_loss_avg(current_standings)
 
         wins_avg_left, loss_avg_left, g_v_left = standings_data.get_vs_left(current_standings)
-        mlb[current_standings['teamAbbrev']].wins_avg_left = wins_avg_left
-        mlb[current_standings['teamAbbrev']].losses_avg_left = loss_avg_left
-        mlb[current_standings['teamAbbrev']].g_v_left = g_v_left
+        mlb[current_standings['team']['abbreviation']].wins_avg_left = wins_avg_left
+        mlb[current_standings['team']['abbreviation']].losses_avg_left = loss_avg_left
+        mlb[current_standings['team']['abbreviation']].g_v_left = g_v_left
 
         wins_avg_right, loss_avg_right, g_v_right = standings_data.get_vs_right(current_standings)
-        mlb[current_standings['teamAbbrev']].wins_avg_right = wins_avg_right
-        mlb[current_standings['teamAbbrev']].loss_avg_right = loss_avg_right
-        mlb[current_standings['teamAbbrev']].g_v_right = g_v_right
+        mlb[current_standings['team']['abbreviation']].wins_avg_right = wins_avg_right
+        mlb[current_standings['team']['abbreviation']].loss_avg_right = loss_avg_right
+        mlb[current_standings['team']['abbreviation']].g_v_right = g_v_right
 
         w_avg_home, l_avg_home, g_at_home = standings_data.get_at_home(current_standings)
-        mlb[current_standings['teamAbbrev']].w_avg_home = wins_avg_right
-        mlb[current_standings['teamAbbrev']].l_avg_home = l_avg_home
-        mlb[current_standings['teamAbbrev']].g_at_home = g_at_home
+        mlb[current_standings['team']['abbreviation']].w_avg_home = wins_avg_right
+        mlb[current_standings['team']['abbreviation']].l_avg_home = l_avg_home
+        mlb[current_standings['team']['abbreviation']].g_at_home = g_at_home
 
         w_avg_road, l_avg_road, g_at_road = standings_data.get_at_road(current_standings)
-        mlb[current_standings['teamAbbrev']].w_avg_road = w_avg_road
-        mlb[current_standings['teamAbbrev']].l_avg_road = l_avg_road
-        mlb[current_standings['teamAbbrev']].g_at_road = g_at_road
+        mlb[current_standings['team']['abbreviation']].w_avg_road = w_avg_road
+        mlb[current_standings['team']['abbreviation']].l_avg_road = l_avg_road
+        mlb[current_standings['team']['abbreviation']].g_at_road = g_at_road
 
-        mlb[current_standings['teamAbbrev']].run_avg = standings_data.get_run_avg(current_standings)
+        mlb[current_standings['team']['abbreviation']].run_avg = standings_data.get_run_avg(current_standings)
 
 set_league_standings_data(TEAM_STANDING_DICT)
 
@@ -194,9 +197,10 @@ team_stats = TeamStatsNoSplit()
 for t_stat in TEAM_STATS_DICT:
     log.debug('getting team stats (no split)')
     assert isinstance(t_stat, dict), type(t_stat)
-
+    PRINT('your here!!')
+    import pdb; pdb.set_trace()
     walks_per_game = team_stats.get_walks_per_game(t_stat)
-    mlb[t_stat['teamAbbrev']].walks_per_game = walks_per_game
+    mlb[t_stat].walks_per_game = walks_per_game
 
     hits_per_game = team_stats.get_hits_per_game(t_stat)
     mlb[t_stat['teamAbbrev']].hits_per_game = hits_per_game
