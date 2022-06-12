@@ -1,9 +1,10 @@
 import requests
 import json
 import re
-
-from calculator.full_season_forecaster.pitcher_calculator import calculate_game
 from datetime import datetime
+from calculator.full_season_forecaster.pitcher_calculator import calculate_game
+from calculator.settings.api import year
+from calculator.settings.logger import log
 
 import operator
 
@@ -25,6 +26,7 @@ TEAM_VS_RIGHTY_URI = '/named.team_hitting_season_leader_sit.bam?season=2022&sort
 
 def get_team_stats():
     CURRENT_URL = BASE_URL + TEAM_STATS_URI
+    log.debug('get_team_stats from %s' + CURRENT_URL)
     try:
         RESPONSE = requests.get(CURRENT_URL)
     except requests.exceptions.RequestException as e:
@@ -35,6 +37,7 @@ def get_team_stats():
     TEAM_STATS_DICT = JSON_RESPONSE['team_hitting_season_leader_master']['queryResults']['row']
     return TEAM_STATS_DICT
 
+log.debug('TEAM_STATS_DICT = get_team_stats()')
 TEAM_STATS_DICT = get_team_stats()
 
 
@@ -45,10 +48,8 @@ def get_all_team_names(d):
         current_name = t['team_short']
         ALL_TEAM_SHORT_NAMES.append(current_name)
 
-
+log.debug('get_all_team_names(TEAM_STATS_DICT)')
 get_all_team_names(TEAM_STATS_DICT)
-
-
 
 
 class Team(object):
@@ -103,16 +104,20 @@ def get_splits_by_uri(uri):
     CURRENT_DICT = JSON_RESPONSE['team_hitting_season_leader_sit']['queryResults']['row']
     return CURRENT_DICT
 
+log.debug('TEAM_AT_HOME_DICT')
 TEAM_AT_HOME_DICT = get_splits_by_uri(TEAM_AT_HOME_URI)
+log.debug('TEAM_AWAY_URI')
 TEAM_AWAY_DICT = get_splits_by_uri(TEAM_AWAY_URI)
+log.debug('TEAM_VS_LEFTY_URI')
 TEAM_VS_LEFTY_DICT = get_splits_by_uri(TEAM_VS_LEFTY_URI)
-TEAM_VS_RIGHTY_DICT = get_splits_by_uri(TEAM_VS_RIGHTY_URI)
+log.debug('TEAM_VS_LEFTY_URI')
+TEAM_VS_RIGHTY_DICT = get_splits_by_uri(TEAM_VS_LEFTY_URI)
 
 
 def get_standings():
     today = datetime.now().strftime('%Y/%m/%d')
-    TEAM_STANDING_URI = '/named.standings_schedule_date.bam?season=2019&schedule_game_date.game_date=%27' + today + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
-    CURRENT_URL = BASE_URL + TEAM_STANDING_URI
+    TEAM_STANDING_URL = '/named.standings_schedule_date.bam?season=2019&schedule_game_date.game_date=%27' + today + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
+    CURRENT_URL = BASE_URL + TEAM_STANDING_URL
     try:
         TEAM_STANDING_RESPONSE = requests.get(CURRENT_URL)
     except requests.exceptions.RequestException as e:
@@ -202,8 +207,11 @@ for team in TEAM_STATS_DICT:
 
 def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
     for team in SPLITS_DICT:
-        team_name = team['team_full']
-        short_name = team['team_short'].lower().replace(' ', '_')
+        # team_name = team['team_full']
+        team_name = team['teamName']
+
+        short_name = team['teamShortName'].lower().replace(' ', '_')
+        print('maybe this should have been teamAbbrev')
         records = TEAM_RECORD_MAP[short_name]
         if type == 'home':
             w = records.w_at_home
@@ -225,11 +233,15 @@ def get_expected_game_by_dict(SPLITS_DICT, ADD_TO_DICT, type):
             assert 1 == 2, 'got to else in get_expected_game_by_dict'
         print('In get expected. Losses ' + str(l))
         inning = games * 8.75
-        runs_per_game = float(team['r']) / games
-        walks_per_game = float(team['bb']) / games
-        hits_per_game = float(team['h']) / games
-        homeruns_per_game = float(team['hr']) / games
-        strikeouts_per_game = float(team['so']) / games
+        runs_per_game = float(team['runs']) / games
+        walks_per_game = (
+            float(team['baseOnBalls']) + \
+            float(team['hitByPitch']) + \
+            float(team['intentionalWalks'])
+            ) / games
+        hits_per_game = float(team['hits']) / games
+        homeruns_per_game = float(team['homeRuns']) / games
+        strikeouts_per_game = float(team['strikeOuts']) / games
         ts = short_name.lower().replace(' ', '_')
         # print 'Games %.2f:\n' % (games)
         expected_game = calculate_game(7, runs_per_game, walks_per_game, hits_per_game, \

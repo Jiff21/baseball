@@ -1,30 +1,38 @@
 # Calculator
 
 ## install
-From fantasy folder.
+From fantasy folder. Version at update `Python 3.6.8`
 
 ```bash
-virtualenv -p python3.6 env
-. env/bin/activate
+virtualenv env
+source env/bin/activate
 ```
 
-## Update team data
+## Run
 
 ```bash
-python calculator/mlbdotcom_teamscraper.py
+python main.py
 ```
 
 TODO: Need to store data after getting it
 
 
-## Single Pitcher Outing
+## Update team data
+NOT WORKING SEE https://stackoverflow.com/questions/14132789/relative-imports-for-the-billionth-time, runs on main
+```bash
+python calculator/mlbdotcom_teamscraper.py
+```
+TODO: Need to store data after getting it
 
+
+## Single Pitcher Outing
+NOT WORKING SEE https://stackoverflow.com/questions/14132789/relative-imports-for-the-billionth-time, runs on main
 ```bash
 python full_season_forecaster/pitcher_outing.py
 ```
 
 ## Inning Extrapolator
-
+NOT WORKING SEE https://stackoverflow.com/questions/14132789/relative-imports-for-the-billionth-time, runs on main
 Get a projection for next season based on last seasons totals and your projection for this season.
 
 ```bash

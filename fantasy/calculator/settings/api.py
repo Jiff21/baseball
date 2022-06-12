@@ -1,8 +1,9 @@
 import os
 from datetime import datetime
+from calculator.settings.logger import log
 
 year = datetime.now().strftime('%Y')
-today = datetime.now().strftime('%Y/%m/%d')
+today = datetime.now().strftime('%Y-%m-%d')
 year = '2022'
 # today = '2019/10/30'
 
@@ -30,12 +31,14 @@ TEAM_AWAY_URI      = SPLITS_URI + '&sitCodes=a' + END_QUAL
 TEAM_VS_LEFTY_URI  = SPLITS_URI + '&sitCodes=vl' + END_QUAL
 TEAM_VS_RIGHTY_URI = SPLITS_URI + '&sitCodes=v4' + END_QUAL
 
-TEAM_STANDING_URI = \
-    'named.standings_schedule_date.bam?season=' \
+TEAM_STANDING_URL = \
+    'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=' \
     + YEAR_FOR_HITTING_STATS \
-    + '&schedule_game_date.game_date=%27' \
+    + '&date=' \
     + DATE_FOR_STANDINGS \
-    + '%27&sit_code=%27h0%27&league_id=103&league_id=104&all_star_sw=%27N%27&version=2'
+    + '&standingsTypes=regularSeason,springTraining,firstHalf,secondHalf&hydrate=division,conference,sport,league,team(nextSchedule(team,gameType=[R,F,D,L,W,C],inclusive=false),previousSchedule(team,gameType=[R,F,D,L,W,C],inclusive=true))'
+
+
 # Updated URL for Above but would need to reformat for json resplonse
 STATS_API = 'https://statsapi.mlb.com/api/v1/'
 STANDINGS_URI = 'standings?leagueId=103,104&season=2019&standingsTypes=regularSeason,springTraining,firstHalf,secondHalf&hydrate=division,conference,sport,league,team(nextSchedule(team,gameType=[R,F,D,L,W,C],inclusive=false),previousSchedule(team,gameType=[R,F,D,L,W,C],inclusive=true))'

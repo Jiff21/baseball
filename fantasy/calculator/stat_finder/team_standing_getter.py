@@ -2,7 +2,7 @@ import os
 import re
 import json
 import requests
-from calculator.settings.api import BASE_URL, TEAM_STANDING_URI
+from calculator.settings.api import BASE_URL, TEAM_STANDING_URL
 from calculator.settings.api import STATS_API, STANDINGS_URI
 
 def get_relevant_part_of_standings_dict(feed_me_json):
@@ -72,9 +72,9 @@ def return_wins_losses(feed_me_json):
 
 
 def get_standings():
-    CURRENT_URL = BASE_URL + TEAM_STANDING_URI
+    log.debug('in get_standings, TEAM_STANDING_URL is %s' TEAM_STANDING_URL)
     try:
-        TEAM_STANDING_RESPONSE = requests.get(CURRENT_URL)
+        TEAM_STANDING_RESPONSE = requests.get(TEAM_STANDING_URL)
     except requests.exceptions.RequestException as e:
         print (e)
         sys.exit(1)
