@@ -93,7 +93,7 @@ class Team(object):
 
 def get_splits_by_uri(uri):
     CURRENT_URL = BASE_URL + uri
-    print('Getting splits from %s' CURRENT_URL)
+    print('get_splits_by_uri - Getting splits from %s' CURRENT_URL)
     try:
         RESPONSE = requests.get(CURRENT_URL)
     except requests.exceptions.RequestException as e:

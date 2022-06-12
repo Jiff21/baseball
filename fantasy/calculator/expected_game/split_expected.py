@@ -50,7 +50,11 @@ class SplitExpectedGame(object):
 
     def calculate_righty_expected_game(self, team, league, innings=7):
         log.debug('calculating righty expected game')
+        # import pdb; pdb.set_trace()
+        log.debug(team)
+        log.debug(league[team])
         expected_starter_plate_appearance = (innings/float(9)) * league[team].plate_appearences_per_game
+        # AttributeError: 'Team' object has no attribute 'vs_r_r_per_pa'
         splits_r_expected = league[team].vs_r_r_per_pa * expected_starter_plate_appearance
         splits_h_expected = league[team].vs_r_h_per_pa * expected_starter_plate_appearance
         splits_hr_expected = league[team].vs_r_hr_per_pa * expected_starter_plate_appearance

@@ -111,11 +111,12 @@ class SplitsScraper(object):
         log.debug(
             'running get_pitcher_rl_splits_per_dict,\ getting rbi since no runs'
         )
-        r = self.get_rbi(splits_dict)
+        rbi = self.get_rbi(splits_dict)
 
         plate_appearances = self.get_plate_appearances(splits_dict)
-        runs_per_pa = self.get_avg(r, plate_appearances)
-
+        rbi_per_pa = self.get_avg(rbi, plate_appearances)
+        log.debug('rbi_per_pa set to %s' % rbi_per_pa)
+        
         h = self.get_hits(splits_dict)
         hits_per_pa = self.get_avg(h, plate_appearances)
 
@@ -128,4 +129,4 @@ class SplitsScraper(object):
         so = self.get_strikeouts(splits_dict)
         so_per_pa = self.get_avg(so, plate_appearances)
 
-        return runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa
+        return rbi_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa

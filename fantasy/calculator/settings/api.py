@@ -29,7 +29,7 @@ END_QUAL = '&recSP=1&recPP=50'
 TEAM_AT_HOME_URI   = SPLITS_URI + '&sitCodes=h' + END_QUAL
 TEAM_AWAY_URI      = SPLITS_URI + '&sitCodes=a' + END_QUAL
 TEAM_VS_LEFTY_URI  = SPLITS_URI + '&sitCodes=vl' + END_QUAL
-TEAM_VS_RIGHTY_URI = SPLITS_URI + '&sitCodes=v4' + END_QUAL
+TEAM_VS_RIGHTY_URI = SPLITS_URI + '&sitCodes=vr' + END_QUAL
 
 TEAM_STANDING_URL = \
     'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=' \
