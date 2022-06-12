@@ -1,5 +1,6 @@
 import json
 import requests
+import sys
 from calculator.settings.logger import log
 from calculator.settings.api import UPDATED_BASE_URL, TEAM_HITTING_JSON_BLOCK
 
@@ -13,9 +14,9 @@ class SplitsScraper(object):
         return number / total
 
     def get_splits_by_uri(self, uri):
-        print("TODO WRITE TESTS, get splits from api")
+        log.debug("TODO WRITE TESTS, get splits from api")
         current_url = UPDATED_BASE_URL + uri
-        print("2. " + current_url)
+        log.debug("get_splits_by_uri" + current_url)
         try:
             response = requests.get(current_url)
         except requests.exceptions.RequestException as e:

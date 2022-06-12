@@ -96,21 +96,14 @@ class StandingsData():
 def get_standings():
     today = datetime.now().strftime('%Y/%m/%d')
     log.debug('TEAM_STANDING_URL is %s' % TEAM_STANDING_URL)
-    # TODO: UPDATE URL but will change json structure.
-    # CURRENT_URL = STATS_API + STANDINGS_URI
     try:
         TEAM_STANDING_RESPONSE = requests.get(TEAM_STANDING_URL)
     except requests.exceptions.RequestException as e:
         print(e)
         sys.exit(1)
     STANDING_TEXT = TEAM_STANDING_RESPONSE.text
-    # Text is cheating a comma in last, first, could load whole data otherwise
-    # STANDING_TEXT = re.sub(r'\"[,]"', lambda x: x.group(0).replace(",", "\,"),  STANDING_TEXT)
     JSON_STANDINGS = json.loads(STANDING_TEXT)
     # Standings are in two blocks al and NL. This combines them.
-    # print('you changed this\n')
-    print(JSON_STANDINGS['records'][0]['teamRecords'][1]['records'])
-    # print('\n')
     log.debug('use https://jsonpathfinder.com/ if they switch this again')
     tsd = JSON_STANDINGS['records'][0]['teamRecords']
     tsd.extend(JSON_STANDINGS['records'][1]['teamRecords'])
