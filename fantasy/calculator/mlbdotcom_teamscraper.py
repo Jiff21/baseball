@@ -69,6 +69,7 @@ for stats in TEAM_AWAY_DICT:
 
 TEAM_VS_LEFTY_DICT = split_scraper.get_splits_by_uri(TEAM_VS_LEFTY_URI)
 
+
 for stats in TEAM_VS_LEFTY_DICT:
     log.debug('getting lefty splits')
     runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa = split_scraper.get_pitcher_rl_splits_per_dict(stats)
@@ -78,14 +79,11 @@ for stats in TEAM_VS_LEFTY_DICT:
     mlb[stats['teamAbbrev']].vs_l_bb_per_pa = walks_per_pa
     mlb[stats['teamAbbrev']].vs_l_so_per_pa = so_per_pa
 
-print('1. Getting TEAM_VS_RIGHTY_URI coming back empty %s' % TEAM_VS_RIGHTY_URI)
 TEAM_VS_RIGHTY_DICT = split_scraper.get_splits_by_uri(TEAM_VS_RIGHTY_URI)
-print('2. %s' % TEAM_VS_RIGHTY_DICT)
+
 for stats in TEAM_VS_RIGHTY_DICT:
-    print('3.')
     log.debug('getting righty splits')
     rbi_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa = split_scraper.get_pitcher_rl_splits_per_dict(stats)
-    log.debug('In for stats in TEAM_VS_RIGHTY_DICT: %s' % rbi_per_pa)
     mlb[stats['teamAbbrev']].vs_r_r_per_pa = rbi_per_pa
     mlb[stats['teamAbbrev']].vs_r_h_per_pa = hits_per_pa
     mlb[stats['teamAbbrev']].vs_r_hr_per_pa = hr_per_pa

@@ -30,14 +30,14 @@ def ask_for_matchups(league):
     pitcher_1_matchups_list = []
     pitcher_2_matchups_list = []
     print('WHAT DOES THIS EXPECT FOR MATCHUPS? OR BUG? ')
-    input_response_2 = str(input('What are the first pitchers matchups?\n')).upper()
+    input_response_2 = input('What are the first pitchers matchups?\n').upper()
     print('1.')
     pitcher_1_matchups_list = [x.strip() for x in input_response_2.split(',')]
     print('2.')
     check_matchups_recognized(pitcher_1_matchups_list, league)
     print('1.')
     pitcher_1_arm_side = get_arm_side()
-    input_response_3 = str(input('What are the second pitchers matchups?\n')).upper()
+    input_response_3 = input('What are the second pitchers matchups?\n').upper()
     pitcher_2_matchups_list = [x.strip() for x in input_response_3.split(',')]
     check_matchups_recognized(pitcher_2_matchups_list, league)
     pitcher_2_arm_side = get_arm_side()
