@@ -93,12 +93,11 @@ def print_road_leaderboard():
 
 def leaderboard_controller():
     print('TODO: WRITE TESTS, something off left and right same')
-    leaderboard_resp_1 = input(
+    leaderboard_resp_1 = str(input(
         'What Leaderboard would you like to see?\n\t1. General Expected Game\n' \
         '\t2. Righty Splits\n\t3. Lefty Splits\n\t4. Home Splits\n' \
         '\t5. Road Splits\n\t6. Exit\n\t7. Main Menu\n'
-    ).lower()
-    import pdb;pdb.set_trace()
+    )).lower()
     if leaderboard_resp_1 == '1' or 'general' in leaderboard_resp_1:
         print('\n\nGeneric expected game:\n')
         print_generic_leaderboard()

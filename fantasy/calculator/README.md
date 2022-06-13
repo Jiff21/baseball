@@ -1,11 +1,16 @@
 # Calculator
 
-## install
-From fantasy folder. Version at update `Python 3.6.8`
+
+## Dependencies
+
+Last tested at Python Version 3.10.4.
+
+## Install
 
 ```bash
-virtualenv env
+python -m venv env
 source env/bin/activate
+pip install -r calculator/requirements.txt
 ```
 
 ## Run
