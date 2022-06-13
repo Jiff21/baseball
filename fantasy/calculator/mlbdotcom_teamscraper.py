@@ -24,29 +24,6 @@ from calculator.scraper.team_splits_stats import SplitsScraper
 split_scraper = SplitsScraper()
 TEAM_AT_HOME_DICT = split_scraper.get_splits_by_uri(TEAM_AT_HOME_URI)
 
-
-#
-# def get_relevant_splits_per_dict(splits_dict):
-#     log.debug('running get_relevant_splits_per_dict')
-#     r = int(splits_dict['r'])
-#     g = int(splits_dict['g'])
-#     runs_per_game = get_avg(r, g)
-#
-#     h = int(splits_dict['h'])
-#     hits_per_game = get_avg(h, g)
-#
-#     hr = int(splits_dict['hr'])
-#     hr_per_game = get_avg(hr, g)
-#
-#     bb = int(splits_dict['bb'])
-#     waks_per_game = get_avg(bb, g)
-#
-#     so = int(splits_dict['so'])
-#     so_per_game = get_avg(so, g)
-#
-#     return runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game
-
-
 for stats in TEAM_AT_HOME_DICT:
     log.debug('getting home splits')
     runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game = split_scraper.get_relevant_splits_per_dict(stats)
@@ -57,7 +34,6 @@ for stats in TEAM_AT_HOME_DICT:
     mlb[stats['teamAbbrev']].home_so_pg = so_per_game
 
 TEAM_AWAY_DICT = split_scraper.get_splits_by_uri(TEAM_AWAY_URI)
-
 for stats in TEAM_AWAY_DICT:
     log.debug('getting away splits')
     runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game = split_scraper.get_relevant_splits_per_dict(stats)
@@ -67,9 +43,8 @@ for stats in TEAM_AWAY_DICT:
     mlb[stats['teamAbbrev']].away_bb_pg = waks_per_game
     mlb[stats['teamAbbrev']].away_so_pg = so_per_game
 
+
 TEAM_VS_LEFTY_DICT = split_scraper.get_splits_by_uri(TEAM_VS_LEFTY_URI)
-
-
 for stats in TEAM_VS_LEFTY_DICT:
     log.debug('getting lefty splits')
     runs_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa = split_scraper.get_pitcher_rl_splits_per_dict(stats)
@@ -79,8 +54,8 @@ for stats in TEAM_VS_LEFTY_DICT:
     mlb[stats['teamAbbrev']].vs_l_bb_per_pa = walks_per_pa
     mlb[stats['teamAbbrev']].vs_l_so_per_pa = so_per_pa
 
-TEAM_VS_RIGHTY_DICT = split_scraper.get_splits_by_uri(TEAM_VS_RIGHTY_URI)
 
+TEAM_VS_RIGHTY_DICT = split_scraper.get_splits_by_uri(TEAM_VS_RIGHTY_URI)
 for stats in TEAM_VS_RIGHTY_DICT:
     log.debug('getting righty splits')
     rbi_per_pa, hits_per_pa, hr_per_pa, walks_per_pa, so_per_pa = split_scraper.get_pitcher_rl_splits_per_dict(stats)
@@ -193,6 +168,7 @@ class TeamStatsNoSplit(object):
 team_stats = TeamStatsNoSplit()
 
 for t_stat in TEAM_STATS_DICT:
+    #TODO: Write tests for these
     log.debug('getting team stats (no split)')
     assert isinstance(t_stat, dict), type(t_stat)
 
@@ -218,10 +194,8 @@ for t_stat in TEAM_STATS_DICT:
     plate_appearences_per_game = team_stats.get_plate_appearences_per_game(t_stat)
     mlb[t_stat['team_abbrev']].plate_appearences_per_game = plate_appearences_per_game
 
+# print('TODO: Write test for total_plate_appearances %f' % mlb['HOU'].total_plate_appearances)
 
-# TODO: Write tests all of above
-print('TODO: Write test for total_plate_appearances %f' % mlb['HOU'].total_plate_appearances)
-# print(mlb['HOU'].plate_appearences_per_game)
 
 # TODO Random stats to get for future/ general _expected
 # mlb[stats['teamAbbrev']].home_r_pg = runs_per_game
