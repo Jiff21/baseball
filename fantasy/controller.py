@@ -7,12 +7,16 @@ from calculator.streaming_pitcher_matchup_scout.splits_leaderboard import leader
 
 
 def start():
-    input_response_1 = input('What would you like to do?\n' \
-        '\t1. Leaderboards\n\t2. Calculate all splits\n' \
-        '\t3. Compare SP matchups\n\t4. Compare SP detailed\n' \
-        '\t5. Pitcher extrapolator\n\t6. Batter extrapolator\n'
+    input_response_1 = input(
+        'What would you like to do?\n' \
+        '\t1. Leaderboards\n' \
+        '\t2. Calculate all splits\n' \
+        '\t3. Compare SP matchups\n' \
+        '\t4. Compare SP detailed\n' \
+        '\t5. Pitcher extrapolator\n' \
+        '\t6. Batter extrapolator\n'
     )
-    input_response_1 = str(input_response_1).lower()
+    input_response_1 = input_response_1.lower()
     if input_response_1 == '1' or 'Leaderboard' in input_response_1:
         leaderboard_controller()
     elif input_response_1 == '2' or 'calculate all splits' in input_response_1:
