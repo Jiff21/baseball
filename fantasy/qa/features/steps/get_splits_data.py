@@ -32,6 +32,12 @@ def step_impl(context):
 def step_impl(context):
     context.current_stat = context.split_scraper.get_runs(context.current_data)
 
+
+@step('we get rbi')
+def step_impl(context):
+    context.current_stat = context.split_scraper.get_rbi(context.current_data)
+
+
 @step('we get games')
 def step_impl(context):
     context.current_stat = context.split_scraper.get_games(context.current_data)
@@ -61,6 +67,7 @@ def step_impl(context):
     context.current_stat = context.split_scraper.get_strikeouts(
         context.current_data
     )
+
 
 @step('we get plate appearances')
 def step_impl(context):

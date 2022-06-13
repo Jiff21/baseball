@@ -10,8 +10,19 @@ Feature: We can scrape team hitting splits data
       | split  | expected |
       | Home   | 306      |
       | Road   | 305      |
+
+
+  Scenario Outline: Splits get rbi works for <split> Data
+    Given we load the test data for single team "<split>" Splits
+      And we create a SplitsScraper object
+    When we get rbi
+    Then the current stat should be an int equal to <expected>
+
+    Examples:
+      | split  | expected |
       | Lefty  | 212      |
       | Righty | 364      |
+
 
 
   Scenario Outline: Splits get Games works for <split> Data
