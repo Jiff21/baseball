@@ -27,11 +27,28 @@ class BatterExtrapolator(object):
         return points/plate_appearances
 
     def get_expected_pas(self):
-        return float(
+        bo_number = float(
             input('How many Plate Appears do you expect/did the batter ' \
             'to have next year?\nLinupe spot:1=670,2=650,3=630,5=581,6=541,7=523' \
             '8=460\n\t\t\t\t\t\t')
         )
+        if bo_number == 1.0:
+            exp_pa = 670
+        elif bo_number == 2.0:
+            exp_pa = 650
+        elif bo_number == 3.0:
+            exp_pa = 630
+        elif bo_number == 4.0:
+            exp_pa = 600
+        elif bo_number == 5.0:
+            exp_pa = 581
+        elif bo_number == 6.0:
+            exp_pa = 541
+        elif bo_number == 7.0:
+            exp_pa = 523
+        else:
+            exp_pa = bo_number
+        return exp_pa
 
     def ask_for_details(self, previous_total):
         quest = input(
