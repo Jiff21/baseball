@@ -1,7 +1,5 @@
 class ScoringSettings(object):
 
-	print('Loaded scoring settings')
-
 	class Batting(object):
 		S = 1
 		D = 2

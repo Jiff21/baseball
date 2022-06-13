@@ -23,8 +23,9 @@ def get_team_stats():
 
 def get_all_team_names(passed_json):
     the_names = []
+    log.debug('all team abbreviation, but from team_short')
     for t in passed_json:
-        print(t['team_short'])
+        log.debug(t['team_short'])
         current_name = t['team_short']
         the_names.append(current_name)
     return the_names

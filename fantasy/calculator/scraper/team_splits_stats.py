@@ -30,10 +30,6 @@ class SplitsScraper(object):
             )
         response_text = response.text
         response_json = json.loads(response_text)
-        # import pdb; pdb.set_trace()
-        print('You just changed this to return response json to return directly as a guess thats where line below left off')
-        # current_dict = response_json[TEAM_HITTING_JSON_BLOCK]['queryResults']['row']
-        # return current_dict
         return response_json['stats']
 
     def get_runs(self, dic):
@@ -116,7 +112,7 @@ class SplitsScraper(object):
         plate_appearances = self.get_plate_appearances(splits_dict)
         rbi_per_pa = self.get_avg(rbi, plate_appearances)
         log.debug('rbi_per_pa set to %s' % rbi_per_pa)
-        
+
         h = self.get_hits(splits_dict)
         hits_per_pa = self.get_avg(h, plate_appearances)
 
