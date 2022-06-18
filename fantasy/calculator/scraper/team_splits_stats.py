@@ -9,14 +9,13 @@ class SplitsScraper(object):
     def __init__(self):
         log.debug('Instantiate SplitsScraper')
 
-
     def get_avg(self, number, total):
         return number / total
 
     def get_splits_by_uri(self, uri):
         log.debug("TODO WRITE TESTS, get splits from api")
         current_url = UPDATED_BASE_URL + uri
-        log.debug("get_splits_by_uri" + current_url)
+        log.debug("GETTING SPLIT FROM \n" + current_url)
         try:
             response = requests.get(current_url)
         except requests.exceptions.RequestException as e:
@@ -48,8 +47,16 @@ class SplitsScraper(object):
         return int(dic['homeRuns'])
 
     def get_walks(self, dic):
-        print('add ints and bean balls')
         return int(dic['baseOnBalls'])
+
+    def get_int_walks(self, dic):
+        return int(dic['intentionalWalks'])
+
+    def get_int_walks(self, dic):
+        return int(dic['catchersInterference'])
+
+    def get_catcher_interference(self, dic):
+        return int(dic['catchersInterference'])
 
     def get_strikeouts(self, dic):
         return int(dic['strikeOuts'])

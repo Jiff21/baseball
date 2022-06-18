@@ -2,9 +2,10 @@ import re
 from calculator.settings.team_object import Team
 from calculator.stat_finder.team_standing_getter import return_wins_losses
 
+
 ## need a way to map back ab per games
 def ab_per_game(passed_json, passed_short_name):
-    # import pdb; pdb.set_trace()
+    print('DOES THIS EVER RUNS???')
     for t in passed_json:
         current_name = t['team_short']
         if current_name == passed_short_name:
@@ -17,6 +18,7 @@ def ab_per_game(passed_json, passed_short_name):
 TEAM_RECORD_MAP = {}
 
 def create_teams(all_teams, TEAM_STANDING_DICT):
+    print('DOES THIS EVER RUNS??? 2')
     for t in all_teams:
         win_avg, loss_avg, games, w_v_left, l_v_left, w_v_right, l_v_right, \
         w_at_home, l_at_home, w_on_road, l_on_road, g_v_left, g_v_right, \

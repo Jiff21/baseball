@@ -15,13 +15,13 @@ from static.team_map import TEAM_MAP
 # Todo Test that find by ID gets correct team from api
 mlb = get_all_team_names(TEAM_MAP)
 
-# import pdb; pdb.set_trace()
 from calculator.scraper.team_hitting_stats import get_team_stats
 TEAM_STATS_DICT = get_team_stats()
 
 from calculator.scraper.team_splits_stats import SplitsScraper
 
 split_scraper = SplitsScraper()
+log.debug('\n\n Geting Home Splits')
 TEAM_AT_HOME_DICT = split_scraper.get_splits_by_uri(TEAM_AT_HOME_URI)
 
 for stats in TEAM_AT_HOME_DICT:
@@ -33,6 +33,7 @@ for stats in TEAM_AT_HOME_DICT:
     mlb[stats['teamAbbrev']].home_bb_pg = waks_per_game
     mlb[stats['teamAbbrev']].home_so_pg = so_per_game
 
+log.debug('\n\n Geting Away Splits')
 TEAM_AWAY_DICT = split_scraper.get_splits_by_uri(TEAM_AWAY_URI)
 for stats in TEAM_AWAY_DICT:
     log.debug('getting away splits')
@@ -44,6 +45,7 @@ for stats in TEAM_AWAY_DICT:
     mlb[stats['teamAbbrev']].away_so_pg = so_per_game
 
 
+log.debug('\n\n Geting Lefty Splits')
 TEAM_VS_LEFTY_DICT = split_scraper.get_splits_by_uri(TEAM_VS_LEFTY_URI)
 for stats in TEAM_VS_LEFTY_DICT:
     log.debug('getting lefty splits')
@@ -55,6 +57,7 @@ for stats in TEAM_VS_LEFTY_DICT:
     mlb[stats['teamAbbrev']].vs_l_so_per_pa = so_per_pa
 
 
+log.debug('\n\n Geting Righty Splits')
 TEAM_VS_RIGHTY_DICT = split_scraper.get_splits_by_uri(TEAM_VS_RIGHTY_URI)
 for stats in TEAM_VS_RIGHTY_DICT:
     log.debug('getting righty splits')
@@ -73,8 +76,6 @@ def set_league_standings_data(current_standings_dict):
     assert isinstance(current_standings_dict, list), type(current_standings_dict)
     for current_standings in current_standings_dict:
         log.debug('\n\n getting set_league_standings_data data')
-        print(current_standings['team']['abbreviation'])
-        log.debug('\n\n')
         assert isinstance(current_standings, dict), type(current_standings)
 
         wins = standings_data.get_wins(current_standings)
@@ -91,24 +92,28 @@ def set_league_standings_data(current_standings_dict):
 
         mlb[current_standings['team']['abbreviation']].loss_avg = standings_data.set_loss_avg(current_standings)
 
-        wins_avg_left, loss_avg_left, g_v_left = standings_data.get_vs_left(current_standings)
-        mlb[current_standings['team']['abbreviation']].wins_avg_left = wins_avg_left
-        mlb[current_standings['team']['abbreviation']].losses_avg_left = loss_avg_left
+        # wins_avg_left, loss_avg_left, g_v_left = standings_data.get_vs_left(current_standings)
+        wins_v_left, loss_v_left, g_v_left = standings_data.get_vs_left(current_standings)
+        mlb[current_standings['team']['abbreviation']].wins_avg_left = wins_v_left/g_v_left
+        mlb[current_standings['team']['abbreviation']].losses_avg_left = loss_v_left/g_v_left
         mlb[current_standings['team']['abbreviation']].g_v_left = g_v_left
 
-        wins_avg_right, loss_avg_right, g_v_right = standings_data.get_vs_right(current_standings)
-        mlb[current_standings['team']['abbreviation']].wins_avg_right = wins_avg_right
-        mlb[current_standings['team']['abbreviation']].loss_avg_right = loss_avg_right
+        # wins_avg_right, loss_avg_right, g_v_right = standings_data.get_vs_right(current_standings)
+        wins_v_right, loss_v_right, g_v_right = standings_data.get_vs_right(current_standings)
+        mlb[current_standings['team']['abbreviation']].wins_avg_right = wins_v_right / g_v_right
+        mlb[current_standings['team']['abbreviation']].loss_avg_right = loss_v_right /g_v_right
         mlb[current_standings['team']['abbreviation']].g_v_right = g_v_right
 
-        w_avg_home, l_avg_home, g_at_home = standings_data.get_at_home(current_standings)
-        mlb[current_standings['team']['abbreviation']].w_avg_home = wins_avg_right
-        mlb[current_standings['team']['abbreviation']].l_avg_home = l_avg_home
+        # w_avg_home, l_avg_home, g_at_home = standings_data.get_at_home(current_standings)
+        w_at_home, l_at_home, g_at_home = standings_data.get_at_home(current_standings)
+        mlb[current_standings['team']['abbreviation']].w_avg_home = w_at_home / g_at_home
+        mlb[current_standings['team']['abbreviation']].l_avg_home = l_at_home / g_at_home
         mlb[current_standings['team']['abbreviation']].g_at_home = g_at_home
 
         w_avg_road, l_avg_road, g_at_road = standings_data.get_at_road(current_standings)
-        mlb[current_standings['team']['abbreviation']].w_avg_road = w_avg_road
-        mlb[current_standings['team']['abbreviation']].l_avg_road = l_avg_road
+        w_on_road, l_on_road, g_at_road = standings_data.get_at_road(current_standings)
+        mlb[current_standings['team']['abbreviation']].w_avg_road = w_on_road / g_at_road
+        mlb[current_standings['team']['abbreviation']].l_avg_road = l_on_road / g_at_road
         mlb[current_standings['team']['abbreviation']].g_at_road = g_at_road
 
         mlb[current_standings['team']['abbreviation']].run_avg = standings_data.get_run_avg(current_standings)
@@ -206,57 +211,33 @@ for t_stat in TEAM_STATS_DICT:
 from calculator.expected_game.split_expected import SplitExpectedGame
 split_expected_game_calculator = SplitExpectedGame()
 
-
-
-#
-# for team in mlb:
-#     log.debug('calculating expected_game_no_split')
-#     expected_game = calculate_game(
-#         7, # AVG innings starter (could improve)
-#         mlb[team].runs_per_game,
-#         mlb[team].walks_per_game,
-#         mlb[team].hits_per_game,
-#         mlb[team].homeruns_per_game,
-#         mlb[team].strikeouts_per_game,
-#         0, # Saves
-#         mlb[team].win_avg,
-#         mlb[team].loss_avg,
-#         0 # quality_starts
-#     )
-#     mlb[team].expected_game_no_split = expected_game
-
-
-
 def calculate_all_team_expections():
     for team in mlb:
-        split_expected_game_calculator.calculate_generic_expected_game(team, mlb, 9)
-        split_expected_game_calculator.calculate_lefty_expected_game(team, mlb, 9)
-        split_expected_game_calculator.calculate_righty_expected_game(team, mlb, 9)
-        split_expected_game_calculator.calculate_home_expected_game(team, mlb, 9)
-        split_expected_game_calculator.calculate_away_expected_game(team, mlb, 9)
-        print('TODO: Write test for expected game all %f' % mlb[team].expected_game_no_split)
-        print('TODO: Write test for expected splits lefty. %s %f' % (
+        split_expected_game_calculator.calculate_generic_expected_game(team, mlb, 7)
+        split_expected_game_calculator.calculate_lefty_expected_game(team, mlb, 7)
+        split_expected_game_calculator.calculate_righty_expected_game(team, mlb, 7)
+        split_expected_game_calculator.calculate_home_expected_game(team, mlb, 7)
+        split_expected_game_calculator.calculate_away_expected_game(team, mlb, 7)
+        log.debug('TODO: Write test for expected game all %f' % mlb[team].expected_game_no_split)
+        log.debug('TODO: Write test for expected splits lefty. %s %f' % (
             team,
             mlb[team].expected_game_lefty_split
             )
         )
-        print('TODO: Write test for expected splits righty. %s %f' % (
+        log.debug('TODO: Write test for expected splits righty. %s %f' % (
             team,
             mlb[team].expected_game_righty_split
             )
         )
-        print('TODO: Write test for expected splits home. %s %f' % (
+        log.debug('TODO: Write test for expected splits home. %s %f' % (
             team,
             mlb[team].expected_game_home_split
             )
         )
 
-        print('TODO: Write test for expected splits away. %s %f' % (
+        log.debug('TODO: Write test for expected splits away. %s %f' % (
             team,
             mlb[team].expected_game_away_split
             )
         )
     return mlb
-
-# calculate_all_team_expections()
-## Something is off, home road splits produce higher projects then left right splits. should even out

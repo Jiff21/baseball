@@ -15,9 +15,12 @@ UPDATED_BASE_URL = 'https://bdfed.stitch.mlbinfra.com/bdfed/stats/team'
 
 TEAM_HITTING_JSON_BLOCK = '?stitch_env=prod&sportId=1&gameType=R&group=hitting&order=desc&sortStat=onBasePlusSlugging&stats=season'
 
-TEAM_STATS_URI = TEAM_HITTING_JSON_BLOCK + '&season=' \
-    + YEAR_FOR_HITTING_STATS \
-    + '&limit=30&offset=0'
+# THey are no longer accurately supporting this. May need to update to elsewhere.
+TEAM_STATS_URI = 'named.team_hitting_season_leader_master.bam?season=' \
+                     + YEAR_FOR_HITTING_STATS \
+                     + '&sort_order=%27desc%27&sort_column=%27avg%27&' \
+                     + 'game_type=%27R%27&sport_code=%27mlb%27&recSP=1&recPP=50'
+
 
 # SPLITS_URI = 'named.team_hitting_season_leader_sit.bam?season=' \
 SPLITS_URI =  TEAM_HITTING_JSON_BLOCK + '?season=' \
@@ -41,4 +44,4 @@ TEAM_STANDING_URL = \
 
 # Updated URL for Above but would need to reformat for json resplonse
 STATS_API = 'https://statsapi.mlb.com/api/v1/'
-STANDINGS_URI = 'standings?leagueId=103,104&season=2019&standingsTypes=regularSeason,springTraining,firstHalf,secondHalf&hydrate=division,conference,sport,league,team(nextSchedule(team,gameType=[R,F,D,L,W,C],inclusive=false),previousSchedule(team,gameType=[R,F,D,L,W,C],inclusive=true))'
+STANDINGS_URI = 'standings?leagueId=103,104&season=' + year + '&standingsTypes=regularSeason,springTraining,firstHalf,secondHalf&hydrate=division,conference,sport,league,team(nextSchedule(team,gameType=[R,F,D,L,W,C],inclusive=false),previousSchedule(team,gameType=[R,F,D,L,W,C],inclusive=true))'

@@ -111,7 +111,7 @@ def leaderboard_controller():
         print('\n\nHome Splits:\n')
         print_home_leaderboard()
     elif leaderboard_resp_1 == '5' or 'away' in leaderboard_resp_1 or 'road' in leaderboard_resp_1:
-        print('\n\nHome Splits:\n')
+        print('\n\nRoad Splits:\n')
         print_road_leaderboard()
     elif leaderboard_resp_1 == 'exit' or leaderboard_resp_1 == '6':
         exit()

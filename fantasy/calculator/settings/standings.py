@@ -4,13 +4,17 @@ import requests
 from datetime import datetime
 from calculator.settings.team_object import Team
 from calculator.settings.team_record_map import get_record_map
-from calculator.settings.api import BASE_URL,TEAM_STATS_URI, TEAM_AT_HOME_URI, TEAM_AWAY_URI, TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
+from calculator.settings.api import BASE_URL,TEAM_STATS_URI, TEAM_AT_HOME_URI
+from calculator.settings.api import TEAM_AWAY_URI, TEAM_VS_LEFTY_URI, TEAM_VS_RIGHTY_URI
+from calculator.settings.api import log
 from calculator.stat_finder.team_standing_getter import get_standings
 from calculator.mlbdotcom_teamscape import get_splits_by_uri
 
 
 def get_team_stats():
+    log.debug('\n\n getting team stats')
     CURRENT_URL = BASE_URL + TEAM_STATS_URI
+    log.debug('Getting Team Stats from %s' % CURRENT_URL)
     try:
         RESPONSE = requests.get(CURRENT_URL)
     except requests.exceptions.RequestException as e:
@@ -33,6 +37,7 @@ def get_all_team_names(passed_json):
 
 
 class Standings(object):
+
     TEAM_STATS_DICT = get_team_stats()
     ALL_TEAM_SHORT_NAMES = get_all_team_names(TEAM_STATS_DICT)
     TEAM_STANDING_DICT = get_standings()

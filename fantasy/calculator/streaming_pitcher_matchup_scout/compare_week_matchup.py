@@ -70,7 +70,6 @@ def get_expected_week_outcomes_split(matchups_list, arm_side, league):
     if arm_side == 'left':
         for matchup in matchups_list:
             add = expected_matchup_lefty(matchup, league)
-            # import pdb; pdb.set_trace()
             expected += add
     elif arm_side == 'right':
         for matchup in matchups_list:
