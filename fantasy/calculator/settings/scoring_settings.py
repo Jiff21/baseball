@@ -21,10 +21,10 @@ class ScoringSettings(object):
 		ER = -1.0
 		HA = -1.0
 		HB = -1.0
-		HRA = -3.0
+		HRA = -2.0
 		INN = 3.0
 		K = 1.0
-		W = 5.0
+		W = 4.0
 		L = -3.0
 		S = 5.0
 		QS = 0.0 # No longic for this yet
