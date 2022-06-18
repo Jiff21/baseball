@@ -6,7 +6,7 @@ from calculator.settings.api import BASE_URL, UPDATED_BASE_URL
 from calculator.settings.api import TEAM_STATS_URI, log
 
 def get_team_stats():
-    print("TODO WRITE TESTS, get_team_stats")
+    log.debug("TODO WRITE TESTS, get_team_stats")
     current_url = BASE_URL + TEAM_STATS_URI
     log.debug('DATA SOURCE: %s' % current_url)
     try:

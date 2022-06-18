@@ -92,7 +92,6 @@ def print_road_leaderboard():
 
 
 def leaderboard_controller():
-    print('TODO: WRITE TESTS, something off left and right same')
     leaderboard_resp_1 = str(input(
         'What Leaderboard would you like to see?\n\t1. General Expected Game\n' \
         '\t2. Righty Splits\n\t3. Lefty Splits\n\t4. Home Splits\n' \

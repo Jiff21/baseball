@@ -6,8 +6,9 @@ class ScoringSettings(object):
 		T = 3
 		HR = 4
 		BB = 1
-		IBB = 1
-		HBP = 1
+		IBB = 1 # No longic for this yet
+		HBP = 1 # No longic for this yet
+		CI = 1 # No longic for this yet
 		R = 1
 		RBI = 1
 		SB = 2
@@ -26,6 +27,6 @@ class ScoringSettings(object):
 		W = 5.0
 		L = -3.0
 		S = 5.0
-		QS = 0.0
+		QS = 0.0 # No longic for this yet
 
 	# def calculate_off
