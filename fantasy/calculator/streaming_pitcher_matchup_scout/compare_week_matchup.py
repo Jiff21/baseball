@@ -24,6 +24,7 @@ def check_matchups_recognized(matchups_list, league):
         else:
             print('Unrecognized team in matchups. Start Over.\n')
             ask_for_matchups(league)
+            
 
 
 def ask_for_matchups(league):
@@ -38,7 +39,6 @@ def ask_for_matchups(league):
     check_matchups_recognized(pitcher_2_matchups_list, league)
     pitcher_2_arm_side = get_arm_side()
     return pitcher_1_matchups_list, pitcher_1_arm_side, pitcher_2_matchups_list, pitcher_2_arm_side
-
 
 def expected_matchup_righty(matchup, league):
     log.debug(

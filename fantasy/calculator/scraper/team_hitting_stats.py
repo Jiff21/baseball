@@ -15,7 +15,6 @@ def get_team_stats():
         print('Error in get_team_stats')
         print(e)
         sys.exit(1)
-    print("WOKRING ON MAKING THIS WORK. For Reason TEAM ABV does not match ARI va AZ. Switch to teamAbbrev")
     team_stats_dict = response.json()['stats']
     # team_stats_dict = json_stats['stats']
     return team_stats_dict
