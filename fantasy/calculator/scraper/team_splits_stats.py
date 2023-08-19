@@ -19,6 +19,7 @@ class SplitsScraper(object):
         try:
             response = requests.get(current_url)
         except requests.exceptions.RequestException as e:
+            print('Error getting  splits by uri')
             print(e)
             sys.exit(1)
         log.debug('get_splits_by_uri response:\n%s\n' % response.status_code)
@@ -81,12 +82,12 @@ class SplitsScraper(object):
         hr_per_game = self.get_avg(hr, g)
 
         bb = self.get_walks(splits_dict)
-        waks_per_game = self.get_avg(bb, g)
+        walks_per_game = self.get_avg(bb, g)
 
         so = self.get_strikeouts(splits_dict)
         so_per_game = self.get_avg(so, g)
 
-        return runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game
+        return runs_per_game, hits_per_game, hr_per_game, walks_per_game, so_per_game
 
 
     def get_pitcher_splits_per_dict(self, splits_dict):

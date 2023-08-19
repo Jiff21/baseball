@@ -18,6 +18,7 @@ def get_team_stats():
     try:
         RESPONSE = requests.get(CURRENT_URL)
     except requests.exceptions.RequestException as e:
+        print('Error gettin team stats')
         print (e)
         sys.exit(1)
     TEXT = RESPONSE.text

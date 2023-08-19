@@ -100,6 +100,7 @@ def get_standings():
         TEAM_STANDING_RESPONSE = requests.get(TEAM_STANDING_URL)
     except requests.exceptions.RequestException as e:
         print(e)
+        print('Error getting STanding')
         sys.exit(1)
     STANDING_TEXT = TEAM_STANDING_RESPONSE.text
     JSON_STANDINGS = json.loads(STANDING_TEXT)

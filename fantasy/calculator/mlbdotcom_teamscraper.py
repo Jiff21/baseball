@@ -26,22 +26,22 @@ TEAM_AT_HOME_DICT = split_scraper.get_splits_by_uri(TEAM_AT_HOME_URI)
 
 for stats in TEAM_AT_HOME_DICT:
     log.debug('getting home splits')
-    runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game = split_scraper.get_relevant_splits_per_dict(stats)
+    runs_per_game, hits_per_game, hr_per_game, walks_per_game, so_per_game = split_scraper.get_relevant_splits_per_dict(stats)
     mlb[stats['teamAbbrev']].home_r_pg = runs_per_game
     mlb[stats['teamAbbrev']].home_h_pg = hits_per_game
     mlb[stats['teamAbbrev']].home_hr_pg = hr_per_game
-    mlb[stats['teamAbbrev']].home_bb_pg = waks_per_game
+    mlb[stats['teamAbbrev']].home_bb_pg = walks_per_game
     mlb[stats['teamAbbrev']].home_so_pg = so_per_game
 
 log.debug('\n\n Geting Away Splits')
 TEAM_AWAY_DICT = split_scraper.get_splits_by_uri(TEAM_AWAY_URI)
 for stats in TEAM_AWAY_DICT:
     log.debug('getting away splits')
-    runs_per_game, hits_per_game, hr_per_game, waks_per_game, so_per_game = split_scraper.get_relevant_splits_per_dict(stats)
+    runs_per_game, hits_per_game, hr_per_game, walks_per_game, so_per_game = split_scraper.get_relevant_splits_per_dict(stats)
     mlb[stats['teamAbbrev']].away_r_pg = runs_per_game
     mlb[stats['teamAbbrev']].away_h_pg = hits_per_game
     mlb[stats['teamAbbrev']].away_hr_pg = hr_per_game
-    mlb[stats['teamAbbrev']].away_bb_pg = waks_per_game
+    mlb[stats['teamAbbrev']].away_bb_pg = walks_per_game
     mlb[stats['teamAbbrev']].away_so_pg = so_per_game
 
 
@@ -149,25 +149,25 @@ class TeamStatsNoSplit(object):
         pass
 
     def get_walks_per_game(self, current_dict):
-        return int(current_dict['bb']) / int(current_dict['g'])
+        return int(current_dict['baseOnBalls']) / int(current_dict['gamesPlayed'])
 
     def get_hits_per_game(self, current_dict):
-        return int(current_dict['h']) / int(current_dict['g'])
+        return int(current_dict['hits']) / int(current_dict['gamesPlayed'])
 
     def get_runs_per_game(self, current_dict):
-        return int(current_dict['r']) / int(current_dict['g'])
+        return int(current_dict['runs']) / int(current_dict['gamesPlayed'])
 
     def get_homeruns_per_game(self, current_dict):
-        return int(current_dict['hr']) / int(current_dict['g'])
+        return int(current_dict['homeRuns']) / int(current_dict['gamesPlayed'])
 
     def get_strikeouts_per_game(self, current_dict):
-        return int(current_dict['so']) / int(current_dict['g'])
+        return int(current_dict['strikeOuts']) / int(current_dict['gamesPlayed'])
 
     def get_total_plate_appearance(self, current_dict):
-        return int(current_dict['tpa'])
+        return int(current_dict['plateAppearances'])
 
     def get_plate_appearences_per_game(self, current_dict):
-        return int(current_dict['tpa']) / int(current_dict['g'])
+        return int(current_dict['plateAppearances']) / int(current_dict['gamesPlayed'])
 
 
 team_stats = TeamStatsNoSplit()
@@ -175,29 +175,30 @@ team_stats = TeamStatsNoSplit()
 for t_stat in TEAM_STATS_DICT:
     #TODO: Write tests for these
     log.debug('getting team stats (no split)')
+    # import pdb; pdb.set_trace();
     assert isinstance(t_stat, dict), type(t_stat)
-
-    walks_per_game = team_stats.get_walks_per_game(t_stat)
+    
     log.debug('REMOVE LATER - this used to just pass t_stat was there a reason why?')
-    mlb[t_stat['team_abbrev']].walks_per_game = walks_per_game
+    mlb[t_stat['teamAbbrev']].walks_per_game = walks_per_game
+    walks_per_game = team_stats.get_walks_per_game(t_stat)
 
     hits_per_game = team_stats.get_hits_per_game(t_stat)
-    mlb[t_stat['team_abbrev']].hits_per_game = hits_per_game
+    mlb[t_stat['teamAbbrev']].hits_per_game = hits_per_game
 
     runs_per_game = team_stats.get_runs_per_game(t_stat)
-    mlb[t_stat['team_abbrev']].runs_per_game = runs_per_game
+    mlb[t_stat['teamAbbrev']].runs_per_game = runs_per_game
 
     homeruns_per_game = team_stats.get_homeruns_per_game(t_stat)
-    mlb[t_stat['team_abbrev']].homeruns_per_game = homeruns_per_game
+    mlb[t_stat['teamAbbrev']].homeruns_per_game = homeruns_per_game
 
     strikeouts_per_game = team_stats.get_strikeouts_per_game(t_stat)
-    mlb[t_stat['team_abbrev']].strikeouts_per_game = strikeouts_per_game
+    mlb[t_stat['teamAbbrev']].strikeouts_per_game = strikeouts_per_game
 
     total_plate_appearances = team_stats.get_total_plate_appearance(t_stat)
-    mlb[t_stat['team_abbrev']].total_plate_appearances = total_plate_appearances
+    mlb[t_stat['teamAbbrev']].total_plate_appearances = total_plate_appearances
 
     plate_appearences_per_game = team_stats.get_plate_appearences_per_game(t_stat)
-    mlb[t_stat['team_abbrev']].plate_appearences_per_game = plate_appearences_per_game
+    mlb[t_stat['teamAbbrev']].plate_appearences_per_game = plate_appearences_per_game
 
 # print('TODO: Write test for total_plate_appearances %f' % mlb['HOU'].total_plate_appearances)
 
@@ -206,7 +207,7 @@ for t_stat in TEAM_STATS_DICT:
 # mlb[stats['teamAbbrev']].home_r_pg = runs_per_game
 # mlb[stats['teamAbbrev']].home_h_pg = hits_per_game
 # mlb[stats['teamAbbrev']].home_hr_pg = hr_per_game
-# mlb[stats['teamAbbrev']].home_bb_pg = waks_per_game
+# mlb[stats['teamAbbrev']].home_bb_pg = walks_per_game
 
 from calculator.expected_game.split_expected import SplitExpectedGame
 split_expected_game_calculator = SplitExpectedGame()
