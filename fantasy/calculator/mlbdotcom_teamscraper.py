@@ -79,8 +79,11 @@ def set_league_standings_data(current_standings_dict):
         assert isinstance(current_standings, dict), type(current_standings)
 
         wins = standings_data.get_wins(current_standings)
-        log.debug(wins)
-
+        log.debug("Getting standings for {}".format(current_standings['team']['abbreviation']))
+        log.debug("{team} has {wins} Wins".format(
+            wins=wins,
+            team=current_standings['team']['abbreviation'])
+        )
         mlb[current_standings['team']['abbreviation']].wins = wins
 
         losses = standings_data.get_losses(current_standings)
@@ -92,30 +95,33 @@ def set_league_standings_data(current_standings_dict):
 
         mlb[current_standings['team']['abbreviation']].loss_avg = standings_data.set_loss_avg(current_standings)
 
-        # wins_avg_left, loss_avg_left, g_v_left = standings_data.get_vs_left(current_standings)
         wins_v_left, loss_v_left, g_v_left = standings_data.get_vs_left(current_standings)
         mlb[current_standings['team']['abbreviation']].wins_avg_left = wins_v_left/g_v_left
         mlb[current_standings['team']['abbreviation']].losses_avg_left = loss_v_left/g_v_left
         mlb[current_standings['team']['abbreviation']].g_v_left = g_v_left
 
-        # wins_avg_right, loss_avg_right, g_v_right = standings_data.get_vs_right(current_standings)
         wins_v_right, loss_v_right, g_v_right = standings_data.get_vs_right(current_standings)
         mlb[current_standings['team']['abbreviation']].wins_avg_right = wins_v_right / g_v_right
         mlb[current_standings['team']['abbreviation']].loss_avg_right = loss_v_right /g_v_right
         mlb[current_standings['team']['abbreviation']].g_v_right = g_v_right
 
-        # w_avg_home, l_avg_home, g_at_home = standings_data.get_at_home(current_standings)
         w_at_home, l_at_home, g_at_home = standings_data.get_at_home(current_standings)
         mlb[current_standings['team']['abbreviation']].w_avg_home = w_at_home / g_at_home
         mlb[current_standings['team']['abbreviation']].l_avg_home = l_at_home / g_at_home
         mlb[current_standings['team']['abbreviation']].g_at_home = g_at_home
 
-        # w_avg_road, l_avg_road, g_at_road = standings_data.get_at_road(current_standings)
         w_on_road, l_on_road, g_at_road = standings_data.get_at_road(current_standings)
         mlb[current_standings['team']['abbreviation']].w_avg_road = w_on_road / g_at_road
         mlb[current_standings['team']['abbreviation']].l_avg_road = l_on_road / g_at_road
         mlb[current_standings['team']['abbreviation']].g_at_road = g_at_road
-
+        log.debug("{team} has {w_on_road} wins on road".format(
+            w_on_road=w_on_road,
+            team=current_standings['team']['abbreviation'])
+        )
+        log.debug("{team} has {l_on_road} losses on road".format(
+            l_on_road=l_on_road,
+            team=current_standings['team']['abbreviation'])
+        )
         mlb[current_standings['team']['abbreviation']].run_avg = standings_data.get_run_avg(current_standings)
 
 set_league_standings_data(TEAM_STANDING_DICT)
