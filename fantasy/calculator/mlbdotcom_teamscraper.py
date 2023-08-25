@@ -110,7 +110,7 @@ def set_league_standings_data(current_standings_dict):
         mlb[current_standings['team']['abbreviation']].l_avg_home = l_at_home / g_at_home
         mlb[current_standings['team']['abbreviation']].g_at_home = g_at_home
 
-        w_avg_road, l_avg_road, g_at_road = standings_data.get_at_road(current_standings)
+        # w_avg_road, l_avg_road, g_at_road = standings_data.get_at_road(current_standings)
         w_on_road, l_on_road, g_at_road = standings_data.get_at_road(current_standings)
         mlb[current_standings['team']['abbreviation']].w_avg_road = w_on_road / g_at_road
         mlb[current_standings['team']['abbreviation']].l_avg_road = l_on_road / g_at_road

@@ -52,19 +52,19 @@ class StandingsData():
         homesplits = current_dict['records']['splitRecords'][0]
         log.debug('in get_at_home homesplits is \n%s\n' % homesplits)
         assert(homesplits['type'] == 'home')
-        w_avg_home = homesplits['wins']
-        l_avg_home = homesplits['losses']
+        w_at_home = homesplits['wins']
+        l_at_home = homesplits['losses']
         g_at_home = homesplits['wins'] + homesplits['losses']
-        return w_avg_home, l_avg_home, g_at_home
+        return w_at_home, l_at_home, g_at_home
 
     def get_at_road(self, current_dict):
         roadsplits = current_dict['records']['splitRecords'][1]
         log.debug('in get_at_road roadsplits is \n%s\n' % roadsplits)
         assert(roadsplits['type'] == 'away')
-        w_avg_road = roadsplits['wins']
-        l_avg_road = roadsplits['losses']
+        w_on_road = roadsplits['wins']
+        l_on_road = roadsplits['losses']
         g_at_road = roadsplits['wins'] + roadsplits['losses']
-        return w_avg_road, l_avg_road, g_at_road
+        return w_on_road, l_on_road, g_at_road
 
     def get_games_total(self, current_dict):
         # self.wins = self.get_wins(current_dict)
@@ -94,13 +94,12 @@ class StandingsData():
 
 
 def get_standings():
-    today = datetime.now().strftime('%Y/%m/%d')
     log.debug('TEAM_STANDING_URL is %s' % TEAM_STANDING_URL)
     try:
         TEAM_STANDING_RESPONSE = requests.get(TEAM_STANDING_URL)
     except requests.exceptions.RequestException as e:
         print(e)
-        print('Error getting STanding')
+        print('Error getting Standing')
         sys.exit(1)
     STANDING_TEXT = TEAM_STANDING_RESPONSE.text
     JSON_STANDINGS = json.loads(STANDING_TEXT)

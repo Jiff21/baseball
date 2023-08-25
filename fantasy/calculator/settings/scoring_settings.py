@@ -1,3 +1,5 @@
+from calculator.settings.logger import args
+
 class ScoringSettings(object):
 
 	class Batting(object):
@@ -28,5 +30,15 @@ class ScoringSettings(object):
 		L = -3.0
 		S = 5.0
 		QS = 0.0 # No longic for this yet
+		if args.league == 'igtbtk':
+			QS = 1.0 # No longic for this yet
+			HRA = -1.0
+			BB = -0.5
+			K = 0.5
+			W = 2.0
+			L = -1.0
+			S = 3.0
+			BS = -1 #No logic yet
+		
 
 	# def calculate_off

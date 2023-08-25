@@ -16,7 +16,7 @@ pip install -r calculator/requirements.txt
 ## Run
 
 ```bash
-python main.py
+python main.py --loglevel debug --league igtbtk
 ```
 
 TODO: Need to store data after getting it

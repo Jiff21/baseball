@@ -160,7 +160,7 @@ def leaderboard_controller():
     elif leaderboard_resp_1 == '6' or 'csv' in leaderboard_resp_1 or 'print' in leaderboard_resp_1:
         print('\n\nWrite CSV:\n')
         write_to_csv()
-    elif leaderboard_resp_1 == 'exit' or leaderboard_resp_1 == '9':
+    elif leaderboard_resp_1 == 'exit' or leaderboard_resp_1 == '0':
         exit()
     elif leaderboard_resp_1 == 'main' or leaderboard_resp_1 == '8':
         main.main()
