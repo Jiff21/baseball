@@ -16,7 +16,7 @@ def start():
         '\t5. Pitcher extrapolator\n' \
         '\t6. Batter extrapolator\n'
     )
-    input_response_1 = input_response_1.lower()
+    input_response_1 = str(input_response_1).lower()
     if input_response_1 == '1' or 'Leaderboard' in input_response_1:
         leaderboard_controller()
     elif input_response_1 == '2' or 'calculate all splits' in input_response_1:
