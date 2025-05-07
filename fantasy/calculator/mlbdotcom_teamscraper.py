@@ -181,7 +181,6 @@ team_stats = TeamStatsNoSplit()
 for t_stat in TEAM_STATS_DICT:
     #TODO: Write tests for these
     log.debug('getting team stats (no split)')
-    # import pdb; pdb.set_trace();
     assert isinstance(t_stat, dict), type(t_stat)
     
     log.debug('REMOVE LATER - this used to just pass t_stat was there a reason why?')

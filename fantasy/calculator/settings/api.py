@@ -4,9 +4,10 @@ from calculator.settings.logger import log
 
 year = datetime.now().strftime('%Y')
 today = datetime.now().strftime('%Y-%m-%d')
+
 # year = '2023'
 # today = '2019/10/30'
-
+print('THE YEAR IS {}'.format(year))
 YEAR_FOR_HITTING_STATS = os.getenv('YEAR_FOR_HITTING_STATS', year)
 DATE_FOR_STANDINGS = os.getenv('DATE_FOR_STANDINGS', today)
 

@@ -1,6 +1,7 @@
 from calculator.settings.scoring_settings import ScoringSettings
 ssp = ScoringSettings.Pitching
 
+
 def calculate_game(innings, earned_runs, total_walks, hits_allowed, \
 	homeruns_allowed, strikeouts, saves, wins, losses, quality_starts):
 	total = (float(innings) * ssp.INN) \

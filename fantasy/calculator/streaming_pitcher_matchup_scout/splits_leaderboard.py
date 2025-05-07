@@ -134,6 +134,7 @@ def write_to_csv():
                     'righty vs': righty_road
                 }
             )
+        print('csv written to {}'.format(sheet_path))
 
 
 def leaderboard_controller():
