@@ -10,7 +10,7 @@ class SplitsScraper(object):
         log.debug('Instantiate SplitsScraper')
 
     def get_avg(self, number, total):
-        return number / total
+        return float(number) / float(total)
 
     def get_splits_by_uri(self, uri):
         log.debug("TODO WRITE TESTS, get splits from api")
@@ -121,8 +121,8 @@ class SplitsScraper(object):
         rbi_per_pa = self.get_avg(rbi, plate_appearances)
         log.debug('rbi_per_pa set to %s' % rbi_per_pa)
 
-        h = self.get_hits(splits_dict)
-        hits_per_pa = self.get_avg(h, plate_appearances)
+        hitz = self.get_hits(splits_dict)
+        hits_per_pa = self.get_avg(hitz, plate_appearances)
 
         hr = self.get_home_runs(splits_dict)
         hr_per_pa = self.get_avg(hr, plate_appearances)
