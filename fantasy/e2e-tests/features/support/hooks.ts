@@ -10,13 +10,17 @@ Before(async function (this: CustomWorld) {
 });
 
 After(async function (this: CustomWorld, scenario) {
-  if (scenario.result?.status === 'FAILED') {
-    // Take screenshot on failure
-    const screenshot = await this.page.screenshot({ 
-      path: `reports/screenshots/${scenario.pickle.name.replace(/\s+/g, '_')}_${Date.now()}.png`,
-      fullPage: true 
-    });
-    this.attach(screenshot, 'image/png');
+  if (scenario.result?.status === 'FAILED' && this.page) {
+    try {
+      // Take screenshot on failure
+      const screenshot = await this.page.screenshot({ 
+        path: `reports/screenshots/${scenario.pickle.name.replace(/\s+/g, '_')}_${Date.now()}.png`,
+        fullPage: true 
+      });
+      this.attach(screenshot, 'image/png');
+    } catch (error) {
+      console.log('Failed to take screenshot:', error);
+    }
   }
   
   await this.cleanup();
@@ -25,4 +29,3 @@ After(async function (this: CustomWorld, scenario) {
 AfterAll(async function () {
   console.log('E2E test suite completed.');
 });
-

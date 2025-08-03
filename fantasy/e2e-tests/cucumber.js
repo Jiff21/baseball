@@ -4,6 +4,7 @@ const config = {
     'features/support/**/*.ts'
   ],
   requireModule: ['ts-node/register'],
+  loader: ['ts-node/esm'],
   format: [
     'progress-bar',
     'json:reports/cucumber_report.json',
@@ -24,4 +25,3 @@ const config = {
 };
 
 module.exports = config;
-
