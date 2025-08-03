@@ -52,22 +52,177 @@ const FantasyExpectedStart: React.FC = () => {
   }, [leagueType]);
 
   /**
-   * Load scoring settings based on league type
+   * Get hardcoded scoring settings based on league type
    */
-  const loadScoringSettings = useCallback(async () => {
+  const getHardcodedScoringSettings = (league: LeagueType): ScoringSettings => {
+    switch (league) {
+      case 'Custom':
+        return {
+          batting: {
+            S: 1.0,    // Singles
+            D: 2.0,    // Doubles
+            T: 3.0,    // Triples
+            HR: 4.0,   // Home Runs
+            BB: 1.0,   // Walks
+            IBB: 1.0,  // Intentional Walks
+            HBP: 1.0,  // Hit By Pitch
+            R: 1.0,    // Runs
+            RBI: 1.0,  // Runs Batted In
+            SB: 1.0,   // Stolen Base
+            CS: -1.0,  // Caught Stealing
+            SO: 0.5,   // Strike Outs
+            GIDP: 0.0, // Grounded into Double Play
+            E: 0.0     // Errors
+          },
+          pitching: {
+            BB: -1.0,   // Walks Issued
+            IBB: -1.0,  // Intentional Base on Balls
+            ER: -1.0,   // Earned Runs
+            HA: -1.0,   // Hits allowed
+            HB: -1.0,   // Hit Batters
+            HRA: -1.0,  // Home Runs Allowed
+            INN: 3.0,   // Innings
+            K: 0.5,     // Strikeouts
+            W: 2.0,     // Wins
+            L: -1.0,    // Losses
+            S: 2.0,     // Saves
+            BS: -1.0,   // Blown Saves
+            QS: 2.0,    // Quality Starts
+            TB: 0.0,    // Total Bases
+            Hold: 0.0,  // Holds
+            WP: 0.0,    // Wild Pitch
+            BK: 0.0     // Balk
+          }
+        };
+      case 'ESPN':
+        return {
+          batting: {
+            S: 1.0,
+            D: 2.0,
+            T: 3.0,
+            HR: 4.0,
+            BB: 1.0,
+            IBB: 0.0,
+            HBP: 0.0,
+            R: 1.0,
+            RBI: 1.0,
+            SB: 1.0,
+            CS: 0.0,
+            SO: -1.0,
+            GIDP: 0.0,
+            E: 0.0
+          },
+          pitching: {
+            BB: -1.0,
+            IBB: -1.0,
+            ER: -1.0,
+            HA: -1.0,
+            HB: 0.0,
+            HRA: -1.0,
+            INN: 3.0,
+            K: 1.0,
+            W: 2.0,
+            L: -1.0,
+            S: 2.0,
+            BS: 0.0,
+            QS: 0.0,
+            TB: 0.0,
+            Hold: 0.0,
+            WP: 0.0,
+            BK: 0.0
+          }
+        };
+      case 'CBS':
+        return {
+          batting: {
+            S: 1.0,
+            D: 2.0,
+            T: 3.0,
+            HR: 4.0,
+            BB: 1.0,
+            IBB: 1.0,
+            HBP: 1.0,
+            R: 1.0,
+            RBI: 1.0,
+            SB: 2.0,
+            CS: -1.0,
+            SO: -1.0,
+            GIDP: 0.0,
+            E: 0.0
+          },
+          pitching: {
+            BB: -1.0,
+            IBB: -1.0,
+            ER: -1.0,
+            HA: -1.0,
+            HB: 0.0,
+            HRA: -1.0,
+            INN: 3.0,
+            K: 1.0,
+            W: 5.0,
+            L: -3.0,
+            S: 2.0,
+            BS: -2.0,
+            QS: 0.0,
+            TB: 0.0,
+            Hold: 0.0,
+            WP: 0.0,
+            BK: 0.0
+          }
+        };
+      case 'Yahoo':
+        return {
+          batting: {
+            S: 1.0,
+            D: 2.0,
+            T: 3.0,
+            HR: 4.0,
+            BB: 1.0,
+            IBB: 1.0,
+            HBP: 1.0,
+            R: 1.0,
+            RBI: 1.0,
+            SB: 2.0,
+            CS: -1.0,
+            SO: -1.0,
+            GIDP: 0.0,
+            E: 0.0
+          },
+          pitching: {
+            BB: -1.0,
+            IBB: -1.0,
+            ER: -1.0,
+            HA: -1.0,
+            HB: 0.0,
+            HRA: -1.0,
+            INN: 3.0,
+            K: 1.0,
+            W: 5.0,
+            L: -3.0,
+            S: 2.0,
+            BS: -2.0,
+            QS: 0.0,
+            TB: 0.0,
+            Hold: 0.0,
+            WP: 0.0,
+            BK: 0.0
+          }
+        };
+      default:
+        return getHardcodedScoringSettings('Custom');
+    }
+  };
+
+  /**
+   * Load scoring settings based on league type (now using hardcoded values)
+   */
+  const loadScoringSettings = useCallback(() => {
+    const settings = getHardcodedScoringSettings(leagueType);
+    setScoringSettings(settings);
+    
     if (leagueType === 'Custom') {
-      // Load default custom settings
-      const response = await FantasyBaseballAPI.getScoringSettings('Custom');
-      if (response.data) {
-        setScoringSettings(response.data.scoring_settings);
-      }
       setShowScoringSettings(true);
     } else {
-      // Load preset settings
-      const response = await FantasyBaseballAPI.getScoringSettings(leagueType);
-      if (response.data) {
-        setScoringSettings(response.data.scoring_settings);
-      }
       setShowScoringSettings(false);
     }
   }, [leagueType]);
@@ -315,4 +470,3 @@ const FantasyExpectedStart: React.FC = () => {
 };
 
 export default FantasyExpectedStart;
-
