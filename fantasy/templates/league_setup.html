@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}League Setup - Scoring Settings{% endblock %}
+
+{% block content %}
+<h1>League Setup</h1>
+
+<form method="POST" action="{{ url_for('update_scoring') }}">
+    <h2>Scoring Settings</h2>
+    
+    <div class="section">
+        <h3>Batting</h3>
+        <div class="settings-grid">
+            {% for stat_name, value in batting_settings.items() %}
+            <div class="setting-item">
+                <span class="setting-label">{{ stat_name }}</span>
+                <input type="number" 
+                       name="batting_{{ stat_name.lower().replace(' ', '_') }}" 
+                       value="{{ value }}" 
+                       step="0.1"
+                       class="setting-value {% if value > 0 %}positive{% elif value < 0 %}negative{% else %}neutral{% endif %}">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="section">
+        <h3>Pitching</h3>
+        <div class="settings-grid">
+            {% for stat_name, value in pitching_settings.items() %}
+            <div class="setting-item">
+                <span class="setting-label">{{ stat_name }}</span>
+                <input type="number" 
+                       name="pitching_{{ stat_name.lower().replace(' ', '_') }}" 
+                       value="{{ value }}" 
+                       step="0.1"
+                       class="setting-value {% if value > 0 %}positive{% elif value < 0 %}negative{% else %}neutral{% endif %}">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div style="text-align: center;">
+        <button type="submit" class="btn">Update Scoring Settings</button>
+        <a href="{{ url_for('index') }}" class="btn" style="background-color: #95a5a6; text-decoration: none; margin-left: 10px;">Back to Home</a>
+    </div>
+</form>
+
+<div style="margin-top: 40px; padding: 20px; background-color: #ecf0f1; border-radius: 5px;">
+    <h3>Scoring Legend</h3>
+    <p><span class="positive">Green values</span> indicate positive scoring (points awarded)</p>
+    <p><span class="negative">Red values</span> indicate negative scoring (points deducted)</p>
+    <p><span class="neutral">Gray values</span> indicate neutral scoring (no points)</p>
+</div>
+{% endblock %}

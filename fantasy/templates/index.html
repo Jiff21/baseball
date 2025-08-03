@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Baseball Fantasy League - Home{% endblock %}
+
+{% block content %}
+<h1>Baseball Fantasy League</h1>
+
+<div style="text-align: center; margin: 50px 0;">
+    <h2>Welcome to the Fantasy Baseball League Manager</h2>
+    <p style="font-size: 18px; color: #7f8c8d; margin-bottom: 30px;">
+        Set up your league scoring settings and manage your fantasy baseball experience.
+    </p>
+    
+    <a href="{{ url_for('league_setup') }}" class="btn" style="text-decoration: none; display: inline-block;">
+        League Setup & Scoring Settings
+    </a>
+</div>
+{% endblock %}
