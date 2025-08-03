@@ -5,6 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FantasyBaseballAPI } from '../services/api';
 import { LocalStorageManager } from '../utils/localStorage';
 import { ColorUtils } from '../utils/colorUtils';
+import { FantasyCalculations, TeamStats, CalculationResult } from '../utils/fantasyCalculations';
 import {
   ScoringSettings,
   LeagueType,
@@ -220,11 +221,8 @@ const FantasyExpectedStart: React.FC = () => {
     const settings = getHardcodedScoringSettings(leagueType);
     setScoringSettings(settings);
     
-    if (leagueType === 'Custom') {
-      setShowScoringSettings(true);
-    } else {
-      setShowScoringSettings(false);
-    }
+    // Always show scoring settings for all league types
+    setShowScoringSettings(true);
   }, [leagueType]);
 
   /**
@@ -278,7 +276,7 @@ const FantasyExpectedStart: React.FC = () => {
   };
 
   /**
-   * Calculate expected points for all teams
+   * Calculate expected points for all teams using frontend calculations
    */
   const calculateExpectedPoints = async () => {
     if (!scoringSettings) {
@@ -290,20 +288,53 @@ const FantasyExpectedStart: React.FC = () => {
     setError(null);
 
     try {
-      const request = {
-        handedness,
-        inning,
-        league_type: leagueType,
-        ...(leagueType === 'Custom' && { custom_scoring: scoringSettings }),
-      };
-
-      const response = await FantasyBaseballAPI.calculateExpected(request);
+      // Fetch team stats from backend
+      const response = await FantasyBaseballAPI.getTeamStats();
       
       if (response.error) {
         setError(response.error);
-      } else if (response.data) {
-        setResults(response.data);
+        return;
       }
+
+      if (!response.data || !response.data.teams) {
+        setError('No team data received');
+        return;
+      }
+
+      // Calculate expected points using frontend logic
+      const teamStats: TeamStats[] = response.data.teams;
+      const calculationResults = FantasyCalculations.calculateAllTeamsExpectedPoints(
+        teamStats,
+        handedness,
+        inning,
+        scoringSettings
+      );
+
+      // Add color coding for visualization
+      const resultsWithColors = FantasyCalculations.addColorCoding(calculationResults);
+
+      // Calculate analysis summary
+      const points = calculationResults.map(r => r.expected_fantasy_points);
+      const minPoints = Math.min(...points);
+      const maxPoints = Math.max(...points);
+      const avgPoints = points.reduce((sum, p) => sum + p, 0) / points.length;
+
+      // Format results to match expected structure
+      const formattedResults: MatchupAnalysisResult = {
+        results: resultsWithColors,
+        parameters: {
+          handedness,
+          inning,
+          league_type: leagueType
+        },
+        analysis: {
+          min_points: minPoints,
+          max_points: maxPoints,
+          avg_points: avgPoints
+        }
+      };
+
+      setResults(formattedResults);
     } catch (err) {
       setError('Failed to calculate expected points');
       console.error('Calculation error:', err);

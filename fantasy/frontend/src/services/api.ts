@@ -86,6 +86,18 @@ export class FantasyBaseballAPI {
   }
 
   /**
+   * Get team stats for all teams (vs lefty and righty)
+   */
+  static async getTeamStats(): Promise<ApiResponse<{ teams: any[]; count: number }>> {
+    try {
+      const response: AxiosResponse = await apiClient.get('/team-stats');
+      return { data: response.data };
+    } catch (error: any) {
+      return { error: error.response?.data?.error || 'Failed to get team stats' };
+    }
+  }
+
+  /**
    * Get a specific team by abbreviation
    */
   static async getTeam(abbreviation: string): Promise<ApiResponse<{ team: Team }>> {
@@ -139,4 +151,3 @@ export class FantasyBaseballAPI {
 }
 
 export default FantasyBaseballAPI;
-

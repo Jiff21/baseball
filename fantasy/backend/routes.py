@@ -269,6 +269,52 @@ def matchup_analysis():
         return jsonify({'error': 'Internal server error'}), 500
 
 
+@api.route('/team-stats', methods=['GET'])
+def get_all_team_stats():
+    """
+    Get basic team stats for all teams (vs lefty and righty).
+    This endpoint provides the raw data needed for frontend calculations.
+    """
+    try:
+        teams = Team.query.all()
+        
+        if not teams:
+            return jsonify({'error': 'No teams found'}), 404
+        
+        team_stats = []
+        for team in teams:
+            team_data = {
+                'abbreviation': team.abbreviation,
+                'name': team.name,
+                'vs_lefty': {
+                    'era': team.vs_lefty_era,
+                    'whip': team.vs_lefty_whip,
+                    'k_per_9': team.vs_lefty_k_per_9,
+                    'bb_per_9': team.vs_lefty_bb_per_9,
+                    'hr_per_9': team.vs_lefty_hr_per_9,
+                    'hits_per_9': team.vs_lefty_hits_per_9
+                },
+                'vs_righty': {
+                    'era': team.vs_righty_era,
+                    'whip': team.vs_righty_whip,
+                    'k_per_9': team.vs_righty_k_per_9,
+                    'bb_per_9': team.vs_righty_bb_per_9,
+                    'hr_per_9': team.vs_righty_hr_per_9,
+                    'hits_per_9': team.vs_righty_hits_per_9
+                }
+            }
+            team_stats.append(team_data)
+        
+        return jsonify({
+            'teams': team_stats,
+            'count': len(team_stats)
+        })
+        
+    except Exception as e:
+        logger.error(f"Error fetching team stats: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+
 # Error handlers
 @api.errorhandler(404)
 def not_found(error):
@@ -287,4 +333,3 @@ def internal_error(error):
     """Handle 500 errors."""
     logger.error(f"Internal server error: {error}")
     return jsonify({'error': 'Internal server error'}), 500
-

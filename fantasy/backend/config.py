@@ -17,7 +17,14 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
     
     # CORS configuration
-    CORS_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000']
+    CORS_ORIGINS = [
+        'http://localhost:3000', 
+        'http://127.0.0.1:3000',
+        'http://localhost:3001',
+        'http://127.0.0.1:3001',
+        'http://localhost:8080',
+        'http://127.0.0.1:8080'
+    ]
     
     # MLB API configuration
     MLB_BASE_URL = 'https://www.mlb.com'
@@ -32,6 +39,8 @@ class Config:
 class DevelopmentConfig(Config):
     """Development configuration."""
     DEBUG = True
+    # More permissive CORS for development
+    CORS_ORIGINS = ['*']  # Allow all origins in development
 
 class ProductionConfig(Config):
     """Production configuration."""
@@ -49,4 +58,3 @@ config = {
     'testing': TestingConfig,
     'default': DevelopmentConfig
 }
-
