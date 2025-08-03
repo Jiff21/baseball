@@ -56,7 +56,7 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
         id={`${category}-${stat}`}
         type="number"
         step="0.1"
-        value={value}
+        value={value.toFixed(1)}
         onChange={(e) => handleInputChange(category, stat, e.target.value)}
         className="stat-input"
         readOnly={readOnly}

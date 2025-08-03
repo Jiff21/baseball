@@ -1,0 +1,24 @@
+{
+  "name": "fantasy-baseball-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-end tests for Fantasy Baseball application using Playwright and Cucumber",
+  "scripts": {
+    "test": "cucumber-js",
+    "test:headed": "cucumber-js --tags '@headed'",
+    "test:debug": "cucumber-js --tags '@debug'",
+    "install-browsers": "playwright install",
+    "report": "allure serve allure-results"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^10.3.1",
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.10.0",
+    "allure-cucumberjs": "^2.15.0",
+    "typescript": "^5.3.0",
+    "ts-node": "^10.9.0"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}
+

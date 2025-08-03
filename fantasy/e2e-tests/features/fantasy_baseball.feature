@@ -1,0 +1,90 @@
+Feature: Fantasy Baseball Application
+  As a fantasy baseball user
+  I want to calculate expected points and manage custom scoring settings
+  So that I can make informed decisions about my fantasy team
+
+  Background:
+    Given I navigate to the Fantasy Baseball application
+    And the application loads successfully
+
+  @smoke
+  Scenario: Calculate Expected Points without errors
+    Given I am on the Fantasy Baseball page
+    When I select "Custom" from the league type dropdown
+    And I click the "Calculate Expected Points" button
+    Then I should not see any error messages
+    And I should see the team matchup analysis results
+    And the results should contain expected fantasy points for all teams
+
+  @scoring-settings
+  Scenario: Scoring settings display with decimal points
+    Given I am on the Fantasy Baseball page
+    When I select "Custom" from the league type dropdown
+    Then I should see the "Scoring Settings" section
+    And all scoring values should display with one decimal point
+    And I should see the "Batting" subsection with all required fields
+    And I should see the "Pitching" subsection with all required fields
+
+  @custom-league
+  Scenario: Save and load custom league settings
+    Given I am on the Fantasy Baseball page
+    When I select "Custom" from the league type dropdown
+    And I modify the batting "Singles" value to "1.5"
+    And I modify the pitching "Wins" value to "3.0"
+    And I enter "MBL" as the league name
+    And I click the "Save" button
+    Then I should see a success message
+    When I select "ESPN" from the league type dropdown
+    And I select "MBL" from the league type dropdown
+    Then the batting "Singles" value should be "1.5"
+    And the pitching "Wins" value should be "3.0"
+
+  @validation
+  Scenario: Verify all required batting fields are present
+    Given I am on the Fantasy Baseball page
+    When I select "Custom" from the league type dropdown
+    Then I should see the following batting fields:
+      | Field Name          |
+      | Singles             |
+      | Doubles             |
+      | Triples             |
+      | Home Runs           |
+      | Walks               |
+      | Intentional Walks   |
+      | Hit By Pitch        |
+      | Runs                |
+      | Runs Batted In      |
+      | Stolen Base         |
+      | Caught Stealing     |
+      | Strike Outs         |
+
+  @validation
+  Scenario: Verify all required pitching fields are present
+    Given I am on the Fantasy Baseball page
+    When I select "Custom" from the league type dropdown
+    Then I should see the following pitching fields:
+      | Field Name                  |
+      | Walks Issued                |
+      | Intentional Base on Balls   |
+      | Earned Runs                 |
+      | Hits Allowed                |
+      | Hit Batters                 |
+      | Home Runs Allowed           |
+      | Innings (3 outs)            |
+      | Strikeouts                  |
+      | Wins                        |
+      | Losses                      |
+      | Saves                       |
+      | Blown Saves                 |
+      | Quality Starts              |
+      | Total Bases                 |
+
+  @error-handling
+  Scenario: Handle API errors gracefully
+    Given I am on the Fantasy Baseball page
+    And the backend API is unavailable
+    When I select "Custom" from the league type dropdown
+    And I click the "Calculate Expected Points" button
+    Then I should see an appropriate error message
+    And the application should remain functional
+
