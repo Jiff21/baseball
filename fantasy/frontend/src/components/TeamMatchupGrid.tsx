@@ -88,8 +88,8 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
         </div>
       </div>
 
-      {/* Team Grid */}
-      <div className="teams-grid">
+      {/* Team Rows */}
+      <div className="teams-rows">
         {sortedResults.map((result) => {
           const colorScore = result.color_score || 0;
           const colorProperties = ColorUtils.generateColorProperties(colorScore);
@@ -98,29 +98,41 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
           return (
             <div
               key={result.team_abbreviation}
-              className={`team-card ${categoryClass} ${selectedTeam === result.team_abbreviation ? 'selected' : ''}`}
+              className={`team-row ${categoryClass} ${selectedTeam === result.team_abbreviation ? 'selected' : ''}`}
               style={colorProperties}
               onClick={() => handleTeamClick(result.team_abbreviation)}
             >
-              <div className="team-header">
+              <div className="team-info">
                 <h3 className="team-abbr">{result.team_abbreviation}</h3>
                 <div className="fantasy-points">
-                  {result.expected_fantasy_points.toFixed(2)}
+                  {result.expected_fantasy_points.toFixed(2)} pts
                 </div>
               </div>
               
-              <div className="team-stats-preview">
+              <div className="team-stats-row">
                 <div className="stat-item">
                   <span className="stat-label">Hits:</span>
-                  <span className="stat-value">{result.expected_hits.toFixed(3)}</span>
+                  <span className="stat-value">{result.expected_hits.toFixed(2)}</span>
                 </div>
                 <div className="stat-item">
                   <span className="stat-label">HR:</span>
-                  <span className="stat-value">{result.expected_home_runs.toFixed(3)}</span>
+                  <span className="stat-value">{result.expected_home_runs.toFixed(2)}</span>
                 </div>
                 <div className="stat-item">
                   <span className="stat-label">Runs:</span>
-                  <span className="stat-value">{result.expected_runs.toFixed(3)}</span>
+                  <span className="stat-value">{result.expected_runs.toFixed(2)}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">RBI:</span>
+                  <span className="stat-value">{result.expected_rbi.toFixed(2)}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Walks:</span>
+                  <span className="stat-value">{result.expected_walks.toFixed(2)}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">SO:</span>
+                  <span className="stat-value">{result.expected_strikeouts.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -234,4 +246,3 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
 };
 
 export default TeamMatchupGrid;
-

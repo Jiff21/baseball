@@ -40,30 +40,39 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
   };
 
   /**
-   * Render input field for a stat
+   * Render input field for a stat with inline layout
    */
   const renderStatInput = (
     category: 'batting' | 'pitching',
     stat: string,
     label: string,
     value: number
-  ) => (
-    <div className="stat-input-group" key={`${category}-${stat}`}>
-      <label htmlFor={`${category}-${stat}`} className="stat-label">
-        {label}:
-      </label>
-      <input
-        id={`${category}-${stat}`}
-        type="number"
-        step="0.1"
-        value={value.toFixed(1)}
-        onChange={(e) => handleInputChange(category, stat, e.target.value)}
-        className="stat-input"
-        readOnly={readOnly}
-        disabled={readOnly}
-      />
-    </div>
-  );
+  ) => {
+    // Special validation for innings - allow thirds (e.g., 6.1, 6.2)
+    const isInnings = stat === 'INN';
+    const step = isInnings ? "0.1" : "0.1";
+    const max = isInnings ? "9.2" : "999";
+    
+    return (
+      <div className="stat-input-inline" key={`${category}-${stat}`}>
+        <label htmlFor={`${category}-${stat}`} className="stat-label-inline">
+          {label}:
+        </label>
+        <input
+          id={`${category}-${stat}`}
+          type="number"
+          step={step}
+          max={max}
+          min={isInnings ? "0.1" : "-999"}
+          value={value.toFixed(1)}
+          onChange={(e) => handleInputChange(category, stat, e.target.value)}
+          className="stat-input-inline"
+          readOnly={readOnly}
+          disabled={readOnly}
+        />
+      </div>
+    );
+  };
 
   return (
     <div className="scoring-settings-form">
@@ -78,11 +87,11 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
         )}
       </div>
 
-      <div className="settings-grid">
+      <div className="settings-sections">
         {/* Batting Settings */}
         <div className="settings-section">
           <h4 className="section-title">Batting</h4>
-          <div className="stats-grid">
+          <div className="stats-inline-grid">
             {renderStatInput('batting', 'S', 'Singles', scoringSettings.batting.S)}
             {renderStatInput('batting', 'D', 'Doubles', scoringSettings.batting.D)}
             {renderStatInput('batting', 'T', 'Triples', scoringSettings.batting.T)}
@@ -95,22 +104,20 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
             {renderStatInput('batting', 'SB', 'Stolen Base', scoringSettings.batting.SB)}
             {renderStatInput('batting', 'CS', 'Caught Stealing', scoringSettings.batting.CS)}
             {renderStatInput('batting', 'SO', 'Strike Outs', scoringSettings.batting.SO)}
-            {renderStatInput('batting', 'GIDP', 'Grounded into Double Play', scoringSettings.batting.GIDP)}
-            {renderStatInput('batting', 'E', 'Errors', scoringSettings.batting.E)}
           </div>
         </div>
 
         {/* Pitching Settings */}
         <div className="settings-section">
           <h4 className="section-title">Pitching</h4>
-          <div className="stats-grid">
+          <div className="stats-inline-grid">
             {renderStatInput('pitching', 'BB', 'Walks Issued', scoringSettings.pitching.BB)}
             {renderStatInput('pitching', 'IBB', 'Intentional Base on Balls', scoringSettings.pitching.IBB)}
             {renderStatInput('pitching', 'ER', 'Earned Runs', scoringSettings.pitching.ER)}
             {renderStatInput('pitching', 'HA', 'Hits Allowed', scoringSettings.pitching.HA)}
             {renderStatInput('pitching', 'HB', 'Hit Batters', scoringSettings.pitching.HB)}
             {renderStatInput('pitching', 'HRA', 'Home Runs Allowed', scoringSettings.pitching.HRA)}
-            {renderStatInput('pitching', 'INN', 'Innings (3 outs)', scoringSettings.pitching.INN)}
+            {renderStatInput('pitching', 'INN', 'Innings', scoringSettings.pitching.INN)}
             {renderStatInput('pitching', 'K', 'Strikeouts', scoringSettings.pitching.K)}
             {renderStatInput('pitching', 'W', 'Wins', scoringSettings.pitching.W)}
             {renderStatInput('pitching', 'L', 'Losses', scoringSettings.pitching.L)}
@@ -118,9 +125,6 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
             {renderStatInput('pitching', 'BS', 'Blown Saves', scoringSettings.pitching.BS)}
             {renderStatInput('pitching', 'QS', 'Quality Starts', scoringSettings.pitching.QS)}
             {renderStatInput('pitching', 'TB', 'Total Bases', scoringSettings.pitching.TB)}
-            {renderStatInput('pitching', 'Hold', 'Holds', scoringSettings.pitching.Hold)}
-            {renderStatInput('pitching', 'WP', 'Wild Pitch', scoringSettings.pitching.WP)}
-            {renderStatInput('pitching', 'BK', 'Balk', scoringSettings.pitching.BK)}
           </div>
         </div>
       </div>

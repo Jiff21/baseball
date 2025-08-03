@@ -1,7 +1,7 @@
 /**
  * Fantasy Expected Start component - Main component for calculating expected fantasy points
  */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { FantasyBaseballAPI } from '../services/api';
 import { LocalStorageManager } from '../utils/localStorage';
 import { ColorUtils } from '../utils/colorUtils';
@@ -16,6 +16,7 @@ import {
 } from '../types';
 import ScoringSettingsForm from './ScoringSettingsForm';
 import TeamMatchupGrid from './TeamMatchupGrid';
+import Accordion from './Accordion';
 import './FantasyExpectedStart.css';
 
 const FantasyExpectedStart: React.FC = () => {
@@ -36,6 +37,9 @@ const FantasyExpectedStart: React.FC = () => {
   
   // UI state
   const [showScoringSettings, setShowScoringSettings] = useState<boolean>(true);
+  
+  // Refs for scrolling
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   /**
    * Load custom leagues from localStorage on component mount
@@ -336,6 +340,18 @@ const FantasyExpectedStart: React.FC = () => {
       };
 
       setResults(formattedResults);
+      
+      // Collapse scoring settings accordion and scroll to results
+      setShowScoringSettings(false);
+      setTimeout(() => {
+        if (resultsRef.current) {
+          resultsRef.current.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      }, 300); // Wait for accordion collapse animation
+      
     } catch (err) {
       setError('Failed to calculate expected points');
       console.error('Calculation error:', err);
@@ -446,14 +462,21 @@ const FantasyExpectedStart: React.FC = () => {
             )}
           </div>
 
-          {/* Scoring Settings Form */}
-          {showScoringSettings && scoringSettings && (
-            <ScoringSettingsForm
-              scoringSettings={scoringSettings}
-              onSettingsChange={setScoringSettings}
-              readOnly={leagueType !== 'Custom'}
-              leagueType={leagueType}
-            />
+          {/* Scoring Settings Accordion */}
+          {scoringSettings && (
+            <Accordion
+              title="Scoring Settings"
+              isOpen={showScoringSettings}
+              onToggle={() => setShowScoringSettings(!showScoringSettings)}
+              className="scoring-settings-accordion"
+            >
+              <ScoringSettingsForm
+                scoringSettings={scoringSettings}
+                onSettingsChange={setScoringSettings}
+                readOnly={leagueType !== 'Custom'}
+                leagueType={leagueType}
+              />
+            </Accordion>
           )}
 
           {/* Error Display */}
@@ -477,7 +500,7 @@ const FantasyExpectedStart: React.FC = () => {
 
         {/* Results Section */}
         {results && (
-          <div className="results-section">
+          <div className="results-section" ref={resultsRef}>
             <div className="results-header">
               <h2>Team Matchup Analysis</h2>
               <div className="results-summary">
