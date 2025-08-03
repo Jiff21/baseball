@@ -69,7 +69,7 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
     <div className="scoring-settings-form">
       <div className="settings-header">
         <h3>
-          {leagueType === 'Custom' ? 'Custom' : leagueType} Scoring Settings
+          Scoring Settings
         </h3>
         {readOnly && (
           <p className="readonly-notice">
@@ -129,4 +129,3 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
 };
 
 export default ScoringSettingsForm;
-

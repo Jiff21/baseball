@@ -35,7 +35,7 @@ const FantasyExpectedStart: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   
   // UI state
-  const [showScoringSettings, setShowScoringSettings] = useState<boolean>(false);
+  const [showScoringSettings, setShowScoringSettings] = useState<boolean>(true);
 
   /**
    * Load custom leagues from localStorage on component mount
