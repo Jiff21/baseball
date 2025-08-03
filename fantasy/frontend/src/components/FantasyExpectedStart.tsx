@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FantasyBaseballAPI } from '../services/api';
 import { LocalStorageManager } from '../utils/localStorage';
 import { ColorUtils } from '../utils/colorUtils';
-import { FantasyCalculations, TeamStats, CalculationResult } from '../utils/fantasyCalculations';
+import { FantasyCalculations, TeamStats } from '../utils/fantasyCalculations';
 import {
   ScoringSettings,
   LeagueType,
@@ -330,7 +330,8 @@ const FantasyExpectedStart: React.FC = () => {
         analysis: {
           min_points: minPoints,
           max_points: maxPoints,
-          avg_points: avgPoints
+          avg_points: avgPoints,
+          total_teams: calculationResults.length
         }
       };
 

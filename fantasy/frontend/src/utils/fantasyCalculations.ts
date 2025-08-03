@@ -1,7 +1,7 @@
 /**
  * Frontend fantasy baseball calculations utility
  */
-import { ScoringSettings } from '../types';
+import { ScoringSettings, ExpectedGameResult } from '../types';
 
 export interface TeamStats {
   abbreviation: string;
@@ -24,31 +24,6 @@ export interface TeamStats {
   };
 }
 
-export interface CalculationResult {
-  team_abbreviation: string;
-  team_name: string;
-  handedness: string;
-  inning: number;
-  expected_fantasy_points: number;
-  expected_runs: number;
-  expected_hits: number;
-  expected_singles: number;
-  expected_doubles: number;
-  expected_triples: number;
-  expected_home_runs: number;
-  expected_walks: number;
-  expected_strikeouts: number;
-  expected_rbi: number;
-  team_stats: {
-    era: number;
-    whip: number;
-    k_per_9: number;
-    bb_per_9: number;
-    hr_per_9: number;
-    hits_per_9: number;
-  };
-}
-
 export class FantasyCalculations {
   /**
    * Calculate expected fantasy points for a single team
@@ -58,7 +33,7 @@ export class FantasyCalculations {
     handedness: 'Lefty' | 'Righty',
     inning: number,
     scoringSettings: ScoringSettings
-  ): CalculationResult {
+  ): ExpectedGameResult {
     // Select appropriate stats based on handedness
     const stats = handedness.toLowerCase() === 'lefty' ? teamStats.vs_lefty : teamStats.vs_righty;
     
@@ -95,7 +70,6 @@ export class FantasyCalculations {
     
     return {
       team_abbreviation: teamStats.abbreviation,
-      team_name: teamStats.name,
       handedness,
       inning,
       expected_fantasy_points: Math.round(totalBattingPoints * 100) / 100,
@@ -120,7 +94,7 @@ export class FantasyCalculations {
     handedness: 'Lefty' | 'Righty',
     inning: number,
     scoringSettings: ScoringSettings
-  ): CalculationResult[] {
+  ): ExpectedGameResult[] {
     return allTeamStats.map(teamStats => 
       this.calculateTeamExpectedPoints(teamStats, handedness, inning, scoringSettings)
     );
@@ -129,10 +103,7 @@ export class FantasyCalculations {
   /**
    * Add color coding based on percentiles for visualization
    */
-  static addColorCoding(results: CalculationResult[]): (CalculationResult & {
-    color_score: number;
-    color_category: string;
-  })[] {
+  static addColorCoding(results: ExpectedGameResult[]): ExpectedGameResult[] {
     if (results.length === 0) return [];
 
     const points = results.map(r => r.expected_fantasy_points);
@@ -143,7 +114,7 @@ export class FantasyCalculations {
       const pointsValue = result.expected_fantasy_points;
       
       let colorScore: number;
-      let colorCategory: string;
+      let colorCategory: 'excellent' | 'good' | 'average' | 'poor';
 
       if (maxPoints === minPoints) {
         // All teams have same expected points
