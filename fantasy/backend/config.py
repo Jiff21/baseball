@@ -41,10 +41,19 @@ class DevelopmentConfig(Config):
     DEBUG = True
     # More permissive CORS for development
     CORS_ORIGINS = ['*']  # Allow all origins in development
+    
+    # CSRF Protection - DISABLED for development
+    WTF_CSRF_ENABLED = False
+    WTF_CSRF_CHECK_DEFAULT = False
 
 class ProductionConfig(Config):
     """Production configuration."""
     DEBUG = False
+    
+    # CSRF Protection - ENABLED for production
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_CHECK_DEFAULT = True
+    WTF_CSRF_TIME_LIMIT = 3600  # 1 hour
 
 class TestingConfig(Config):
     """Testing configuration."""

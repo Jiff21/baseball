@@ -4,7 +4,7 @@ API routes for the Fantasy Baseball application.
 from flask import Blueprint, request, jsonify
 from marshmallow import Schema, fields, ValidationError
 from services import FantasyCalculatorService, TeamService
-from models import ScoringSettings
+from models import ScoringSettings, Team
 import logging
 
 logger = logging.getLogger(__name__)
@@ -313,6 +313,7 @@ def get_all_team_stats():
     except Exception as e:
         logger.error(f"Error fetching team stats: {e}")
         return jsonify({'error': 'Internal server error'}), 500
+
 
 
 # Error handlers
