@@ -76,7 +76,7 @@ def main():
     
     print("✅ Dependencies checked")
     print("\n🌐 Servers will be available at:")
-    print("   Backend:  http://localhost:5000")
+    print("   Backend:  http://localhost:8000")
     print("   Frontend: http://localhost:3000")
     print("\n💡 Press Ctrl+C to stop both servers")
     print("=" * 40)

@@ -90,7 +90,7 @@ python app.py
 python app.py
 ```
 
-The API will be available at `http://localhost:5000`
+The API will be available at `http://localhost:8000`
 
 ### Frontend Setup
 
@@ -211,7 +211,7 @@ The application uses SQLite with the following main tables:
 
 2. Use a production WSGI server like Gunicorn:
 ```bash
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
+gunicorn -w 4 -b 0.0.0.0:8000 app:app
 ```
 
 ### Frontend Deployment
@@ -223,7 +223,7 @@ npm run build
 2. Serve the `build` directory with a web server
 
 ### Environment Variables
-- `REACT_APP_API_URL`: Backend API URL (default: http://localhost:5000/api)
+- `REACT_APP_API_URL`: Backend API URL (default: http://localhost:8000/api)
 - `FLASK_ENV`: Flask environment (development/production)
 - `SECRET_KEY`: Flask secret key for production
 

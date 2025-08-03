@@ -176,39 +176,39 @@ const FantasyExpectedStart: React.FC = () => {
   };
 
   return (
-    <div className=\"fantasy-expected-start\">
-      <div className=\"container\">
-        <header className=\"header\">
+    <div className="fantasy-expected-start">
+      <div className="container">
+        <header className="header">
           <h1>Fantasy Expected Start</h1>
-          <p className=\"subtitle\">
+          <p className="subtitle">
             Calculate expected fantasy points for MLB team matchups
           </p>
         </header>
 
-        <div className=\"form-section\">
-          <div className=\"form-grid\">
+        <div className="form-section">
+          <div className="form-grid">
             {/* Handedness Dropdown */}
-            <div className=\"form-group\">
-              <label htmlFor=\"handedness\">Batter Handedness:</label>
+            <div className="form-group">
+              <label htmlFor="handedness">Batter Handedness:</label>
               <select
-                id=\"handedness\"
+                id="handedness"
                 value={handedness}
                 onChange={(e) => setHandedness(e.target.value as Handedness)}
-                className=\"form-control\"
+                className="form-control"
               >
-                <option value=\"Righty\">Righty</option>
-                <option value=\"Lefty\">Lefty</option>
+                <option value="Righty">Righty</option>
+                <option value="Lefty">Lefty</option>
               </select>
             </div>
 
             {/* League Type Dropdown */}
-            <div className=\"form-group\">
-              <label htmlFor=\"leagueType\">League Type:</label>
+            <div className="form-group">
+              <label htmlFor="leagueType">League Type:</label>
               <select
-                id=\"leagueType\"
+                id="leagueType"
                 value={leagueType === 'Custom' && leagueName ? leagueName : leagueType}
                 onChange={(e) => handleLeagueTypeChange(e.target.value)}
-                className=\"form-control\"
+                className="form-control"
               >
                 {getLeagueOptions().map((option) => (
                   <option key={option} value={option}>
@@ -219,37 +219,37 @@ const FantasyExpectedStart: React.FC = () => {
             </div>
 
             {/* Inning Input */}
-            <div className=\"form-group\">
-              <label htmlFor=\"inning\">Innings:</label>
+            <div className="form-group">
+              <label htmlFor="inning">Innings:</label>
               <input
-                id=\"inning\"
-                type=\"number\"
-                min=\"1\"
-                max=\"9\"
+                id="inning"
+                type="number"
+                min="1"
+                max="9"
                 value={inning}
                 onChange={(e) => handleInningChange(e.target.value)}
-                className=\"form-control\"
+                className="form-control"
               />
-              <small className=\"form-text\">Enter innings (1-9)</small>
+              <small className="form-text">Enter innings (1-9)</small>
             </div>
 
             {/* League Name Input (for custom leagues) */}
             {leagueType === 'Custom' && (
-              <div className=\"form-group\">
-                <label htmlFor=\"leagueName\">League Name (optional):</label>
-                <div className=\"input-group\">
+              <div className="form-group">
+                <label htmlFor="leagueName">League Name (optional):</label>
+                <div className="input-group">
                   <input
-                    id=\"leagueName\"
-                    type=\"text\"
+                    id="leagueName"
+                    type="text"
                     value={leagueName}
                     onChange={(e) => setLeagueName(e.target.value)}
-                    placeholder=\"Enter name to save custom league\"
-                    className=\"form-control\"
+                    placeholder="Enter name to save custom league"
+                    className="form-control"
                   />
                   <button
-                    type=\"button\"
+                    type="button"
                     onClick={saveCustomLeague}
-                    className=\"btn btn-secondary\"
+                    className="btn btn-secondary"
                     disabled={!leagueName.trim() || !scoringSettings}
                   >
                     Save
@@ -271,17 +271,17 @@ const FantasyExpectedStart: React.FC = () => {
 
           {/* Error Display */}
           {error && (
-            <div className=\"alert alert-danger\" role=\"alert\">
+            <div className="alert alert-danger" role="alert">
               {error}
             </div>
           )}
 
           {/* Calculate Button */}
-          <div className=\"calculate-section\">
+          <div className="calculate-section">
             <button
               onClick={calculateExpectedPoints}
               disabled={loading || !scoringSettings}
-              className=\"btn btn-primary btn-lg\"
+              className="btn btn-primary btn-lg"
             >
               {loading ? 'Calculating...' : 'Calculate Expected Points'}
             </button>
@@ -290,10 +290,10 @@ const FantasyExpectedStart: React.FC = () => {
 
         {/* Results Section */}
         {results && (
-          <div className=\"results-section\">
-            <div className=\"results-header\">
+          <div className="results-section">
+            <div className="results-header">
               <h2>Team Matchup Analysis</h2>
-              <div className=\"results-summary\">
+              <div className="results-summary">
                 <p>
                   <strong>Parameters:</strong> {results.parameters.handedness} batter, 
                   {results.parameters.inning} innings, {results.parameters.league_type} scoring

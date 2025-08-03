@@ -15,3 +15,9 @@ env/
 frontend/bower_components
 frontend/site/css
 .idea
+fantasy/backend/venv/*
+frontend/node_modules/*
+
+
+fantasy/frontend/package-lock.json
+fantasy/backend/fantasy_baseball.db

@@ -48,17 +48,17 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
     label: string,
     value: number
   ) => (
-    <div className=\"stat-input-group\" key={`${category}-${stat}`}>
-      <label htmlFor={`${category}-${stat}`} className=\"stat-label\">
+    <div className="stat-input-group" key={`${category}-${stat}`}>
+      <label htmlFor={`${category}-${stat}`} className="stat-label">
         {label}:
       </label>
       <input
         id={`${category}-${stat}`}
-        type=\"number\"
-        step=\"0.1\"
+        type="number"
+        step="0.1"
         value={value}
         onChange={(e) => handleInputChange(category, stat, e.target.value)}
-        className=\"stat-input\"
+        className="stat-input"
         readOnly={readOnly}
         disabled={readOnly}
       />
@@ -66,23 +66,23 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
   );
 
   return (
-    <div className=\"scoring-settings-form\">
-      <div className=\"settings-header\">
+    <div className="scoring-settings-form">
+      <div className="settings-header">
         <h3>
           {leagueType === 'Custom' ? 'Custom' : leagueType} Scoring Settings
         </h3>
         {readOnly && (
-          <p className=\"readonly-notice\">
+          <p className="readonly-notice">
             These are preset values for {leagueType} leagues and cannot be modified.
           </p>
         )}
       </div>
 
-      <div className=\"settings-grid\">
+      <div className="settings-grid">
         {/* Batting Settings */}
-        <div className=\"settings-section\">
-          <h4 className=\"section-title\">Batting</h4>
-          <div className=\"stats-grid\">
+        <div className="settings-section">
+          <h4 className="section-title">Batting</h4>
+          <div className="stats-grid">
             {renderStatInput('batting', 'S', 'Singles', scoringSettings.batting.S)}
             {renderStatInput('batting', 'D', 'Doubles', scoringSettings.batting.D)}
             {renderStatInput('batting', 'T', 'Triples', scoringSettings.batting.T)}
@@ -101,9 +101,9 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
         </div>
 
         {/* Pitching Settings */}
-        <div className=\"settings-section\">
-          <h4 className=\"section-title\">Pitching</h4>
-          <div className=\"stats-grid\">
+        <div className="settings-section">
+          <h4 className="section-title">Pitching</h4>
+          <div className="stats-grid">
             {renderStatInput('pitching', 'BB', 'Walks Issued', scoringSettings.pitching.BB)}
             {renderStatInput('pitching', 'IBB', 'Intentional Base on Balls', scoringSettings.pitching.IBB)}
             {renderStatInput('pitching', 'ER', 'Earned Runs', scoringSettings.pitching.ER)}

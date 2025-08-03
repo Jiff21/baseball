@@ -90,7 +90,7 @@ if __name__ == '__main__':
             init_database()
     
     # Run app
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 8000))
     debug = os.environ.get('FLASK_ENV') == 'development'
     
     logger.info(f"Starting Flask app on port {port} (debug={debug})")

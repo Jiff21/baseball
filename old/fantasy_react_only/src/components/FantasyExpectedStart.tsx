@@ -102,7 +102,7 @@ const FantasyExpectedStart: React.FC<FantasyExpectedStartProps> = () => {
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/players');
+        const response = await axios.get('http://localhost:8000/api/players');
         setPlayers(response.data);
       } catch (error) {
         console.error('Error fetching players:', error);
@@ -145,7 +145,7 @@ const FantasyExpectedStart: React.FC<FantasyExpectedStartProps> = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/calculate-expected', {
+      const response = await axios.post('http://localhost:8000/api/calculate-expected', {
         player_name: selectedPlayer,
         handedness,
         league_type: leagueType,

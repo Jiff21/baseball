@@ -61,10 +61,10 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
   };
 
   return (
-    <div className=\"team-matchup-grid\">
+    <div className="team-matchup-grid">
       {/* Controls */}
-      <div className=\"grid-controls\">
-        <div className=\"sort-controls\">
+      <div className="grid-controls">
+        <div className="sort-controls">
           <label>Sort by:</label>
           <button
             className={`sort-btn ${sortBy === 'points' ? 'active' : ''}`}
@@ -80,16 +80,16 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
           </button>
         </div>
         
-        <div className=\"legend\">
-          <span className=\"legend-item excellent\">Excellent</span>
-          <span className=\"legend-item good\">Good</span>
-          <span className=\"legend-item average\">Average</span>
-          <span className=\"legend-item poor\">Poor</span>
+        <div className="legend">
+          <span className="legend-item excellent">Excellent</span>
+          <span className="legend-item good">Good</span>
+          <span className="legend-item average">Average</span>
+          <span className="legend-item poor">Poor</span>
         </div>
       </div>
 
       {/* Team Grid */}
-      <div className=\"teams-grid\">
+      <div className="teams-grid">
         {sortedResults.map((result) => {
           const colorScore = result.color_score || 0;
           const colorProperties = ColorUtils.generateColorProperties(colorScore);
@@ -102,25 +102,25 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
               style={colorProperties}
               onClick={() => handleTeamClick(result.team_abbreviation)}
             >
-              <div className=\"team-header\">
-                <h3 className=\"team-abbr\">{result.team_abbreviation}</h3>
-                <div className=\"fantasy-points\">
+              <div className="team-header">
+                <h3 className="team-abbr">{result.team_abbreviation}</h3>
+                <div className="fantasy-points">
                   {result.expected_fantasy_points.toFixed(2)}
                 </div>
               </div>
               
-              <div className=\"team-stats-preview\">
-                <div className=\"stat-item\">
-                  <span className=\"stat-label\">Hits:</span>
-                  <span className=\"stat-value\">{result.expected_hits.toFixed(3)}</span>
+              <div className="team-stats-preview">
+                <div className="stat-item">
+                  <span className="stat-label">Hits:</span>
+                  <span className="stat-value">{result.expected_hits.toFixed(3)}</span>
                 </div>
-                <div className=\"stat-item\">
-                  <span className=\"stat-label\">HR:</span>
-                  <span className=\"stat-value\">{result.expected_home_runs.toFixed(3)}</span>
+                <div className="stat-item">
+                  <span className="stat-label">HR:</span>
+                  <span className="stat-value">{result.expected_home_runs.toFixed(3)}</span>
                 </div>
-                <div className=\"stat-item\">
-                  <span className=\"stat-label\">Runs:</span>
-                  <span className=\"stat-value\">{result.expected_runs.toFixed(3)}</span>
+                <div className="stat-item">
+                  <span className="stat-label">Runs:</span>
+                  <span className="stat-value">{result.expected_runs.toFixed(3)}</span>
                 </div>
               </div>
             </div>
@@ -130,96 +130,96 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
 
       {/* Detailed View */}
       {selectedTeam && (
-        <div className=\"team-details\">
+        <div className="team-details">
           {(() => {
             const details = getSelectedTeamDetails();
             if (!details) return null;
 
             return (
-              <div className=\"details-card\">
-                <div className=\"details-header\">
+              <div className="details-card">
+                <div className="details-header">
                   <h3>{details.team_abbreviation} - Detailed Analysis</h3>
                   <button
-                    className=\"close-btn\"
+                    className="close-btn"
                     onClick={() => setSelectedTeam(null)}
                   >
                     ×
                   </button>
                 </div>
                 
-                <div className=\"details-content\">
-                  <div className=\"details-section\">
+                <div className="details-content">
+                  <div className="details-section">
                     <h4>Expected Offensive Stats</h4>
-                    <div className=\"stats-grid-detailed\">
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">Fantasy Points:</span>
-                        <span className=\"value\">{details.expected_fantasy_points.toFixed(2)}</span>
+                    <div className="stats-grid-detailed">
+                      <div className="stat-detailed">
+                        <span className="label">Fantasy Points:</span>
+                        <span className="value">{details.expected_fantasy_points.toFixed(2)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">Hits:</span>
-                        <span className=\"value\">{details.expected_hits.toFixed(3)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">Hits:</span>
+                        <span className="value">{details.expected_hits.toFixed(3)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">Singles:</span>
-                        <span className=\"value\">{details.expected_singles.toFixed(3)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">Singles:</span>
+                        <span className="value">{details.expected_singles.toFixed(3)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">Doubles:</span>
-                        <span className=\"value\">{details.expected_doubles.toFixed(3)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">Doubles:</span>
+                        <span className="value">{details.expected_doubles.toFixed(3)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">Triples:</span>
-                        <span className=\"value\">{details.expected_triples.toFixed(3)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">Triples:</span>
+                        <span className="value">{details.expected_triples.toFixed(3)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">Home Runs:</span>
-                        <span className=\"value\">{details.expected_home_runs.toFixed(3)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">Home Runs:</span>
+                        <span className="value">{details.expected_home_runs.toFixed(3)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">Runs:</span>
-                        <span className=\"value\">{details.expected_runs.toFixed(3)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">Runs:</span>
+                        <span className="value">{details.expected_runs.toFixed(3)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">RBI:</span>
-                        <span className=\"value\">{details.expected_rbi.toFixed(3)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">RBI:</span>
+                        <span className="value">{details.expected_rbi.toFixed(3)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">Walks:</span>
-                        <span className=\"value\">{details.expected_walks.toFixed(3)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">Walks:</span>
+                        <span className="value">{details.expected_walks.toFixed(3)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">Strikeouts:</span>
-                        <span className=\"value\">{details.expected_strikeouts.toFixed(3)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">Strikeouts:</span>
+                        <span className="value">{details.expected_strikeouts.toFixed(3)}</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div className=\"details-section\">
+                  <div className="details-section">
                     <h4>Team Pitching Stats (vs {details.handedness})</h4>
-                    <div className=\"stats-grid-detailed\">
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">ERA:</span>
-                        <span className=\"value\">{details.team_stats.era.toFixed(2)}</span>
+                    <div className="stats-grid-detailed">
+                      <div className="stat-detailed">
+                        <span className="label">ERA:</span>
+                        <span className="value">{details.team_stats.era.toFixed(2)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">WHIP:</span>
-                        <span className=\"value\">{details.team_stats.whip.toFixed(3)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">WHIP:</span>
+                        <span className="value">{details.team_stats.whip.toFixed(3)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">K/9:</span>
-                        <span className=\"value\">{details.team_stats.k_per_9.toFixed(1)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">K/9:</span>
+                        <span className="value">{details.team_stats.k_per_9.toFixed(1)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">BB/9:</span>
-                        <span className=\"value\">{details.team_stats.bb_per_9.toFixed(1)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">BB/9:</span>
+                        <span className="value">{details.team_stats.bb_per_9.toFixed(1)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">HR/9:</span>
-                        <span className=\"value\">{details.team_stats.hr_per_9.toFixed(2)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">HR/9:</span>
+                        <span className="value">{details.team_stats.hr_per_9.toFixed(2)}</span>
                       </div>
-                      <div className=\"stat-detailed\">
-                        <span className=\"label\">H/9:</span>
-                        <span className=\"value\">{details.team_stats.hits_per_9.toFixed(1)}</span>
+                      <div className="stat-detailed">
+                        <span className="label">H/9:</span>
+                        <span className="value">{details.team_stats.hits_per_9.toFixed(1)}</span>
                       </div>
                     </div>
                   </div>
