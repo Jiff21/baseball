@@ -77,8 +77,8 @@ export class FantasyCalculations {
       pitchingInningsPoints +
       (expectedWalks * 9 * inningsFactor) * scoringSettings.pitching.BB + // Scale walks to full game
       (expectedRuns * 9 * inningsFactor) * scoringSettings.pitching.ER + // Scale earned runs
-      (expectedHits * 9 * inningsFactor) * scoringSettings.pitching.H + // Scale hits allowed
-      (expectedHomeRuns * 9 * inningsFactor) * scoringSettings.pitching.HR + // Scale HR allowed
+      (expectedHits * 9 * inningsFactor) * scoringSettings.pitching.HA + // Scale hits allowed
+      (expectedHomeRuns * 9 * inningsFactor) * scoringSettings.pitching.HRA + // Scale HR allowed
       (expectedStrikeouts * 9 * inningsFactor) * scoringSettings.pitching.K // Scale strikeouts
     );
     

@@ -383,8 +383,8 @@ const FantasyExpectedStart: React.FC = () => {
     const csvData = [
       ['Team', 'Fantasy Points', 'Batting Points', 'Pitching Points'],
       ...results.results.map(team => [
-        team.team,
-        team.fantasy_points.toFixed(2),
+        team.team_abbreviation,
+        team.expected_fantasy_points.toFixed(2),
         team.batting_points.toFixed(2),
         team.pitching_points.toFixed(2)
       ])
