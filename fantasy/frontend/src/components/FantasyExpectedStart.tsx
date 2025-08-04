@@ -575,14 +575,14 @@ const FantasyExpectedStart: React.FC = () => {
 
                 {/* Inning Input */}
                 <div className="form-group">
-                  <label htmlFor="inning">Expect Innings</label>
+                  <label htmlFor="inning">Start Expected Innings</label>
                   <input
                     id="inning"
                     type="number"
                     min="1"
                     max="9"
                     step="0.33"
-                    value={inning}
+                    value={parseFloat(inning.toString()).toFixed(1)}
                     onChange={(e) => handleInningChange(e.target.value)}
                     className="form-control"
                   />
