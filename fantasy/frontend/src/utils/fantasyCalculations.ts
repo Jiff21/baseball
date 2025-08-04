@@ -85,16 +85,16 @@ export class FantasyCalculations {
     // Pitching points = expectedInnings * innings (from sidebar scoring settings)
     const pitchingInningsPoints = expectedInnings * scoringSettings.pitching.INN;
     
-    // Add other pitching stats (all multiplied by expectedInnings)
+    // Add other pitching stats (scaled properly for expected innings)
     const pitchingPoints = (
       pitchingInningsPoints +
-      (expectedWalks * 9 * inningsFactor) * scoringSettings.pitching.BB + // Scale walks to full game
-      (expectedRuns * 9 * inningsFactor) * scoringSettings.pitching.ER + // Scale earned runs
-      (expectedHits * 9 * inningsFactor) * scoringSettings.pitching.HA + // Scale hits allowed
-      (expectedHomeRuns * 9 * inningsFactor) * scoringSettings.pitching.HRA + // Scale HR allowed
-      (expectedStrikeouts * 9 * inningsFactor) * scoringSettings.pitching.K + // Scale strikeouts
-      winsPerGame * scoringSettings.pitching.W + // Wins per game
-      lossesPerGame * scoringSettings.pitching.L // Losses per game
+      expectedWalks * scoringSettings.pitching.BB + // Walks for expected innings
+      expectedRuns * scoringSettings.pitching.ER + // Earned runs for expected innings  
+      expectedHits * scoringSettings.pitching.HA + // Hits allowed for expected innings
+      expectedHomeRuns * scoringSettings.pitching.HRA + // HR allowed for expected innings
+      expectedStrikeouts * scoringSettings.pitching.K + // Strikeouts for expected innings
+      (winsPerGame * expectedInnings / 9) * scoringSettings.pitching.W + // Wins scaled for expected innings
+      (lossesPerGame * expectedInnings / 9) * scoringSettings.pitching.L // Losses scaled for expected innings
     );
     
     // Only use pitching points for fantasy calculation (batting removed per request)
