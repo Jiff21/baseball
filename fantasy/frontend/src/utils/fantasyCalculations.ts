@@ -38,7 +38,7 @@ export class FantasyCalculations {
   static calculateTeamExpectedPoints(
     teamStats: TeamStats,
     handedness: 'Lefty' | 'Righty',
-    inning: number,
+    expectedInnings: number,
     scoringSettings: ScoringSettings
   ): FantasyExpectedStartScore {
     // Select appropriate stats based on handedness
@@ -51,10 +51,10 @@ export class FantasyCalculations {
       paPerInning = (teamStats.total_plate_appearances / teamStats.games_played) / 9;
     }
     
-    // Calculate expected stats per inning
-    const inningsFactor = inning / 9.0;
+    // Calculate expected stats per inning using expectedInnings (from form)
+    const inningsFactor = expectedInnings / 9.0;
     
-    // Basic expected stats (simplified calculation)
+    // Basic expected stats (simplified calculation) - all multiplied by expectedInnings
     const expectedHits = (stats.hits_per_9 * inningsFactor);
     const expectedWalks = (stats.bb_per_9 * inningsFactor);
     const expectedStrikeouts = (stats.k_per_9 * inningsFactor);
@@ -82,10 +82,10 @@ export class FantasyCalculations {
     const expectedRbi = expectedRuns;
     
     // Calculate pitching fantasy points
-    // The innings value should be multiplied by the pitching-INN scoring setting
-    const pitchingInningsPoints = inning * scoringSettings.pitching.INN;
+    // Pitching points = expectedInnings * innings (from sidebar scoring settings)
+    const pitchingInningsPoints = expectedInnings * scoringSettings.pitching.INN;
     
-    // Add other pitching stats (simplified calculation based on expected stats)
+    // Add other pitching stats (all multiplied by expectedInnings)
     const pitchingPoints = (
       pitchingInningsPoints +
       (expectedWalks * 9 * inningsFactor) * scoringSettings.pitching.BB + // Scale walks to full game
@@ -129,11 +129,11 @@ export class FantasyCalculations {
   static calculateAllTeamsExpectedPoints(
     allTeamStats: TeamStats[],
     handedness: 'Lefty' | 'Righty',
-    inning: number,
+    expectedInnings: number,
     scoringSettings: ScoringSettings
   ): FantasyExpectedStartScore[] {
     return allTeamStats.map(teamStats => 
-      this.calculateTeamExpectedPoints(teamStats, handedness, inning, scoringSettings)
+      this.calculateTeamExpectedPoints(teamStats, handedness, expectedInnings, scoringSettings)
     );
   }
 

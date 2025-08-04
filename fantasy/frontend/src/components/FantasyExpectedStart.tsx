@@ -581,11 +581,12 @@ const FantasyExpectedStart: React.FC = () => {
                     type="number"
                     min="1"
                     max="9"
+                    step="0.33"
                     value={inning}
                     onChange={(e) => handleInningChange(e.target.value)}
                     className="form-control"
                   />
-                  <small className="form-text">Enter innings (1-9)</small>
+                  <small className="form-text">Enter innings (1-9, step 0.33)</small>
                 </div>
 
                 {/* League Name Input (for custom leagues) */}
