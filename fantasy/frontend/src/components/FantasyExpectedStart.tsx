@@ -56,6 +56,56 @@ const FantasyExpectedStart: React.FC = () => {
   }, [leagueType]);
 
   /**
+   * Recalculate results when scoring settings change
+   */
+  useEffect(() => {
+    if (results && scoringSettings) {
+      // Recalculate with new scoring settings
+      const teamStats: TeamStats[] = results.results.map(r => ({
+        id: r.team_id,
+        abbreviation: r.team_abbreviation,
+        name: r.team_name || r.team_abbreviation,
+        vs_lefty: r.vs_lefty,
+        vs_righty: r.vs_righty
+      }));
+
+      const calculationResults = FantasyCalculations.calculateAllTeamsExpectedPoints(
+        teamStats,
+        handedness,
+        inning,
+        scoringSettings
+      );
+
+      // Add color coding for visualization
+      const resultsWithColors = FantasyCalculations.addColorCoding(calculationResults);
+
+      // Calculate analysis summary
+      const points = calculationResults.map(r => r.expected_fantasy_points);
+      const minPoints = Math.min(...points);
+      const maxPoints = Math.max(...points);
+      const avgPoints = points.reduce((sum, p) => sum + p, 0) / points.length;
+
+      // Update results with new calculations
+      const updatedResults: MatchupAnalysisResult = {
+        results: resultsWithColors,
+        parameters: {
+          handedness,
+          inning,
+          league_type: leagueType
+        },
+        analysis: {
+          min_points: minPoints,
+          max_points: maxPoints,
+          avg_points: avgPoints,
+          total_teams: calculationResults.length
+        }
+      };
+
+      setResults(updatedResults);
+    }
+  }, [scoringSettings, handedness, inning]);
+
+  /**
    * Get hardcoded scoring settings based on league type
    */
   const getHardcodedScoringSettings = (league: LeagueType): ScoringSettings => {
@@ -430,8 +480,9 @@ const FantasyExpectedStart: React.FC = () => {
         return;
       }
 
-      // Create flattened headers for nested structure
+      // Create flattened headers for nested structure (only include fields that exist in Team interface)
       const headers = [
+        'team_id',
         'team_name',
         'abbreviation',
         'lefty_era',
@@ -440,29 +491,18 @@ const FantasyExpectedStart: React.FC = () => {
         'lefty_bb_per_9',
         'lefty_hr_per_9',
         'lefty_hits_per_9',
-        'lefty_k_per_pa',
-        'lefty_bb_per_pa',
-        'lefty_hr_per_pa',
-        'lefty_hits_per_pa',
-        'lefty_wins',
-        'lefty_losses',
         'righty_era',
         'righty_whip',
         'righty_k_per_9', 
         'righty_bb_per_9',
         'righty_hr_per_9',
-        'righty_hits_per_9',
-        'righty_k_per_pa',
-        'righty_bb_per_pa',
-        'righty_hr_per_pa',
-        'righty_hits_per_pa',
-        'righty_wins',
-        'righty_losses'
+        'righty_hits_per_9'
       ];
 
       const csvData = [
         headers,
         ...teamsArray.map((team: any) => [
+          team.id || '',
           team.name || '',
           team.abbreviation || '',
           team.vs_lefty?.era || '',
@@ -471,24 +511,12 @@ const FantasyExpectedStart: React.FC = () => {
           team.vs_lefty?.bb_per_9 || '',
           team.vs_lefty?.hr_per_9 || '',
           team.vs_lefty?.hits_per_9 || '',
-          team.vs_lefty?.k_per_pa || '',
-          team.vs_lefty?.bb_per_pa || '',
-          team.vs_lefty?.hr_per_pa || '',
-          team.vs_lefty?.hits_per_pa || '',
-          team.vs_lefty?.wins || '',
-          team.vs_lefty?.losses || '',
           team.vs_righty?.era || '',
           team.vs_righty?.whip || '',
           team.vs_righty?.k_per_9 || '',
           team.vs_righty?.bb_per_9 || '',
           team.vs_righty?.hr_per_9 || '',
-          team.vs_righty?.hits_per_9 || '',
-          team.vs_righty?.k_per_pa || '',
-          team.vs_righty?.bb_per_pa || '',
-          team.vs_righty?.hr_per_pa || '',
-          team.vs_righty?.hits_per_pa || '',
-          team.vs_righty?.wins || '',
-          team.vs_righty?.losses || ''
+          team.vs_righty?.hits_per_9 || ''
         ])
       ];
 
