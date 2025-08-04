@@ -55,6 +55,11 @@ class FantasyCalculatorService:
         if not team:
             raise ValueError(f"Team {team_abbreviation} not found")
         
+        logger.info(f"\n{'='*60}")
+        logger.info(f"CALCULATING EXPECTED POINTS FOR {team.name} ({team_abbreviation})")
+        logger.info(f"Handedness: {handedness} | Innings: {inning}")
+        logger.info(f"{'='*60}")
+        
         # Select appropriate stats based on handedness
         if handedness.lower() == 'lefty':
             era = team.vs_lefty_era
@@ -63,6 +68,15 @@ class FantasyCalculatorService:
             bb_per_9 = team.vs_lefty_bb_per_9
             hr_per_9 = team.vs_lefty_hr_per_9
             hits_per_9 = team.vs_lefty_hits_per_9
+            
+            logger.info(f"📊 RAW TEAM STATS vs LEFTIES:")
+            logger.info(f"   ERA: {era}")
+            logger.info(f"   WHIP: {whip}")
+            logger.info(f"   K/9: {k_per_9}")
+            logger.info(f"   BB/9: {bb_per_9}")
+            logger.info(f"   HR/9: {hr_per_9}")
+            logger.info(f"   Hits/9: {hits_per_9}")
+            logger.info(f"   ⚠️  NOTE: Wins/Losses vs lefties not available in database model")
         else:
             era = team.vs_righty_era
             whip = team.vs_righty_whip
@@ -70,9 +84,21 @@ class FantasyCalculatorService:
             bb_per_9 = team.vs_righty_bb_per_9
             hr_per_9 = team.vs_righty_hr_per_9
             hits_per_9 = team.vs_righty_hits_per_9
+            
+            logger.info(f"📊 RAW TEAM STATS vs RIGHTIES:")
+            logger.info(f"   ERA: {era}")
+            logger.info(f"   WHIP: {whip}")
+            logger.info(f"   K/9: {k_per_9}")
+            logger.info(f"   BB/9: {bb_per_9}")
+            logger.info(f"   HR/9: {hr_per_9}")
+            logger.info(f"   Hits/9: {hits_per_9}")
+            logger.info(f"   ⚠️  NOTE: Wins/Losses vs righties not available in database model")
         
         # Calculate expected stats per inning
         innings_factor = inning / 9.0
+        
+        logger.info(f"\n🧮 PER_9 CALCULATIONS:")
+        logger.info(f"   Innings Factor: {inning}/9 = {innings_factor:.4f}")
         
         # Basic expected stats (simplified calculation)
         expected_hits = (hits_per_9 * innings_factor) / 9  # Per batter
@@ -81,26 +107,54 @@ class FantasyCalculatorService:
         expected_home_runs = (hr_per_9 * innings_factor) / 9
         expected_runs = (era * innings_factor) / 9
         
+        logger.info(f"   Expected Hits: ({hits_per_9} * {innings_factor:.4f}) / 9 = {expected_hits:.6f}")
+        logger.info(f"   Expected Walks: ({bb_per_9} * {innings_factor:.4f}) / 9 = {expected_walks:.6f}")
+        logger.info(f"   Expected Strikeouts: ({k_per_9} * {innings_factor:.4f}) / 9 = {expected_strikeouts:.6f}")
+        logger.info(f"   Expected Home Runs: ({hr_per_9} * {innings_factor:.4f}) / 9 = {expected_home_runs:.6f}")
+        logger.info(f"   Expected Runs: ({era} * {innings_factor:.4f}) / 9 = {expected_runs:.6f}")
+        
         # Break down hits into singles, doubles, triples
         # Typical distribution: ~75% singles, ~20% doubles, ~3% triples, ~2% HR
         expected_singles = expected_hits * 0.75
         expected_doubles = expected_hits * 0.20
         expected_triples = expected_hits * 0.03
         
+        logger.info(f"\n⚾ HIT BREAKDOWN (Distribution):")
+        logger.info(f"   Expected Singles: {expected_hits:.6f} * 0.75 = {expected_singles:.6f}")
+        logger.info(f"   Expected Doubles: {expected_hits:.6f} * 0.20 = {expected_doubles:.6f}")
+        logger.info(f"   Expected Triples: {expected_hits:.6f} * 0.03 = {expected_triples:.6f}")
+        logger.info(f"   Expected Home Runs: {expected_home_runs:.6f} (from HR/9 stat)")
+        
         # Calculate fantasy points
-        batting_points = (
-            expected_singles * scoring_settings['batting'].get('S', 0) +
-            expected_doubles * scoring_settings['batting'].get('D', 0) +
-            expected_triples * scoring_settings['batting'].get('T', 0) +
-            expected_home_runs * scoring_settings['batting'].get('HR', 0) +
-            expected_walks * scoring_settings['batting'].get('BB', 0) +
-            expected_runs * scoring_settings['batting'].get('R', 0) +
-            expected_strikeouts * scoring_settings['batting'].get('SO', 0)
-        )
+        singles_points = expected_singles * scoring_settings['batting'].get('S', 0)
+        doubles_points = expected_doubles * scoring_settings['batting'].get('D', 0)
+        triples_points = expected_triples * scoring_settings['batting'].get('T', 0)
+        hr_points = expected_home_runs * scoring_settings['batting'].get('HR', 0)
+        walks_points = expected_walks * scoring_settings['batting'].get('BB', 0)
+        runs_points = expected_runs * scoring_settings['batting'].get('R', 0)
+        strikeouts_points = expected_strikeouts * scoring_settings['batting'].get('SO', 0)
         
         # For simplicity, assume RBI roughly equals runs
         expected_rbi = expected_runs
-        batting_points += expected_rbi * scoring_settings['batting'].get('RBI', 0)
+        rbi_points = expected_rbi * scoring_settings['batting'].get('RBI', 0)
+        
+        batting_points = (
+            singles_points + doubles_points + triples_points + hr_points +
+            walks_points + runs_points + strikeouts_points + rbi_points
+        )
+        
+        logger.info(f"\n💰 FANTASY POINTS CALCULATION:")
+        logger.info(f"   Scoring Settings: {scoring_settings['batting']}")
+        logger.info(f"   Singles: {expected_singles:.6f} * {scoring_settings['batting'].get('S', 0)} = {singles_points:.6f}")
+        logger.info(f"   Doubles: {expected_doubles:.6f} * {scoring_settings['batting'].get('D', 0)} = {doubles_points:.6f}")
+        logger.info(f"   Triples: {expected_triples:.6f} * {scoring_settings['batting'].get('T', 0)} = {triples_points:.6f}")
+        logger.info(f"   Home Runs: {expected_home_runs:.6f} * {scoring_settings['batting'].get('HR', 0)} = {hr_points:.6f}")
+        logger.info(f"   Walks: {expected_walks:.6f} * {scoring_settings['batting'].get('BB', 0)} = {walks_points:.6f}")
+        logger.info(f"   Runs: {expected_runs:.6f} * {scoring_settings['batting'].get('R', 0)} = {runs_points:.6f}")
+        logger.info(f"   Strikeouts: {expected_strikeouts:.6f} * {scoring_settings['batting'].get('SO', 0)} = {strikeouts_points:.6f}")
+        logger.info(f"   RBI: {expected_rbi:.6f} * {scoring_settings['batting'].get('RBI', 0)} = {rbi_points:.6f}")
+        logger.info(f"   TOTAL BATTING POINTS: {batting_points:.6f}")
+        logger.info(f"{'='*60}\n")
         
         return {
             'team_abbreviation': team_abbreviation,
@@ -145,15 +199,22 @@ class FantasyCalculatorService:
         Returns:
             List of dictionaries containing expected points for all teams
         """
+        logger.info(f"\n🏟️ CALCULATING ALL TEAMS EXPECTED POINTS")
+        logger.info(f"Parameters: {handedness} batters, {inning} innings, {league_type} league")
+        
         # Get scoring settings
         if league_type.upper() == 'CUSTOM' and custom_scoring:
             scoring_settings = custom_scoring
+            logger.info(f"Using custom scoring settings: {custom_scoring}")
         else:
             scoring_settings = FantasyCalculatorService.get_scoring_settings(league_type)
+            logger.info(f"Using {league_type} scoring settings: {scoring_settings}")
         
         # Get all teams
         teams = Team.query.all()
         results = []
+        
+        logger.info(f"Processing {len(teams)} teams...")
         
         for team in teams:
             try:
@@ -170,6 +231,16 @@ class FantasyCalculatorService:
         
         # Sort by expected fantasy points (descending)
         results.sort(key=lambda x: x['expected_fantasy_points'], reverse=True)
+        
+        # Log summary
+        if results:
+            logger.info(f"\n📊 CALCULATION SUMMARY:")
+            logger.info(f"   Total teams processed: {len(results)}")
+            logger.info(f"   Highest expected points: {results[0]['team_abbreviation']} ({results[0]['expected_fantasy_points']:.3f})")
+            logger.info(f"   Lowest expected points: {results[-1]['team_abbreviation']} ({results[-1]['expected_fantasy_points']:.3f})")
+            avg_points = sum(r['expected_fantasy_points'] for r in results) / len(results)
+            logger.info(f"   Average expected points: {avg_points:.3f}")
+            logger.info(f"🏟️ ALL TEAMS CALCULATION COMPLETE\n")
         
         return results
     
@@ -274,4 +345,3 @@ class TeamService:
         
         db.session.commit()
         return team.to_dict()
-
