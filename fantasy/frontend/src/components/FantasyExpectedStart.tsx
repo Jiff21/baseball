@@ -31,6 +31,7 @@ const FantasyExpectedStart: React.FC = () => {
   
   // Results state
   const [results, setResults] = useState<MatchupAnalysisResult | null>(null);
+  const [originalTeamData, setOriginalTeamData] = useState<TeamStats[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   
@@ -59,18 +60,10 @@ const FantasyExpectedStart: React.FC = () => {
    * Recalculate results when scoring settings change
    */
   useEffect(() => {
-    if (results && scoringSettings) {
-      // Recalculate with new scoring settings
-      const teamStats: TeamStats[] = results.results.map(r => ({
-        id: r.team_id,
-        abbreviation: r.team_abbreviation,
-        name: r.team_name || r.team_abbreviation,
-        vs_lefty: r.vs_lefty,
-        vs_righty: r.vs_righty
-      }));
-
+    if (originalTeamData && scoringSettings) {
+      // Recalculate with new scoring settings using original team data
       const calculationResults = FantasyCalculations.calculateAllTeamsExpectedPoints(
-        teamStats,
+        originalTeamData,
         handedness,
         inning,
         scoringSettings
@@ -103,7 +96,7 @@ const FantasyExpectedStart: React.FC = () => {
 
       setResults(updatedResults);
     }
-  }, [scoringSettings, handedness, inning]);
+  }, [scoringSettings, handedness, inning, originalTeamData]);
 
   /**
    * Get hardcoded scoring settings based on league type
@@ -355,6 +348,10 @@ const FantasyExpectedStart: React.FC = () => {
 
       // Calculate expected points using frontend logic
       const teamStats: TeamStats[] = response.data.teams;
+      
+      // Store original team data for recalculations
+      setOriginalTeamData(teamStats);
+      
       const calculationResults = FantasyCalculations.calculateAllTeamsExpectedPoints(
         teamStats,
         handedness,
@@ -480,7 +477,7 @@ const FantasyExpectedStart: React.FC = () => {
         return;
       }
 
-      // Create flattened headers for nested structure (only include fields that exist in Team interface)
+      // Create flattened headers for nested structure
       const headers = [
         'team_id',
         'team_name',
@@ -491,12 +488,16 @@ const FantasyExpectedStart: React.FC = () => {
         'lefty_bb_per_9',
         'lefty_hr_per_9',
         'lefty_hits_per_9',
+        'lefty_wins',
+        'lefty_losses',
         'righty_era',
         'righty_whip',
         'righty_k_per_9', 
         'righty_bb_per_9',
         'righty_hr_per_9',
-        'righty_hits_per_9'
+        'righty_hits_per_9',
+        'righty_wins',
+        'righty_losses'
       ];
 
       const csvData = [
@@ -511,12 +512,16 @@ const FantasyExpectedStart: React.FC = () => {
           team.vs_lefty?.bb_per_9 || '',
           team.vs_lefty?.hr_per_9 || '',
           team.vs_lefty?.hits_per_9 || '',
+          team.vs_lefty?.wins || '',
+          team.vs_lefty?.losses || '',
           team.vs_righty?.era || '',
           team.vs_righty?.whip || '',
           team.vs_righty?.k_per_9 || '',
           team.vs_righty?.bb_per_9 || '',
           team.vs_righty?.hr_per_9 || '',
-          team.vs_righty?.hits_per_9 || ''
+          team.vs_righty?.hits_per_9 || '',
+          team.vs_righty?.wins || '',
+          team.vs_righty?.losses || ''
         ])
       ];
 

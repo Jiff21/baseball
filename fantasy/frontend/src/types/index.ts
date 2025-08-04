@@ -51,6 +51,8 @@ export interface Team {
     bb_per_9: number;
     hr_per_9: number;
     hits_per_9: number;
+    wins: number;
+    losses: number;
   };
   vs_righty: {
     era: number;
@@ -59,6 +61,8 @@ export interface Team {
     bb_per_9: number;
     hr_per_9: number;
     hits_per_9: number;
+    wins: number;
+    losses: number;
   };
   created_at?: string;
   updated_at?: string;
