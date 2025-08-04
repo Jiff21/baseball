@@ -159,16 +159,16 @@ export class FantasyCalculations {
       // Calculate how many standard deviations from mean
       const deviationsFromMean = (pointsValue - mean) / standardDeviation;
       
-      if (deviationsFromMean >= 2.0) {
-        // Two standard deviations above average = Good (Green)
+      if (deviationsFromMean >= 1.5) {
+        // 1.5 standard deviations above average = Good (Green)
         colorCategory = 'good';
         colorScore = 1.0;
-      } else if (deviationsFromMean <= -2.0) {
-        // Two standard deviations below average = Bad (Red)
+      } else if (deviationsFromMean <= -1.5) {
+        // 1.5 standard deviations below average = Bad (Red)
         colorCategory = 'bad';
         colorScore = 0.0;
       } else {
-        // Within two standard deviations = Average (No color)
+        // Within 1.5 standard deviations = Average (No color)
         colorCategory = 'average';
         colorScore = 0.5;
       }

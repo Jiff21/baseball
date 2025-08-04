@@ -106,9 +106,7 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
                 <div className="fantasy-points">
                   {result.expected_fantasy_points.toFixed(2)} pts
                 </div>
-                <div className="points-breakdown">
-                  <span className="pitching-points">Pit: {result.pitching_points.toFixed(1)}</span>
-                </div>
+
               </div>
               
               <div className="team-stats-row">

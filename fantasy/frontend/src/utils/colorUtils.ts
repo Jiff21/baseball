@@ -10,47 +10,36 @@ export interface ColorRGB {
 
 export class ColorUtils {
   /**
-   * Convert a score (0-1) to a color gradient from red to green
+   * Convert a score (0-1) to a color based on category
    */
   static scoreToColor(score: number): string {
-    // Clamp score between 0 and 1
-    const clampedScore = Math.max(0, Math.min(1, score));
-    
-    // Define color points for gradient
-    const red: ColorRGB = { r: 220, g: 53, b: 69 };    // Bootstrap danger red
-    const yellow: ColorRGB = { r: 255, g: 193, b: 7 }; // Bootstrap warning yellow
-    const green: ColorRGB = { r: 40, g: 167, b: 69 };  // Bootstrap success green
-    
-    let color: ColorRGB;
-    
-    if (clampedScore < 0.5) {
-      // Interpolate between red and yellow
-      const t = clampedScore * 2; // Scale to 0-1
-      color = {
-        r: Math.round(red.r + (yellow.r - red.r) * t),
-        g: Math.round(red.g + (yellow.g - red.g) * t),
-        b: Math.round(red.b + (yellow.b - red.b) * t),
-      };
+    // Use discrete colors based on score
+    if (score >= 1.0) {
+      // Good = Green
+      return 'rgb(40, 167, 69)';  // Bootstrap success green
+    } else if (score <= 0.0) {
+      // Bad = Red  
+      return 'rgb(220, 53, 69)';  // Bootstrap danger red
     } else {
-      // Interpolate between yellow and green
-      const t = (clampedScore - 0.5) * 2; // Scale to 0-1
-      color = {
-        r: Math.round(yellow.r + (green.r - yellow.r) * t),
-        g: Math.round(yellow.g + (green.g - yellow.g) * t),
-        b: Math.round(yellow.b + (green.b - yellow.b) * t),
-      };
+      // Average = Dark gray (for borders/text)
+      return 'rgb(108, 117, 125)'; // Bootstrap secondary gray
     }
-    
-    return `rgb(${color.r}, ${color.g}, ${color.b})`;
   }
 
   /**
    * Get background color with opacity for better readability
    */
   static scoreToBackgroundColor(score: number, opacity: number = 0.1): string {
-    const rgb = this.scoreToColor(score);
-    // Convert rgb to rgba with opacity
-    return rgb.replace('rgb', 'rgba').replace(')', `, ${opacity})`);
+    if (score >= 1.0) {
+      // Good = Light green background
+      return `rgba(40, 167, 69, ${opacity})`;
+    } else if (score <= 0.0) {
+      // Bad = Light red background
+      return `rgba(220, 53, 69, ${opacity})`;
+    } else {
+      // Average = White background (no tint)
+      return 'rgba(255, 255, 255, 1)';
+    }
   }
 
   /**
