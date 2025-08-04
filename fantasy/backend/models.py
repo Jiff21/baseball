@@ -151,6 +151,8 @@ class Team(db.Model):
     vs_lefty_bb_per_9 = db.Column(db.Float, default=0.0)
     vs_lefty_hr_per_9 = db.Column(db.Float, default=0.0)
     vs_lefty_hits_per_9 = db.Column(db.Float, default=0.0)
+    vs_lefty_wins = db.Column(db.Integer, default=0)
+    vs_lefty_losses = db.Column(db.Integer, default=0)
     
     # Pitching stats vs righty batters
     vs_righty_era = db.Column(db.Float, default=0.0)
@@ -159,6 +161,8 @@ class Team(db.Model):
     vs_righty_bb_per_9 = db.Column(db.Float, default=0.0)
     vs_righty_hr_per_9 = db.Column(db.Float, default=0.0)
     vs_righty_hits_per_9 = db.Column(db.Float, default=0.0)
+    vs_righty_wins = db.Column(db.Integer, default=0)
+    vs_righty_losses = db.Column(db.Integer, default=0)
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -179,6 +183,8 @@ class Team(db.Model):
                 'bb_per_9': self.vs_lefty_bb_per_9,
                 'hr_per_9': self.vs_lefty_hr_per_9,
                 'hits_per_9': self.vs_lefty_hits_per_9,
+                'wins': self.vs_lefty_wins,
+                'losses': self.vs_lefty_losses,
             },
             'vs_righty': {
                 'era': self.vs_righty_era,
@@ -187,6 +193,8 @@ class Team(db.Model):
                 'bb_per_9': self.vs_righty_bb_per_9,
                 'hr_per_9': self.vs_righty_hr_per_9,
                 'hits_per_9': self.vs_righty_hits_per_9,
+                'wins': self.vs_righty_wins,
+                'losses': self.vs_righty_losses,
             },
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
@@ -238,4 +246,3 @@ class ExpectedGame(db.Model):
             'expected_walks': self.expected_walks,
             'created_at': self.created_at.isoformat() if self.created_at else None,
         }
-

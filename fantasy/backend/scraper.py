@@ -48,13 +48,17 @@ class MLBScraper:
         """Log the full URLs that would be used for real data scraping."""
         logger.info("\n🔗 DATA SOURCE URLs (for future real implementation):")
         
+        # Get current year dynamically
+        from datetime import datetime
+        current_year = datetime.now().year
+        
         # These would be the actual MLB.com URLs for different splits
         urls = {
-            'team_stats_vs_lefty': f"{self.base_url}/stats/team/pitching?split=vl&season=2024",
-            'team_stats_vs_righty': f"{self.base_url}/stats/team/pitching?split=vr&season=2024", 
-            'team_overall_pitching': f"{self.base_url}/stats/team/pitching?season=2024",
-            'team_wins_losses': f"{self.base_url}/standings/2024",
-            'team_advanced_stats': f"{self.base_url}/stats/team/pitching/advanced?season=2024"
+            'team_stats_vs_lefty': f"{self.base_url}/stats/team/pitching?split=vl&season={current_year}",
+            'team_stats_vs_righty': f"{self.base_url}/stats/team/pitching?split=vr&season={current_year}", 
+            'team_overall_pitching': f"{self.base_url}/stats/team/pitching?season={current_year}",
+            'team_wins_losses': f"{self.base_url}/standings/{current_year}",
+            'team_advanced_stats': f"{self.base_url}/stats/team/pitching/advanced?season={current_year}"
         }
         
         for stat_type, url in urls.items():
@@ -125,7 +129,7 @@ class MLBScraper:
             base_hr_per_9 = random.uniform(0.8, 1.5)
             base_hits_per_9 = random.uniform(7.5, 9.5)
             
-            # Generate sample wins/losses (not in current model but logged for reference)
+            # Generate sample wins/losses (now included in database model)
             vs_lefty_wins = random.randint(8, 25)
             vs_lefty_losses = random.randint(5, 20)
             vs_righty_wins = random.randint(15, 40)
@@ -158,7 +162,7 @@ class MLBScraper:
             logger.info(f"      BB/9: {vs_lefty_bb_per_9} | Walks per 9 innings")
             logger.info(f"      HR/9: {vs_lefty_hr_per_9} | Home runs per 9 innings")
             logger.info(f"      Hits/9: {vs_lefty_hits_per_9} | Hits allowed per 9 innings")
-            logger.info(f"      Wins: {vs_lefty_wins} | Losses: {vs_lefty_losses} (not in DB model)")
+            logger.info(f"      Wins: {vs_lefty_wins} | Losses: {vs_lefty_losses} ✅ (now in DB model)")
             
             logger.info(f"   📉 VS RIGHTIES:")
             logger.info(f"      ERA: {vs_righty_era} | Runs allowed per 9 innings")
@@ -167,7 +171,7 @@ class MLBScraper:
             logger.info(f"      BB/9: {vs_righty_bb_per_9} | Walks per 9 innings")
             logger.info(f"      HR/9: {vs_righty_hr_per_9} | Home runs per 9 innings")
             logger.info(f"      Hits/9: {vs_righty_hits_per_9} | Hits allowed per 9 innings")
-            logger.info(f"      Wins: {vs_righty_wins} | Losses: {vs_righty_losses} (not in DB model)")
+            logger.info(f"      Wins: {vs_righty_wins} | Losses: {vs_righty_losses} ✅ (now in DB model)")
             
             team_data = {
                 'abbreviation': abbr,
@@ -178,12 +182,16 @@ class MLBScraper:
                 'vs_lefty_bb_per_9': vs_lefty_bb_per_9,
                 'vs_lefty_hr_per_9': vs_lefty_hr_per_9,
                 'vs_lefty_hits_per_9': vs_lefty_hits_per_9,
+                'vs_lefty_wins': vs_lefty_wins,
+                'vs_lefty_losses': vs_lefty_losses,
                 'vs_righty_era': vs_righty_era,
                 'vs_righty_whip': vs_righty_whip,
                 'vs_righty_k_per_9': vs_righty_k_per_9,
                 'vs_righty_bb_per_9': vs_righty_bb_per_9,
                 'vs_righty_hr_per_9': vs_righty_hr_per_9,
                 'vs_righty_hits_per_9': vs_righty_hits_per_9,
+                'vs_righty_wins': vs_righty_wins,
+                'vs_righty_losses': vs_righty_losses,
             }
             
             teams_data.append(team_data)
