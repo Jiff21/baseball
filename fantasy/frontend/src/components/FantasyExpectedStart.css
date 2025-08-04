@@ -79,6 +79,87 @@
   padding-top: 20px;
 }
 
+/* Mobile Settings Tab */
+.mobile-settings-tab {
+  display: none;
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background: #667eea;
+  color: white;
+  padding: 12px 8px;
+  border-radius: 8px 0 0 8px;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.mobile-settings-tab:hover {
+  background: #5a6fd8;
+  transform: translateY(-50%) translateX(-2px);
+}
+
+/* Drawer Overlay */
+.drawer-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Mobile and Tablet Responsive Styles */
+@media (max-width: 1024px) {
+  .main-layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .mobile-settings-tab {
+    display: block;
+  }
+
+  .drawer-overlay {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 350px;
+    height: 100vh;
+    max-height: 100vh;
+    z-index: 1000;
+    border-radius: 0;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+  }
+
+  .sidebar.drawer-open {
+    right: 0;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 300px;
+  }
+}
+
 /* Main Content */
 .main-content {
   flex: 1;

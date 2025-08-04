@@ -35,6 +35,7 @@ const FantasyExpectedStart: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   
   // UI state
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   
   // Refs for scrolling
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -520,8 +521,13 @@ const FantasyExpectedStart: React.FC = () => {
         </header>
 
         <div className="main-layout">
+          {/* Mobile Settings Tab */}
+          <div className="mobile-settings-tab" onClick={() => setIsDrawerOpen(!isDrawerOpen)}>
+            <span>Settings</span>
+          </div>
+
           {/* Sidebar - Only Scoring Settings */}
-          <div className="sidebar">
+          <div className={`sidebar ${isDrawerOpen ? 'drawer-open' : ''}`}>
             <div className="sidebar-content">
               {/* Scoring Settings */}
               {scoringSettings && (
@@ -536,6 +542,9 @@ const FantasyExpectedStart: React.FC = () => {
               )}
             </div>
           </div>
+
+          {/* Overlay for mobile drawer */}
+          {isDrawerOpen && <div className="drawer-overlay" onClick={() => setIsDrawerOpen(false)} />}
 
           {/* Main Content */}
           <div className="main-content">
@@ -575,7 +584,7 @@ const FantasyExpectedStart: React.FC = () => {
 
                 {/* Inning Input */}
                 <div className="form-group">
-                  <label htmlFor="inning">Start Expected Innings</label>
+                  <label htmlFor="inning">Starter Expected Innings</label>
                   <input
                     id="inning"
                     type="number"
