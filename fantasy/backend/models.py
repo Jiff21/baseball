@@ -92,13 +92,13 @@ class ScoringSettings:
         return {
             'batting': {
                 'S': 1, 'D': 2, 'T': 3, 'HR': 4, 'BB': 1, 'IBB': 0,
-                'HBP': 1, 'R': 1, 'RBI': 1, 'SB': 2, 'CS': -1, 'SO': -1,
+                'HBP': 1, 'R': 1, 'RBI': 1, 'SB': 2, 'CS': -1, 'SO': -0.5,
                 'GIDP': 0, 'E': 0,
             },
             'pitching': {
-                'BB': -1, 'IBB': 0, 'ER': -1, 'HA': 0, 'HB': 0, 'HRA': 0,
-                'INN': 3, 'K': 1, 'W': 7, 'L': -5, 'S': 5, 'BS': -3,
-                'QS': 0, 'TB': 0, 'Hold': 0, 'WP': 0, 'BK': 0,
+                'BB': -1, 'IBB': 0, 'ER': -1, 'HA': -1, 'HB': 0, 'HRA': 0,
+                'INN': 3, 'K': 0.5, 'W': 7, 'L': -5, 'S': 5, 'BS': 0,
+                'QS': 3, 'TB': 0, 'Hold': 0, 'WP': 0, 'BK': 0,
             }
         }
 
@@ -117,6 +117,7 @@ class ScoringSettings:
                 'QS': 3.0, 'TB': 0.0, 'Hold': 0.0, 'WP': 0.0, 'BK': 0.0,
             }
         }
+    
 
     @classmethod
     def get_yahoo_settings(cls):
@@ -133,7 +134,6 @@ class ScoringSettings:
                 'QS': 0.0, 'TB': 0.0, 'Hold': 0.0, 'WP': 0.0, 'BK': 0.0,
             }
         }
-
 
 class Team(db.Model):
     """Model for MLB teams and their stats."""
