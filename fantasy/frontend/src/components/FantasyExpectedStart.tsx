@@ -526,7 +526,6 @@ const FantasyExpectedStart: React.FC = () => {
               {/* Scoring Settings */}
               {scoringSettings && (
                 <div className="scoring-settings-sidebar">
-                  <h4 className="scoring-title">Scoring Settings</h4>
                   <ScoringSettingsForm
                     scoringSettings={scoringSettings}
                     onSettingsChange={setScoringSettings}
