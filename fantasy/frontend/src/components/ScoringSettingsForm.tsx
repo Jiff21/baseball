@@ -48,10 +48,36 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
     label: string,
     value: number
   ) => {
-    // Special validation for innings - allow thirds (e.g., 6.1, 6.2)
+    // Special handling for innings - use dropdown
     const isInnings = stat === 'INN';
-    const step = isInnings ? "0.1" : "0.1";
-    const max = isInnings ? "9.2" : "999";
+    
+    if (isInnings) {
+      const inningsOptions = [
+        3.0, 3.3, 3.6, 4.0, 4.3, 4.6, 5.0, 5.3, 5.6, 
+        6.0, 6.3, 6.6, 7.0, 7.3, 7.6, 8.0, 8.3, 8.6, 9.0
+      ];
+      
+      return (
+        <div className="stat-input-inline" key={`${category}-${stat}`}>
+          <label htmlFor={`${category}-${stat}`} className="stat-label-inline">
+            {label}:
+          </label>
+          <select
+            id={`${category}-${stat}`}
+            value={value.toFixed(1)}
+            onChange={(e) => handleInputChange(category, stat, e.target.value)}
+            className="stat-select-inline"
+            disabled={readOnly}
+          >
+            {inningsOptions.map(option => (
+              <option key={option} value={option.toFixed(1)}>
+                {option.toFixed(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+      );
+    }
     
     return (
       <div className="stat-input-inline" key={`${category}-${stat}`}>
@@ -61,9 +87,9 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
         <input
           id={`${category}-${stat}`}
           type="number"
-          step={step}
-          max={max}
-          min={isInnings ? "0.1" : "-999"}
+          step="0.1"
+          max="999"
+          min="-999"
           value={value.toFixed(1)}
           onChange={(e) => handleInputChange(category, stat, e.target.value)}
           className="stat-input-inline"

@@ -16,7 +16,6 @@ import {
 } from '../types';
 import ScoringSettingsForm from './ScoringSettingsForm';
 import TeamMatchupGrid from './TeamMatchupGrid';
-import Accordion from './Accordion';
 import './FantasyExpectedStart.css';
 
 const FantasyExpectedStart: React.FC = () => {
@@ -36,7 +35,6 @@ const FantasyExpectedStart: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   
   // UI state
-  const [showScoringSettings, setShowScoringSettings] = useState<boolean>(true);
   
   // Refs for scrolling
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -225,8 +223,7 @@ const FantasyExpectedStart: React.FC = () => {
     const settings = getHardcodedScoringSettings(leagueType);
     setScoringSettings(settings);
     
-    // Always show scoring settings for all league types
-    setShowScoringSettings(true);
+    // League type loaded
   }, [leagueType]);
 
   /**
@@ -240,7 +237,7 @@ const FantasyExpectedStart: React.FC = () => {
         setLeagueType('Custom');
         setScoringSettings(customLeague.scoring_settings);
         setLeagueName(newLeagueType);
-        setShowScoringSettings(true);
+        // Custom league loaded
       }
     } else {
       // Standard league type
@@ -341,8 +338,7 @@ const FantasyExpectedStart: React.FC = () => {
 
       setResults(formattedResults);
       
-      // Collapse scoring settings accordion and scroll to results
-      setShowScoringSettings(false);
+      // Scroll to results
       setTimeout(() => {
         if (resultsRef.current) {
           resultsRef.current.scrollIntoView({ 
@@ -350,7 +346,7 @@ const FantasyExpectedStart: React.FC = () => {
             block: 'start' 
           });
         }
-      }, 300); // Wait for accordion collapse animation
+      }, 100);
       
     } catch (err) {
       setError('Failed to calculate expected points');
@@ -388,115 +384,121 @@ const FantasyExpectedStart: React.FC = () => {
           </p>
         </header>
 
-        <div className="form-section">
-          <div className="form-grid">
-            {/* Handedness Dropdown */}
-            <div className="form-group">
-              <label htmlFor="handedness">Batter Handedness:</label>
-              <select
-                id="handedness"
-                value={handedness}
-                onChange={(e) => setHandedness(e.target.value as Handedness)}
-                className="form-control"
-              >
-                <option value="Righty">Righty</option>
-                <option value="Lefty">Lefty</option>
-              </select>
-            </div>
+        <div className="main-layout">
+          {/* Sidebar */}
+          <div className="sidebar">
+            <div className="sidebar-content">
+              <h3 className="sidebar-title">Settings</h3>
+              
+              {/* Form Controls */}
+              <div className="form-controls">
+                {/* Handedness Dropdown */}
+                <div className="form-group">
+                  <label htmlFor="handedness">Batter Handedness:</label>
+                  <select
+                    id="handedness"
+                    value={handedness}
+                    onChange={(e) => setHandedness(e.target.value as Handedness)}
+                    className="form-control"
+                  >
+                    <option value="Righty">Righty</option>
+                    <option value="Lefty">Lefty</option>
+                  </select>
+                </div>
 
-            {/* League Type Dropdown */}
-            <div className="form-group">
-              <label htmlFor="leagueType">League Type:</label>
-              <select
-                id="leagueType"
-                value={leagueType === 'Custom' && leagueName ? leagueName : leagueType}
-                onChange={(e) => handleLeagueTypeChange(e.target.value)}
-                className="form-control"
-              >
-                {getLeagueOptions().map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
+                {/* League Type Dropdown */}
+                <div className="form-group">
+                  <label htmlFor="leagueType">League Type:</label>
+                  <select
+                    id="leagueType"
+                    value={leagueType === 'Custom' && leagueName ? leagueName : leagueType}
+                    onChange={(e) => handleLeagueTypeChange(e.target.value)}
+                    className="form-control"
+                  >
+                    {getLeagueOptions().map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-            {/* Inning Input */}
-            <div className="form-group">
-              <label htmlFor="inning">Innings:</label>
-              <input
-                id="inning"
-                type="number"
-                min="1"
-                max="9"
-                value={inning}
-                onChange={(e) => handleInningChange(e.target.value)}
-                className="form-control"
-              />
-              <small className="form-text">Enter innings (1-9)</small>
-            </div>
-
-            {/* League Name Input (for custom leagues) */}
-            {leagueType === 'Custom' && (
-              <div className="form-group">
-                <label htmlFor="leagueName">League Name (optional):</label>
-                <div className="input-group">
+                {/* Inning Input */}
+                <div className="form-group">
+                  <label htmlFor="inning">Innings:</label>
                   <input
-                    id="leagueName"
-                    type="text"
-                    value={leagueName}
-                    onChange={(e) => setLeagueName(e.target.value)}
-                    placeholder="Enter name to save custom league"
+                    id="inning"
+                    type="number"
+                    min="1"
+                    max="9"
+                    value={inning}
+                    onChange={(e) => handleInningChange(e.target.value)}
                     className="form-control"
                   />
-                  <button
-                    type="button"
-                    onClick={saveCustomLeague}
-                    className="btn btn-secondary"
-                    disabled={!leagueName.trim() || !scoringSettings}
-                  >
-                    Save
-                  </button>
+                  <small className="form-text">Enter innings (1-9)</small>
                 </div>
+
+                {/* League Name Input (for custom leagues) */}
+                {leagueType === 'Custom' && (
+                  <div className="form-group">
+                    <label htmlFor="leagueName">League Name (optional):</label>
+                    <div className="input-group">
+                      <input
+                        id="leagueName"
+                        type="text"
+                        value={leagueName}
+                        onChange={(e) => setLeagueName(e.target.value)}
+                        placeholder="Enter name to save custom league"
+                        className="form-control"
+                      />
+                      <button
+                        type="button"
+                        onClick={saveCustomLeague}
+                        className="btn btn-secondary"
+                        disabled={!leagueName.trim() || !scoringSettings}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          {/* Scoring Settings Accordion */}
-          {scoringSettings && (
-            <Accordion
-              title="Scoring Settings"
-              isOpen={showScoringSettings}
-              onToggle={() => setShowScoringSettings(!showScoringSettings)}
-              className="scoring-settings-accordion"
-            >
-              <ScoringSettingsForm
-                scoringSettings={scoringSettings}
-                onSettingsChange={setScoringSettings}
-                readOnly={leagueType !== 'Custom'}
-                leagueType={leagueType}
-              />
-            </Accordion>
-          )}
+              {/* Scoring Settings */}
+              {scoringSettings && (
+                <div className="scoring-settings-sidebar">
+                  <h4 className="scoring-title">Scoring Settings</h4>
+                  <ScoringSettingsForm
+                    scoringSettings={scoringSettings}
+                    onSettingsChange={setScoringSettings}
+                    readOnly={leagueType !== 'Custom'}
+                    leagueType={leagueType}
+                  />
+                </div>
+              )}
 
-          {/* Error Display */}
-          {error && (
-            <div className="alert alert-danger" role="alert">
-              {error}
+              {/* Calculate Button */}
+              <div className="calculate-section">
+                <button
+                  onClick={calculateExpectedPoints}
+                  disabled={loading || !scoringSettings}
+                  className="btn btn-primary btn-lg"
+                >
+                  {loading ? 'Calculating...' : 'Calculate Expected Points'}
+                </button>
+              </div>
+
+              {/* Error Display */}
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
             </div>
-          )}
-
-          {/* Calculate Button */}
-          <div className="calculate-section">
-            <button
-              onClick={calculateExpectedPoints}
-              disabled={loading || !scoringSettings}
-              className="btn btn-primary btn-lg"
-            >
-              {loading ? 'Calculating...' : 'Calculate Expected Points'}
-            </button>
           </div>
-        </div>
+
+          {/* Main Content */}
+          <div className="main-content">
 
         {/* Results Section */}
         {results && (
@@ -519,6 +521,8 @@ const FantasyExpectedStart: React.FC = () => {
             <TeamMatchupGrid results={results.results} />
           </div>
         )}
+          </div>
+        </div>
       </div>
     </div>
   );
