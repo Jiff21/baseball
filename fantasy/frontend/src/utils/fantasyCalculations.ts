@@ -103,7 +103,7 @@ export class FantasyCalculations {
     return {
       team_abbreviation: teamStats.abbreviation,
       handedness,
-      inning,
+      inning: expectedInnings,
       expected_fantasy_points: Math.round(totalFantasyPoints * 100) / 100,
       batting_points: 0, // Batting calculations removed per request
       pitching_points: Math.round(pitchingPoints * 100) / 100,
