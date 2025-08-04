@@ -69,6 +69,8 @@ export interface ExpectedGameResult {
   handedness: string;
   inning: number;
   expected_fantasy_points: number;
+  batting_points: number;
+  pitching_points: number;
   expected_runs: number;
   expected_hits: number;
   expected_singles: number;
@@ -126,4 +128,3 @@ export interface ApiResponse<T> {
   error?: string;
   message?: string;
 }
-

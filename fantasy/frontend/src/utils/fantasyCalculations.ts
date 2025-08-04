@@ -53,7 +53,7 @@ export class FantasyCalculations {
     const expectedDoubles = expectedHits * 0.20;
     const expectedTriples = expectedHits * 0.03;
     
-    // Calculate fantasy points
+    // Calculate batting fantasy points
     const battingPoints = (
       expectedSingles * scoringSettings.batting.S +
       expectedDoubles * scoringSettings.batting.D +
@@ -68,11 +68,29 @@ export class FantasyCalculations {
     const expectedRbi = expectedRuns;
     const totalBattingPoints = battingPoints + (expectedRbi * scoringSettings.batting.RBI);
     
+    // Calculate pitching fantasy points
+    // The innings value should be multiplied by the pitching-INN scoring setting
+    const pitchingInningsPoints = inning * scoringSettings.pitching.INN;
+    
+    // Add other pitching stats (simplified calculation based on expected stats)
+    const pitchingPoints = (
+      pitchingInningsPoints +
+      (expectedWalks * 9 * inningsFactor) * scoringSettings.pitching.BB + // Scale walks to full game
+      (expectedRuns * 9 * inningsFactor) * scoringSettings.pitching.ER + // Scale earned runs
+      (expectedHits * 9 * inningsFactor) * scoringSettings.pitching.H + // Scale hits allowed
+      (expectedHomeRuns * 9 * inningsFactor) * scoringSettings.pitching.HR + // Scale HR allowed
+      (expectedStrikeouts * 9 * inningsFactor) * scoringSettings.pitching.K // Scale strikeouts
+    );
+    
+    const totalFantasyPoints = totalBattingPoints + pitchingPoints;
+    
     return {
       team_abbreviation: teamStats.abbreviation,
       handedness,
       inning,
-      expected_fantasy_points: Math.round(totalBattingPoints * 100) / 100,
+      expected_fantasy_points: Math.round(totalFantasyPoints * 100) / 100,
+      batting_points: Math.round(totalBattingPoints * 100) / 100,
+      pitching_points: Math.round(pitchingPoints * 100) / 100,
       expected_runs: Math.round(expectedRuns * 1000) / 1000,
       expected_hits: Math.round(expectedHits * 1000) / 1000,
       expected_singles: Math.round(expectedSingles * 1000) / 1000,

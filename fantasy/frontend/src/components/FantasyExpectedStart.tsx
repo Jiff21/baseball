@@ -374,6 +374,80 @@ const FantasyExpectedStart: React.FC = () => {
     return [...standardOptions, ...customLeagues];
   };
 
+  /**
+   * Export results to CSV
+   */
+  const exportResultsCSV = () => {
+    if (!results) return;
+
+    const csvData = [
+      ['Team', 'Fantasy Points', 'Batting Points', 'Pitching Points'],
+      ...results.results.map(team => [
+        team.team,
+        team.fantasy_points.toFixed(2),
+        team.batting_points.toFixed(2),
+        team.pitching_points.toFixed(2)
+      ])
+    ];
+
+    const csvContent = csvData.map(row => row.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `fantasy_results_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
+  /**
+   * Export debug data from team-stats API
+   */
+  const exportDebugCSV = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:8000/api/team-stats');
+      const debugData = await response.json();
+
+      if (!debugData || debugData.length === 0) {
+        setError('No debug data available');
+        return;
+      }
+
+      // Get all unique keys from all teams to create headers
+      const allKeys = new Set<string>();
+      debugData.forEach((team: any) => {
+        Object.keys(team).forEach(key => allKeys.add(key));
+      });
+      const headers = Array.from(allKeys).sort();
+
+      const csvData = [
+        headers,
+        ...debugData.map((team: any) => 
+          headers.map(header => team[header] || '')
+        )
+      ];
+
+      const csvContent = csvData.map(row => row.join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `debug_team_stats_${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      setError('Failed to export debug data');
+      console.error('Debug export error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="fantasy-expected-start">
       <div className="container">
@@ -385,13 +459,29 @@ const FantasyExpectedStart: React.FC = () => {
         </header>
 
         <div className="main-layout">
-          {/* Sidebar */}
+          {/* Sidebar - Only Scoring Settings */}
           <div className="sidebar">
             <div className="sidebar-content">
-              <h3 className="sidebar-title">Settings</h3>
-              
-              {/* Form Controls */}
-              <div className="form-controls">
+              {/* Scoring Settings */}
+              {scoringSettings && (
+                <div className="scoring-settings-sidebar">
+                  <h4 className="scoring-title">Scoring Settings</h4>
+                  <ScoringSettingsForm
+                    scoringSettings={scoringSettings}
+                    onSettingsChange={setScoringSettings}
+                    readOnly={leagueType !== 'Custom'}
+                    leagueType={leagueType}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="main-content">
+            {/* Form Controls */}
+            <div className="form-section">
+              <div className="form-grid">
                 {/* Handedness Dropdown */}
                 <div className="form-group">
                   <label htmlFor="handedness">Batter Handedness:</label>
@@ -464,16 +554,10 @@ const FantasyExpectedStart: React.FC = () => {
                 )}
               </div>
 
-              {/* Scoring Settings */}
-              {scoringSettings && (
-                <div className="scoring-settings-sidebar">
-                  <h4 className="scoring-title">Scoring Settings</h4>
-                  <ScoringSettingsForm
-                    scoringSettings={scoringSettings}
-                    onSettingsChange={setScoringSettings}
-                    readOnly={leagueType !== 'Custom'}
-                    leagueType={leagueType}
-                  />
+              {/* Error Display */}
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
                 </div>
               )}
 
@@ -487,18 +571,7 @@ const FantasyExpectedStart: React.FC = () => {
                   {loading ? 'Calculating...' : 'Calculate Expected Points'}
                 </button>
               </div>
-
-              {/* Error Display */}
-              {error && (
-                <div className="alert alert-danger" role="alert">
-                  {error}
-                </div>
-              )}
             </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="main-content">
 
         {/* Results Section */}
         {results && (
@@ -515,6 +588,24 @@ const FantasyExpectedStart: React.FC = () => {
                   {results.analysis.max_points.toFixed(2)} points 
                   (Avg: {results.analysis.avg_points.toFixed(2)})
                 </p>
+              </div>
+              
+              {/* Export Buttons */}
+              <div className="export-buttons">
+                <button
+                  onClick={exportResultsCSV}
+                  className="btn btn-secondary"
+                  disabled={loading}
+                >
+                  Export Results CSV
+                </button>
+                <button
+                  onClick={exportDebugCSV}
+                  className="btn btn-secondary"
+                  disabled={loading}
+                >
+                  Export Debug CSV
+                </button>
               </div>
             </div>
 

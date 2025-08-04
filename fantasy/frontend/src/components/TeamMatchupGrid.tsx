@@ -107,6 +107,10 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
                 <div className="fantasy-points">
                   {result.expected_fantasy_points.toFixed(2)} pts
                 </div>
+                <div className="points-breakdown">
+                  <span className="batting-points">Bat: {result.batting_points.toFixed(1)}</span>
+                  <span className="pitching-points">Pit: {result.pitching_points.toFixed(1)}</span>
+                </div>
               </div>
               
               <div className="team-stats-row">
@@ -161,12 +165,26 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
                 
                 <div className="details-content">
                   <div className="details-section">
-                    <h4>Expected Offensive Stats</h4>
+                    <h4>Fantasy Points Breakdown</h4>
                     <div className="stats-grid-detailed">
                       <div className="stat-detailed">
-                        <span className="label">Fantasy Points:</span>
+                        <span className="label">Total Fantasy Points:</span>
                         <span className="value">{details.expected_fantasy_points.toFixed(2)}</span>
                       </div>
+                      <div className="stat-detailed">
+                        <span className="label">Batting Points:</span>
+                        <span className="value">{details.batting_points.toFixed(2)}</span>
+                      </div>
+                      <div className="stat-detailed">
+                        <span className="label">Pitching Points:</span>
+                        <span className="value">{details.pitching_points.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="details-section">
+                    <h4>Expected Offensive Stats</h4>
+                    <div className="stats-grid-detailed">
                       <div className="stat-detailed">
                         <span className="label">Hits:</span>
                         <span className="value">{details.expected_hits.toFixed(3)}</span>
