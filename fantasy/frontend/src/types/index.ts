@@ -81,6 +81,8 @@ export interface ExpectedGameResult {
   expected_walks: number;
   expected_strikeouts: number;
   expected_rbi: number;
+  expected_wins: number;
+  expected_losses: number;
   team_stats: {
     era: number;
     whip: number;

@@ -16,6 +16,8 @@ export interface TeamStats {
     bb_per_9: number;
     hr_per_9: number;
     hits_per_9: number;
+    wins?: number;
+    losses?: number;
   };
   vs_righty: {
     era: number;
@@ -24,6 +26,8 @@ export interface TeamStats {
     bb_per_9: number;
     hr_per_9: number;
     hits_per_9: number;
+    wins?: number;
+    losses?: number;
   };
 }
 
@@ -57,6 +61,17 @@ export class FantasyCalculations {
     const expectedHomeRuns = (stats.hr_per_9 * inningsFactor * paPerInning) / 9;
     const expectedRuns = (stats.era * inningsFactor * paPerInning) / 9;
     
+    // Calculate wins and losses per game if data is available
+    let winsPerGame = 0;
+    let lossesPerGame = 0;
+    if (stats.wins !== undefined && stats.losses !== undefined) {
+      const totalGames = stats.wins + stats.losses;
+      if (totalGames > 0) {
+        winsPerGame = stats.wins / totalGames;
+        lossesPerGame = stats.losses / totalGames;
+      }
+    }
+    
     // Break down hits into singles, doubles, triples
     // Typical distribution: ~75% singles, ~20% doubles, ~3% triples, ~2% HR
     const expectedSingles = expectedHits * 0.75;
@@ -89,7 +104,9 @@ export class FantasyCalculations {
       (expectedRuns * 9 * inningsFactor) * scoringSettings.pitching.ER + // Scale earned runs
       (expectedHits * 9 * inningsFactor) * scoringSettings.pitching.HA + // Scale hits allowed
       (expectedHomeRuns * 9 * inningsFactor) * scoringSettings.pitching.HRA + // Scale HR allowed
-      (expectedStrikeouts * 9 * inningsFactor) * scoringSettings.pitching.K // Scale strikeouts
+      (expectedStrikeouts * 9 * inningsFactor) * scoringSettings.pitching.K + // Scale strikeouts
+      winsPerGame * scoringSettings.pitching.W + // Wins per game
+      lossesPerGame * scoringSettings.pitching.L // Losses per game
     );
     
     // Only use pitching points for fantasy calculation (batting removed per request)
@@ -112,6 +129,8 @@ export class FantasyCalculations {
       expected_walks: Math.round(expectedWalks * 1000) / 1000,
       expected_strikeouts: Math.round(expectedStrikeouts * 1000) / 1000,
       expected_rbi: Math.round(expectedRbi * 1000) / 1000,
+      expected_wins: Math.round(winsPerGame * 1000) / 1000,
+      expected_losses: Math.round(lossesPerGame * 1000) / 1000,
       team_stats: stats
     };
   }
