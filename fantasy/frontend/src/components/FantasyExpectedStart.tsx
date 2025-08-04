@@ -439,12 +439,24 @@ const FantasyExpectedStart: React.FC = () => {
         'lefty_bb_per_9',
         'lefty_hr_per_9',
         'lefty_hits_per_9',
+        'lefty_k_per_pa',
+        'lefty_bb_per_pa',
+        'lefty_hr_per_pa',
+        'lefty_hits_per_pa',
+        'lefty_wins',
+        'lefty_losses',
         'righty_era',
         'righty_whip',
         'righty_k_per_9', 
         'righty_bb_per_9',
         'righty_hr_per_9',
-        'righty_hits_per_9'
+        'righty_hits_per_9',
+        'righty_k_per_pa',
+        'righty_bb_per_pa',
+        'righty_hr_per_pa',
+        'righty_hits_per_pa',
+        'righty_wins',
+        'righty_losses'
       ];
 
       const csvData = [
@@ -458,12 +470,24 @@ const FantasyExpectedStart: React.FC = () => {
           team.vs_lefty?.bb_per_9 || '',
           team.vs_lefty?.hr_per_9 || '',
           team.vs_lefty?.hits_per_9 || '',
+          team.vs_lefty?.k_per_pa || '',
+          team.vs_lefty?.bb_per_pa || '',
+          team.vs_lefty?.hr_per_pa || '',
+          team.vs_lefty?.hits_per_pa || '',
+          team.vs_lefty?.wins || '',
+          team.vs_lefty?.losses || '',
           team.vs_righty?.era || '',
           team.vs_righty?.whip || '',
           team.vs_righty?.k_per_9 || '',
           team.vs_righty?.bb_per_9 || '',
           team.vs_righty?.hr_per_9 || '',
-          team.vs_righty?.hits_per_9 || ''
+          team.vs_righty?.hits_per_9 || '',
+          team.vs_righty?.k_per_pa || '',
+          team.vs_righty?.bb_per_pa || '',
+          team.vs_righty?.hr_per_pa || '',
+          team.vs_righty?.hits_per_pa || '',
+          team.vs_righty?.wins || '',
+          team.vs_righty?.losses || ''
         ])
       ];
 

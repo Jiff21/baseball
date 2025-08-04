@@ -16,6 +16,11 @@ export interface TeamStats {
     bb_per_9: number;
     hr_per_9: number;
     hits_per_9: number;
+    // Per-PA stats for more accurate calculations
+    k_per_pa?: number;
+    bb_per_pa?: number;
+    hr_per_pa?: number;
+    hits_per_pa?: number;
     wins?: number;
     losses?: number;
   };
@@ -26,6 +31,11 @@ export interface TeamStats {
     bb_per_9: number;
     hr_per_9: number;
     hits_per_9: number;
+    // Per-PA stats for more accurate calculations
+    k_per_pa?: number;
+    bb_per_pa?: number;
+    hr_per_pa?: number;
+    hits_per_pa?: number;
     wins?: number;
     losses?: number;
   };
@@ -54,12 +64,25 @@ export class FantasyCalculations {
     // Calculate expected stats per inning
     const inningsFactor = inning / 9.0;
     
-    // Basic expected stats (simplified calculation) with PA per inning multiplier
-    const expectedHits = (stats.hits_per_9 * inningsFactor * paPerInning) / 9; // Per batter
-    const expectedWalks = (stats.bb_per_9 * inningsFactor * paPerInning) / 9;
-    const expectedStrikeouts = (stats.k_per_9 * inningsFactor * paPerInning) / 9;
-    const expectedHomeRuns = (stats.hr_per_9 * inningsFactor * paPerInning) / 9;
-    const expectedRuns = (stats.era * inningsFactor * paPerInning) / 9;
+    // Basic expected stats - use per-PA stats if available, otherwise fallback to per-9 stats
+    const expectedHits = stats.hits_per_pa 
+      ? (stats.hits_per_pa * (inningsFactor * paPerInning))
+      : (stats.hits_per_9 * inningsFactor * paPerInning) / 9;
+    
+    const expectedWalks = stats.bb_per_pa
+      ? (stats.bb_per_pa * (inningsFactor * paPerInning))
+      : (stats.bb_per_9 * inningsFactor * paPerInning) / 9;
+    
+    const expectedStrikeouts = stats.k_per_pa
+      ? (stats.k_per_pa * (inningsFactor * paPerInning))
+      : (stats.k_per_9 * inningsFactor * paPerInning) / 9;
+    
+    const expectedHomeRuns = stats.hr_per_pa
+      ? (stats.hr_per_pa * (inningsFactor * paPerInning))
+      : (stats.hr_per_9 * inningsFactor * paPerInning) / 9;
+    
+    // ERA calculation remains the same (runs per inning, not per PA)
+    const expectedRuns = (stats.era * inningsFactor);
     
     // Calculate wins and losses per game if data is available
     let winsPerGame = 0;

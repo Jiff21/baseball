@@ -141,6 +141,8 @@
   font-size: 1rem;
   transition: all 0.3s ease;
   background: white;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-control:focus {
