@@ -92,7 +92,7 @@ export interface FantasyExpectedStartScore {
     hits_per_9: number;
   };
   color_score?: number;
-  color_category?: 'excellent' | 'good' | 'average' | 'poor';
+  color_category?: 'good' | 'average' | 'bad';
 }
 
 export interface MatchupAnalysisResult {

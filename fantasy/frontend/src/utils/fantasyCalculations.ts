@@ -138,39 +138,39 @@ export class FantasyCalculations {
   }
 
   /**
-   * Add color coding based on percentiles for visualization
+   * Add color coding based on standard deviations for visualization
    */
   static addColorCoding(results: FantasyExpectedStartScore[]): FantasyExpectedStartScore[] {
     if (results.length === 0) return [];
 
     const points = results.map(r => r.expected_fantasy_points);
-    const minPoints = Math.min(...points);
-    const maxPoints = Math.max(...points);
+    
+    // Calculate mean and standard deviation
+    const mean = points.reduce((sum, p) => sum + p, 0) / points.length;
+    const variance = points.reduce((sum, p) => sum + Math.pow(p - mean, 2), 0) / points.length;
+    const standardDeviation = Math.sqrt(variance);
 
     return results.map(result => {
       const pointsValue = result.expected_fantasy_points;
       
       let colorScore: number;
-      let colorCategory: 'excellent' | 'good' | 'average' | 'poor';
+      let colorCategory: 'good' | 'average' | 'bad';
 
-      if (maxPoints === minPoints) {
-        // All teams have same expected points
-        colorScore = 0.5;
-        colorCategory = 'average';
+      // Calculate how many standard deviations from mean
+      const deviationsFromMean = (pointsValue - mean) / standardDeviation;
+      
+      if (deviationsFromMean >= 2.0) {
+        // Two standard deviations above average = Good (Green)
+        colorCategory = 'good';
+        colorScore = 1.0;
+      } else if (deviationsFromMean <= -2.0) {
+        // Two standard deviations below average = Bad (Red)
+        colorCategory = 'bad';
+        colorScore = 0.0;
       } else {
-        // Normalize to 0-1 scale
-        colorScore = (pointsValue - minPoints) / (maxPoints - minPoints);
-        
-        // Categorize
-        if (colorScore >= 0.7) {
-          colorCategory = 'excellent';
-        } else if (colorScore >= 0.5) {
-          colorCategory = 'good';
-        } else if (colorScore >= 0.3) {
-          colorCategory = 'average';
-        } else {
-          colorCategory = 'poor';
-        }
+        // Within two standard deviations = Average (No color)
+        colorCategory = 'average';
+        colorScore = 0.5;
       }
 
       return {

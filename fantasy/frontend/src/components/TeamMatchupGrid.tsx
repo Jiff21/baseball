@@ -81,10 +81,9 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
         </div>
         
         <div className="legend">
-          <span className="legend-item excellent">Excellent</span>
           <span className="legend-item good">Good</span>
           <span className="legend-item average">Average</span>
-          <span className="legend-item poor">Poor</span>
+          <span className="legend-item bad">Bad</span>
         </div>
       </div>
 
@@ -108,7 +107,6 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
                   {result.expected_fantasy_points.toFixed(2)} pts
                 </div>
                 <div className="points-breakdown">
-                  <span className="batting-points">Bat: {result.batting_points.toFixed(1)}</span>
                   <span className="pitching-points">Pit: {result.pitching_points.toFixed(1)}</span>
                 </div>
               </div>
@@ -170,10 +168,6 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
                       <div className="stat-detailed">
                         <span className="label">Total Fantasy Points:</span>
                         <span className="value">{details.expected_fantasy_points.toFixed(2)}</span>
-                      </div>
-                      <div className="stat-detailed">
-                        <span className="label">Batting Points:</span>
-                        <span className="value">{details.batting_points.toFixed(2)}</span>
                       </div>
                       <div className="stat-detailed">
                         <span className="label">Pitching Points:</span>

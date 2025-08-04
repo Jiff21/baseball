@@ -65,11 +65,10 @@ export class ColorUtils {
   /**
    * Get color category based on score
    */
-  static getColorCategory(score: number): 'excellent' | 'good' | 'average' | 'poor' {
-    if (score >= 0.7) return 'excellent';
-    if (score >= 0.5) return 'good';
-    if (score >= 0.3) return 'average';
-    return 'poor';
+  static getColorCategory(score: number): 'good' | 'average' | 'bad' {
+    if (score >= 1.0) return 'good';
+    if (score <= 0.0) return 'bad';
+    return 'average';
   }
 
   /**
@@ -77,14 +76,12 @@ export class ColorUtils {
    */
   static getCategoryClassName(category: string): string {
     switch (category) {
-      case 'excellent':
-        return 'matchup-excellent';
       case 'good':
         return 'matchup-good';
       case 'average':
         return 'matchup-average';
-      case 'poor':
-        return 'matchup-poor';
+      case 'bad':
+        return 'matchup-bad';
       default:
         return 'matchup-average';
     }
@@ -107,4 +104,3 @@ export class ColorUtils {
 }
 
 export default ColorUtils;
-
