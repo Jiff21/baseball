@@ -6,6 +6,9 @@ import { ScoringSettings, ExpectedGameResult } from '../types';
 export interface TeamStats {
   abbreviation: string;
   name: string;
+  // Optional plate appearances data for PA per inning calculation
+  total_plate_appearances?: number;
+  games_played?: number;
   vs_lefty: {
     era: number;
     whip: number;
@@ -37,15 +40,22 @@ export class FantasyCalculations {
     // Select appropriate stats based on handedness
     const stats = handedness.toLowerCase() === 'lefty' ? teamStats.vs_lefty : teamStats.vs_righty;
     
+    // Calculate PA per inning multiplier if data is available
+    let paPerInning = 1.0; // Default multiplier
+    if (teamStats.total_plate_appearances && teamStats.games_played) {
+      // Formula: (Total plate appearances / games played) / 9
+      paPerInning = (teamStats.total_plate_appearances / teamStats.games_played) / 9;
+    }
+    
     // Calculate expected stats per inning
     const inningsFactor = inning / 9.0;
     
-    // Basic expected stats (simplified calculation)
-    const expectedHits = (stats.hits_per_9 * inningsFactor) / 9; // Per batter
-    const expectedWalks = (stats.bb_per_9 * inningsFactor) / 9;
-    const expectedStrikeouts = (stats.k_per_9 * inningsFactor) / 9;
-    const expectedHomeRuns = (stats.hr_per_9 * inningsFactor) / 9;
-    const expectedRuns = (stats.era * inningsFactor) / 9;
+    // Basic expected stats (simplified calculation) with PA per inning multiplier
+    const expectedHits = (stats.hits_per_9 * inningsFactor * paPerInning) / 9; // Per batter
+    const expectedWalks = (stats.bb_per_9 * inningsFactor * paPerInning) / 9;
+    const expectedStrikeouts = (stats.k_per_9 * inningsFactor * paPerInning) / 9;
+    const expectedHomeRuns = (stats.hr_per_9 * inningsFactor * paPerInning) / 9;
+    const expectedRuns = (stats.era * inningsFactor * paPerInning) / 9;
     
     // Break down hits into singles, doubles, triples
     // Typical distribution: ~75% singles, ~20% doubles, ~3% triples, ~2% HR
@@ -82,7 +92,8 @@ export class FantasyCalculations {
       (expectedStrikeouts * 9 * inningsFactor) * scoringSettings.pitching.K // Scale strikeouts
     );
     
-    const totalFantasyPoints = totalBattingPoints + pitchingPoints;
+    // Only use pitching points for fantasy calculation (batting removed per request)
+    const totalFantasyPoints = pitchingPoints;
     
     return {
       team_abbreviation: teamStats.abbreviation,
@@ -91,6 +102,7 @@ export class FantasyCalculations {
       expected_fantasy_points: Math.round(totalFantasyPoints * 100) / 100,
       batting_points: Math.round(totalBattingPoints * 100) / 100,
       pitching_points: Math.round(pitchingPoints * 100) / 100,
+      pa_per_inning: Math.round(paPerInning * 1000) / 1000, // PA per I
       expected_runs: Math.round(expectedRuns * 1000) / 1000,
       expected_hits: Math.round(expectedHits * 1000) / 1000,
       expected_singles: Math.round(expectedSingles * 1000) / 1000,

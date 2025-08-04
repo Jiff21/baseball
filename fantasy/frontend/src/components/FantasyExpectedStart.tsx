@@ -411,21 +411,29 @@ const FantasyExpectedStart: React.FC = () => {
       const response = await fetch('http://localhost:8000/api/team-stats');
       const debugData = await response.json();
 
-      if (!debugData || debugData.length === 0) {
+      if (!debugData) {
+        setError('No debug data available');
+        return;
+      }
+
+      // Handle both array and object responses
+      const teamsArray = Array.isArray(debugData) ? debugData : Object.values(debugData);
+      
+      if (teamsArray.length === 0) {
         setError('No debug data available');
         return;
       }
 
       // Get all unique keys from all teams to create headers
       const allKeys = new Set<string>();
-      debugData.forEach((team: any) => {
+      teamsArray.forEach((team: any) => {
         Object.keys(team).forEach(key => allKeys.add(key));
       });
       const headers = Array.from(allKeys).sort();
 
       const csvData = [
         headers,
-        ...debugData.map((team: any) => 
+        ...teamsArray.map((team: any) => 
           headers.map(header => team[header] || '')
         )
       ];

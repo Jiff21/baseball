@@ -71,6 +71,7 @@ export interface ExpectedGameResult {
   expected_fantasy_points: number;
   batting_points: number;
   pitching_points: number;
+  pa_per_inning: number; // PA per I - plate appearances per inning
   expected_runs: number;
   expected_hits: number;
   expected_singles: number;
