@@ -22,7 +22,7 @@ interface ScoringSettings {
   hitsAllowed: number;
   hitBatters: number;
   homeRunsAllowed: number;
-  innings: number;
+  IP: number;
   strikeouts: number;
   wins: number;
   losses: number;
@@ -56,7 +56,7 @@ const FantasyExpectedStart: React.FC = () => {
     hitsAllowed: -1.0,
     hitBatters: -1.0,
     homeRunsAllowed: -1.0,
-    innings: 3.0,
+    IP: 3.0,
     strikeouts: 0.5,
     wins: 2.0,
     losses: -1.0,
@@ -88,7 +88,7 @@ const FantasyExpectedStart: React.FC = () => {
           hitsAllowed: -1.0,
           hitBatters: -1.0,
           homeRunsAllowed: -1.0,
-          innings: 3.0,
+          IP: 3.0,
           strikeouts: 0.5,
           wins: 2.0,
           losses: -1.0,
@@ -117,7 +117,7 @@ const FantasyExpectedStart: React.FC = () => {
           hitsAllowed: -1.0,
           hitBatters: 0.0,
           homeRunsAllowed: -1.0,
-          innings: 3.0,
+          IP: 3.0,
           strikeouts: 1.0,
           wins: 2.0,
           losses: -1.0,
@@ -146,7 +146,7 @@ const FantasyExpectedStart: React.FC = () => {
           hitsAllowed: -1.0,
           hitBatters: 0.0,
           homeRunsAllowed: -1.0,
-          innings: 3.0,
+          IP: 3.0,
           strikeouts: 1.0,
           wins: 5.0,
           losses: -3.0,
@@ -175,7 +175,7 @@ const FantasyExpectedStart: React.FC = () => {
           hitsAllowed: -1.0,
           hitBatters: 0.0,
           homeRunsAllowed: -1.0,
-          innings: 3.0,
+          IP: 3.0,
           strikeouts: 1.0,
           wins: 5.0,
           losses: -3.0,
@@ -295,11 +295,11 @@ const FantasyExpectedStart: React.FC = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '15px' }}>
             {[
               { key: 'walksIssued', label: 'Walks Issued' },
-              { key: 'intentionalBaseOnBalls', label: 'Intentional Base on Balls' },
+              { key: 'intentionalBaseOnBalls', label: 'IBB' },
               { key: 'earnedRuns', label: 'Earned Runs' },
               { key: 'hitsAllowed', label: 'Hits allowed' },
               { key: 'hitBatters', label: 'Hit Batters' },
-              { key: 'homeRunsAllowed', label: 'Home Runs Allowed' },
+              { key: 'homeRunsAllowed', label: 'HRA' },
               { key: 'innings', label: 'Innings' },
               { key: 'strikeouts', label: 'Strikeouts' },
               { key: 'wins', label: 'Wins' },

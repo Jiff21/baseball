@@ -27,11 +27,11 @@ def league_setup():
     
     pitching_settings = {
         'Walks Issued': ScoringSettings.Pitching.BB,
-        'Intentional Base on Balls': ScoringSettings.Pitching.BBI,
+        'IBB': ScoringSettings.Pitching.BBI,
         'Earned Runs': ScoringSettings.Pitching.ER,
         'Hits allowed': ScoringSettings.Pitching.HA,
         'Hit Batters': ScoringSettings.Pitching.HB,
-        'Home Runs Allowed': ScoringSettings.Pitching.HRA,
+        'HRA': ScoringSettings.Pitching.HRA,
         'Innings': ScoringSettings.Pitching.INN,
         'Strikeouts': ScoringSettings.Pitching.K,
         'Wins': ScoringSettings.Pitching.W,

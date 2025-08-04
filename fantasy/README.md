@@ -155,7 +155,7 @@ The application tracks the following pitching statistics for each MLB team, spli
 - **WHIP**: Walks + Hits per Inning Pitched
 - **K/9**: Strikeouts per 9 innings
 - **BB/9**: Walks per 9 innings
-- **HR/9**: Home runs allowed per 9 innings
+- **HR/9**: HRA per 9 innings
 - **H/9**: Hits allowed per 9 innings
 
 ## Testing

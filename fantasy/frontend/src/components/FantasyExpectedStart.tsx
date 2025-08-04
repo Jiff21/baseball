@@ -79,11 +79,11 @@ const FantasyExpectedStart: React.FC = () => {
           },
           pitching: {
             BB: -1.0,   // Walks Issued
-            IBB: -1.0,  // Intentional Base on Balls
+            IBB: -1.0,  // IBB
             ER: -1.0,   // Earned Runs
             HA: -1.0,   // Hits allowed
             HB: -1.0,   // Hit Batters
-            HRA: -1.0,  // Home Runs Allowed
+            HRA: -1.0,  // HRA
             INN: 3.0,   // Innings
             K: 0.5,     // Strikeouts
             W: 2.0,     // Wins
@@ -576,7 +576,7 @@ const FantasyExpectedStart: React.FC = () => {
 
                 {/* Inning Input */}
                 <div className="form-group">
-                  <label htmlFor="inning">Innings:</label>
+                  <label htmlFor="inning">Expect Innings</label>
                   <input
                     id="inning"
                     type="number"

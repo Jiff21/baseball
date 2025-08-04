@@ -119,11 +119,11 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
           <h4 className="section-title">Pitching</h4>
           <div className="stats-inline-grid">
             {renderStatInput('pitching', 'BB', 'Walks Issued', scoringSettings.pitching.BB)}
-            {renderStatInput('pitching', 'IBB', 'Intentional Base on Balls', scoringSettings.pitching.IBB)}
+            {renderStatInput('pitching', 'IBB', 'IBB', scoringSettings.pitching.IBB)}
             {renderStatInput('pitching', 'ER', 'Earned Runs', scoringSettings.pitching.ER)}
             {renderStatInput('pitching', 'HA', 'Hits Allowed', scoringSettings.pitching.HA)}
             {renderStatInput('pitching', 'HB', 'Hit Batters', scoringSettings.pitching.HB)}
-            {renderStatInput('pitching', 'HRA', 'Home Runs Allowed', scoringSettings.pitching.HRA)}
+            {renderStatInput('pitching', 'HRA', 'HRA', scoringSettings.pitching.HRA)}
             {renderStatInput('pitching', 'INN', 'Innings', scoringSettings.pitching.INN)}
             {renderStatInput('pitching', 'K', 'Strikeouts', scoringSettings.pitching.K)}
             {renderStatInput('pitching', 'W', 'Wins', scoringSettings.pitching.W)}

@@ -28,11 +28,11 @@ class ScoringSettings:
 
     class Pitching:
         BB = -1.0    # Walks Issued
-        IBB = -1.0   # Intentional Base on Balls
+        IBB = -1.0   # IBB
         ER = -1.0    # Earned Runs
         HA = -1.0    # Hits allowed
         HB = -1.0    # Hit Batters
-        HRA = -3.0   # Home Runs Allowed
+        HRA = -3.0   # HRA
         INN = 3.0    # Innings (3 outs)
         K = 1.0      # Strikeouts
         W = 5.0      # Wins

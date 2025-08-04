@@ -67,11 +67,11 @@ Feature: Fantasy Baseball Application
     Then I should see the following pitching fields:
       | Field Name                  |
       | Walks Issued                |
-      | Intentional Base on Balls   |
+      | IBB   |
       | Earned Runs                 |
       | Hits Allowed                |
       | Hit Batters                 |
-      | Home Runs Allowed           |
+      | HRA           |
       | Innings (3 outs)            |
       | Strikeouts                  |
       | Wins                        |

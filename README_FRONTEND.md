@@ -23,9 +23,9 @@ The `FantasyExpectedStart.tsx` component includes:
 - Stolen Base, Caught Stealing, Strike Outs
 
 #### Pitching Statistics
-- Walks Issued, Intentional Base on Balls
+- Walks Issued, IBB
 - Earned Runs, Hits allowed, Hit Batters
-- Home Runs Allowed, Innings, Strikeouts
+- HRA, Innings, Strikeouts
 - Wins, Losses, Saves, Blown Saves
 - Quality Starts, Total Bases
 
@@ -36,9 +36,9 @@ The `FantasyExpectedStart.tsx` component includes:
 - Walks=1.0, Intentional Walks=1.0, Hit By Pitch=1.0
 - Runs=1.0, Runs Batted In=1.0, Stolen Base=1.0
 - Caught Stealing=-1.0, Strike Outs=0.5
-- Walks Issued=-1.0, Intentional Base on Balls=-1.0
+- Walks Issued=-1.0, IBB=-1.0
 - Earned Runs=-1.0, Hits allowed=-1.0, Hit Batters=-1.0
-- Home Runs Allowed=-1.0, Innings=3.0, Strikeouts=0.5
+- HRA=-1.0, Innings=3.0, Strikeouts=0.5
 - Wins=2.0, Losses=-1.0, Saves=2.0, Blown Saves=-1.0
 - Quality Starts=2.0, Total Bases=0.0
 
@@ -47,9 +47,9 @@ The `FantasyExpectedStart.tsx` component includes:
 - Walks=1.0, Intentional Walks=0.0, Hit By Pitch=0.0
 - Runs=1.0, Runs Batted In=1.0, Stolen Base=1.0
 - Caught Stealing=0.0, Strike Outs=-1.0
-- Walks Issued=-1.0, Intentional Base on Balls=-1.0
+- Walks Issued=-1.0, IBB=-1.0
 - Earned Runs=-1.0, Hits allowed=-1.0, Hit Batters=0.0
-- Home Runs Allowed=-1.0, Innings=3.0, Strikeouts=1.0
+- HRA=-1.0, Innings=3.0, Strikeouts=1.0
 - Wins=2.0, Losses=-1.0, Saves=2.0, Blown Saves=0.0
 - Quality Starts=0.0, Total Bases=0.0
 
@@ -58,9 +58,9 @@ The `FantasyExpectedStart.tsx` component includes:
 - Walks=1.0, Intentional Walks=1.0, Hit By Pitch=1.0
 - Runs=1.0, Runs Batted In=1.0, Stolen Base=2.0
 - Caught Stealing=-1.0, Strike Outs=-1.0
-- Walks Issued=-1.0, Intentional Base on Balls=-1.0
+- Walks Issued=-1.0, IBB=-1.0
 - Earned Runs=-1.0, Hits allowed=-1.0, Hit Batters=0.0
-- Home Runs Allowed=-1.0, Innings=3.0, Strikeouts=1.0
+- HRA=-1.0, Innings=3.0, Strikeouts=1.0
 - Wins=5.0, Losses=-3.0, Saves=2.0, Blown Saves=-2.0
 - Quality Starts=0.0, Total Bases=0.0
 
@@ -69,9 +69,9 @@ The `FantasyExpectedStart.tsx` component includes:
 - Walks=1.0, Intentional Walks=1.0, Hit By Pitch=1.0
 - Runs=1.0, Runs Batted In=1.0, Stolen Base=2.0
 - Caught Stealing=-1.0, Strike Outs=-1.0
-- Walks Issued=-1.0, Intentional Base on Balls=-1.0
+- Walks Issued=-1.0, IBB=-1.0
 - Earned Runs=-1.0, Hits allowed=-1.0, Hit Batters=0.0
-- Home Runs Allowed=-1.0, Innings=3.0, Strikeouts=1.0
+- HRA=-1.0, Innings=3.0, Strikeouts=1.0
 - Wins=5.0, Losses=-3.0, Saves=2.0, Blown Saves=-2.0
 - Quality Starts=0.0, Total Bases=0.0
 

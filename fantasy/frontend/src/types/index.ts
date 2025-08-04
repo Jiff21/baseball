@@ -21,11 +21,11 @@ export interface ScoringSettings {
   };
   pitching: {
     BB: number;     // Walks Issued
-    IBB: number;    // Intentional Base on Balls
+    IBB: number;    // IBB
     ER: number;     // Earned Runs
     HA: number;     // Hits allowed
     HB: number;     // Hit Batters
-    HRA: number;    // Home Runs Allowed
+    HRA: number;    // HRA
     INN: number;    // Innings (3 outs)
     K: number;      // Strikeouts
     W: number;      // Wins
