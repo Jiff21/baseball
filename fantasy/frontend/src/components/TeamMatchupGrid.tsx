@@ -2,11 +2,11 @@
  * Team Matchup Grid component for displaying color-coded team analysis
  */
 import React, { useState } from 'react';
-import { ExpectedGameResult } from '../types';
+import { FantasyExpectedStartScore } from '../types';
 import { ColorUtils } from '../utils/colorUtils';
 
 interface TeamMatchupGridProps {
-  results: ExpectedGameResult[];
+  results: FantasyExpectedStartScore[];
 }
 
 const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {

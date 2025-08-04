@@ -64,7 +64,7 @@ export interface Team {
   updated_at?: string;
 }
 
-export interface ExpectedGameResult {
+export interface FantasyExpectedStartScore {
   team_abbreviation: string;
   handedness: string;
   inning: number;
@@ -96,7 +96,7 @@ export interface ExpectedGameResult {
 }
 
 export interface MatchupAnalysisResult {
-  results: ExpectedGameResult[];
+  results: FantasyExpectedStartScore[];
   analysis: {
     min_points: number;
     max_points: number;

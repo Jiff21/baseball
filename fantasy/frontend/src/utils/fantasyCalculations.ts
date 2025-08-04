@@ -1,7 +1,7 @@
 /**
  * Frontend fantasy baseball calculations utility
  */
-import { ScoringSettings, ExpectedGameResult } from '../types';
+import { ScoringSettings, FantasyExpectedStartScore } from '../types';
 
 export interface TeamStats {
   abbreviation: string;
@@ -50,7 +50,7 @@ export class FantasyCalculations {
     handedness: 'Lefty' | 'Righty',
     inning: number,
     scoringSettings: ScoringSettings
-  ): ExpectedGameResult {
+  ): FantasyExpectedStartScore {
     // Select appropriate stats based on handedness
     const stats = handedness.toLowerCase() === 'lefty' ? teamStats.vs_lefty : teamStats.vs_righty;
     
@@ -95,26 +95,14 @@ export class FantasyCalculations {
       }
     }
     
-    // Break down hits into singles, doubles, triples
+    // Break down hits into singles, doubles, triples for display purposes only
     // Typical distribution: ~75% singles, ~20% doubles, ~3% triples, ~2% HR
     const expectedSingles = expectedHits * 0.75;
     const expectedDoubles = expectedHits * 0.20;
     const expectedTriples = expectedHits * 0.03;
     
-    // Calculate batting fantasy points
-    const battingPoints = (
-      expectedSingles * scoringSettings.batting.S +
-      expectedDoubles * scoringSettings.batting.D +
-      expectedTriples * scoringSettings.batting.T +
-      expectedHomeRuns * scoringSettings.batting.HR +
-      expectedWalks * scoringSettings.batting.BB +
-      expectedRuns * scoringSettings.batting.R +
-      expectedStrikeouts * scoringSettings.batting.SO
-    );
-    
-    // For simplicity, assume RBI roughly equals runs
+    // For display purposes, assume RBI roughly equals runs
     const expectedRbi = expectedRuns;
-    const totalBattingPoints = battingPoints + (expectedRbi * scoringSettings.batting.RBI);
     
     // Calculate pitching fantasy points
     // The innings value should be multiplied by the pitching-INN scoring setting
@@ -140,7 +128,7 @@ export class FantasyCalculations {
       handedness,
       inning,
       expected_fantasy_points: Math.round(totalFantasyPoints * 100) / 100,
-      batting_points: Math.round(totalBattingPoints * 100) / 100,
+      batting_points: 0, // Batting calculations removed per request
       pitching_points: Math.round(pitchingPoints * 100) / 100,
       pa_per_inning: Math.round(paPerInning * 1000) / 1000, // PA per I
       expected_runs: Math.round(expectedRuns * 1000) / 1000,
@@ -166,7 +154,7 @@ export class FantasyCalculations {
     handedness: 'Lefty' | 'Righty',
     inning: number,
     scoringSettings: ScoringSettings
-  ): ExpectedGameResult[] {
+  ): FantasyExpectedStartScore[] {
     return allTeamStats.map(teamStats => 
       this.calculateTeamExpectedPoints(teamStats, handedness, inning, scoringSettings)
     );
@@ -175,7 +163,7 @@ export class FantasyCalculations {
   /**
    * Add color coding based on percentiles for visualization
    */
-  static addColorCoding(results: ExpectedGameResult[]): ExpectedGameResult[] {
+  static addColorCoding(results: FantasyExpectedStartScore[]): FantasyExpectedStartScore[] {
     if (results.length === 0) return [];
 
     const points = results.map(r => r.expected_fantasy_points);

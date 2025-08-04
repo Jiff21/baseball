@@ -11,7 +11,7 @@ import {
   LeagueType,
   Handedness,
   MatchupAnalysisResult,
-  ExpectedGameResult,
+  FantasyExpectedStartScore,
   CustomLeague
 } from '../types';
 import ScoringSettingsForm from './ScoringSettingsForm';
