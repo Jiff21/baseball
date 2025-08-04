@@ -41,8 +41,27 @@ export class FantasyCalculations {
     expectedInnings: number,
     scoringSettings: ScoringSettings
   ): FantasyExpectedStartScore {
+    // Development logging
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    
+    if (isDevelopment) {
+      console.log(`\n🏟️ FRONTEND CALCULATION: ${teamStats.name} (${teamStats.abbreviation})`);
+      console.log(`📊 Handedness: ${handedness} | Expected Innings: ${expectedInnings}`);
+      console.log('='.repeat(60));
+    }
+    
     // Select appropriate stats based on handedness
     const stats = handedness.toLowerCase() === 'lefty' ? teamStats.vs_lefty : teamStats.vs_righty;
+    
+    if (isDevelopment) {
+      console.log(`📈 RAW TEAM STATS vs ${handedness.toUpperCase()}:`);
+      console.log(`   ERA: ${stats.era} | Runs allowed per 9 innings`);
+      console.log(`   WHIP: ${stats.whip} | Walks + Hits per inning`);
+      console.log(`   K/9: ${stats.k_per_9} | Strikeouts per 9 innings`);
+      console.log(`   BB/9: ${stats.bb_per_9} | Walks per 9 innings`);
+      console.log(`   HR/9: ${stats.hr_per_9} | Home runs per 9 innings`);
+      console.log(`   Hits/9: ${stats.hits_per_9} | Hits allowed per 9 innings`);
+    }
     
     // Calculate PA per inning multiplier if data is available
     let paPerInning = 1.0; // Default multiplier
@@ -54,12 +73,26 @@ export class FantasyCalculations {
     // Calculate expected stats per inning using expectedInnings (from form)
     const inningsFactor = expectedInnings / 9.0;
     
+    if (isDevelopment) {
+      console.log(`\n🧮 PER_9 CALCULATIONS:`);
+      console.log(`   Innings Factor: ${expectedInnings}/9 = ${inningsFactor.toFixed(4)}`);
+      console.log(`   PA per Inning: ${paPerInning.toFixed(2)} (${teamStats.total_plate_appearances ? 'calculated' : 'default'})`);
+    }
+    
     // Basic expected stats (simplified calculation) - all multiplied by expectedInnings
     const expectedHits = (stats.hits_per_9 * inningsFactor);
     const expectedWalks = (stats.bb_per_9 * inningsFactor);
     const expectedStrikeouts = (stats.k_per_9 * inningsFactor);
     const expectedHomeRuns = (stats.hr_per_9 * inningsFactor);
     const expectedRuns = (stats.era * inningsFactor);
+    
+    if (isDevelopment) {
+      console.log(`   Expected Hits: (${stats.hits_per_9} * ${inningsFactor.toFixed(4)}) = ${expectedHits.toFixed(6)}`);
+      console.log(`   Expected Walks: (${stats.bb_per_9} * ${inningsFactor.toFixed(4)}) = ${expectedWalks.toFixed(6)}`);
+      console.log(`   Expected Strikeouts: (${stats.k_per_9} * ${inningsFactor.toFixed(4)}) = ${expectedStrikeouts.toFixed(6)}`);
+      console.log(`   Expected Home Runs: (${stats.hr_per_9} * ${inningsFactor.toFixed(4)}) = ${expectedHomeRuns.toFixed(6)}`);
+      console.log(`   Expected Runs: (${stats.era} * ${inningsFactor.toFixed(4)}) = ${expectedRuns.toFixed(6)}`);
+    }
     
     // Calculate wins and losses per game if data is available
     let winsPerGame = 0;
@@ -77,6 +110,14 @@ export class FantasyCalculations {
     const expectedSingles = expectedHits * 0.75;
     const expectedDoubles = expectedHits * 0.20;
     const expectedTriples = expectedHits * 0.03;
+    
+    if (isDevelopment) {
+      console.log(`\n⚾ HIT BREAKDOWN (Distribution):`);
+      console.log(`   Expected Singles: ${expectedHits.toFixed(6)} * 0.75 = ${expectedSingles.toFixed(6)}`);
+      console.log(`   Expected Doubles: ${expectedHits.toFixed(6)} * 0.20 = ${expectedDoubles.toFixed(6)}`);
+      console.log(`   Expected Triples: ${expectedHits.toFixed(6)} * 0.03 = ${expectedTriples.toFixed(6)}`);
+      console.log(`   Expected Home Runs: ${expectedHomeRuns.toFixed(6)} (from HR/9 stat)`);
+    }
     
     // For display purposes, assume RBI roughly equals runs
     const expectedRbi = expectedRuns;
@@ -96,6 +137,20 @@ export class FantasyCalculations {
       (winsPerGame * expectedInnings / 9) * scoringSettings.pitching.W + // Wins scaled for expected innings
       (lossesPerGame * expectedInnings / 9) * scoringSettings.pitching.L // Losses scaled for expected innings
     );
+    
+    if (isDevelopment) {
+      console.log(`\n💰 FANTASY POINTS CALCULATION:`);
+      console.log(`   Pitching Scoring Settings:`, scoringSettings.pitching);
+      console.log(`   Innings Points: ${expectedInnings} * ${scoringSettings.pitching.INN} = ${pitchingInningsPoints.toFixed(6)}`);
+      console.log(`   Walks: ${expectedWalks.toFixed(6)} * ${scoringSettings.pitching.BB} = ${(expectedWalks * scoringSettings.pitching.BB).toFixed(6)}`);
+      console.log(`   Earned Runs: ${expectedRuns.toFixed(6)} * ${scoringSettings.pitching.ER} = ${(expectedRuns * scoringSettings.pitching.ER).toFixed(6)}`);
+      console.log(`   Hits Allowed: ${expectedHits.toFixed(6)} * ${scoringSettings.pitching.HA} = ${(expectedHits * scoringSettings.pitching.HA).toFixed(6)}`);
+      console.log(`   HR Allowed: ${expectedHomeRuns.toFixed(6)} * ${scoringSettings.pitching.HRA} = ${(expectedHomeRuns * scoringSettings.pitching.HRA).toFixed(6)}`);
+      console.log(`   Strikeouts: ${expectedStrikeouts.toFixed(6)} * ${scoringSettings.pitching.K} = ${(expectedStrikeouts * scoringSettings.pitching.K).toFixed(6)}`);
+      console.log(`   Wins: ${(winsPerGame * expectedInnings / 9).toFixed(6)} * ${scoringSettings.pitching.W} = ${((winsPerGame * expectedInnings / 9) * scoringSettings.pitching.W).toFixed(6)}`);
+      console.log(`   Losses: ${(lossesPerGame * expectedInnings / 9).toFixed(6)} * ${scoringSettings.pitching.L} = ${((lossesPerGame * expectedInnings / 9) * scoringSettings.pitching.L).toFixed(6)}`);
+      console.log(`   TOTAL PITCHING POINTS: ${pitchingPoints.toFixed(6)}`);
+    }
     
     // Only use pitching points for fantasy calculation (batting removed per request)
     const totalFantasyPoints = pitchingPoints;

@@ -315,6 +315,42 @@ def get_all_team_stats():
         return jsonify({'error': 'Internal server error'}), 500
 
 
+@api.route('/refresh-data', methods=['POST'])
+def refresh_data():
+    """
+    Refresh team data by running the scraper.
+    This endpoint allows manual refresh of the database with latest team statistics.
+    """
+    try:
+        logger.info("🔄 Manual data refresh requested")
+        
+        # Import here to avoid circular imports
+        from scraper import MLBScraper
+        
+        # Run the scraper
+        scraper = MLBScraper()
+        scraper.run_full_scrape()
+        
+        # Get updated team count
+        from models import Team
+        team_count = Team.query.count()
+        
+        logger.info(f"✅ Data refresh completed successfully - {team_count} teams updated")
+        
+        return jsonify({
+            'message': 'Data refresh completed successfully',
+            'teams_updated': team_count,
+            'status': 'success'
+        })
+        
+    except Exception as e:
+        logger.error(f"❌ Error during data refresh: {e}")
+        return jsonify({
+            'error': 'Failed to refresh data',
+            'details': str(e),
+            'status': 'error'
+        }), 500
+
 
 # Error handlers
 @api.errorhandler(404)

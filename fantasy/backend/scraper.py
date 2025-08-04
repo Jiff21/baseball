@@ -31,14 +31,37 @@ class MLBScraper:
         Returns:
             List of team statistics dictionaries
         """
-        logger.info("Starting team statistics scraping...")
+        logger.info("🏟️ Starting team statistics scraping...")
+        logger.info(f"📡 Data source base URL: {self.base_url}")
+        
+        # Log the full URLs we would be scraping from (for future real implementation)
+        self._log_data_source_urls()
         
         # For now, we'll use sample data since MLB.com scraping requires
         # more complex handling of their dynamic content
         sample_teams = self._get_sample_team_data()
         
-        logger.info(f"Scraped statistics for {len(sample_teams)} teams")
+        logger.info(f"✅ Scraped statistics for {len(sample_teams)} teams")
         return sample_teams
+    
+    def _log_data_source_urls(self) -> None:
+        """Log the full URLs that would be used for real data scraping."""
+        logger.info("\n🔗 DATA SOURCE URLs (for future real implementation):")
+        
+        # These would be the actual MLB.com URLs for different splits
+        urls = {
+            'team_stats_vs_lefty': f"{self.base_url}/stats/team/pitching?split=vl&season=2024",
+            'team_stats_vs_righty': f"{self.base_url}/stats/team/pitching?split=vr&season=2024", 
+            'team_overall_pitching': f"{self.base_url}/stats/team/pitching?season=2024",
+            'team_wins_losses': f"{self.base_url}/standings/2024",
+            'team_advanced_stats': f"{self.base_url}/stats/team/pitching/advanced?season=2024"
+        }
+        
+        for stat_type, url in urls.items():
+            logger.info(f"   📊 {stat_type}: {url}")
+        
+        logger.info("   ⚠️  NOTE: Currently using sample data - real scraping would use these URLs")
+        logger.info("")
     
     def _get_sample_team_data(self) -> List[Dict]:
         """
@@ -88,7 +111,12 @@ class MLBScraper:
         import random
         random.seed(42)  # For consistent sample data
         
+        logger.info("📊 GENERATING TEAM DATA WITH DETAILED LOGGING:")
+        logger.info("=" * 80)
+        
         for abbr, name in team_names.items():
+            logger.info(f"\n🏟️ Processing {name} ({abbr})")
+            
             # Generate realistic pitching stats
             base_era = random.uniform(3.5, 5.5)
             base_whip = random.uniform(1.15, 1.45)
@@ -97,28 +125,71 @@ class MLBScraper:
             base_hr_per_9 = random.uniform(0.8, 1.5)
             base_hits_per_9 = random.uniform(7.5, 9.5)
             
+            # Generate sample wins/losses (not in current model but logged for reference)
+            vs_lefty_wins = random.randint(8, 25)
+            vs_lefty_losses = random.randint(5, 20)
+            vs_righty_wins = random.randint(15, 40)
+            vs_righty_losses = random.randint(10, 35)
+            
             # Lefty vs righty variations (lefties typically perform slightly better vs righties)
             lefty_modifier = random.uniform(0.95, 1.05)
             righty_modifier = random.uniform(0.95, 1.05)
             
+            # Calculate final stats
+            vs_lefty_era = round(base_era * lefty_modifier, 2)
+            vs_lefty_whip = round(base_whip * lefty_modifier, 3)
+            vs_lefty_k_per_9 = round(base_k_per_9 * lefty_modifier, 1)
+            vs_lefty_bb_per_9 = round(base_bb_per_9 * lefty_modifier, 1)
+            vs_lefty_hr_per_9 = round(base_hr_per_9 * lefty_modifier, 2)
+            vs_lefty_hits_per_9 = round(base_hits_per_9 * lefty_modifier, 1)
+            
+            vs_righty_era = round(base_era * righty_modifier, 2)
+            vs_righty_whip = round(base_whip * righty_modifier, 3)
+            vs_righty_k_per_9 = round(base_k_per_9 * righty_modifier, 1)
+            vs_righty_bb_per_9 = round(base_bb_per_9 * righty_modifier, 1)
+            vs_righty_hr_per_9 = round(base_hr_per_9 * righty_modifier, 2)
+            vs_righty_hits_per_9 = round(base_hits_per_9 * righty_modifier, 1)
+            
+            # Log detailed values for this team
+            logger.info(f"   📈 VS LEFTIES:")
+            logger.info(f"      ERA: {vs_lefty_era} | Runs allowed per 9 innings")
+            logger.info(f"      WHIP: {vs_lefty_whip} | Walks + Hits per inning")
+            logger.info(f"      K/9: {vs_lefty_k_per_9} | Strikeouts per 9 innings")
+            logger.info(f"      BB/9: {vs_lefty_bb_per_9} | Walks per 9 innings")
+            logger.info(f"      HR/9: {vs_lefty_hr_per_9} | Home runs per 9 innings")
+            logger.info(f"      Hits/9: {vs_lefty_hits_per_9} | Hits allowed per 9 innings")
+            logger.info(f"      Wins: {vs_lefty_wins} | Losses: {vs_lefty_losses} (not in DB model)")
+            
+            logger.info(f"   📉 VS RIGHTIES:")
+            logger.info(f"      ERA: {vs_righty_era} | Runs allowed per 9 innings")
+            logger.info(f"      WHIP: {vs_righty_whip} | Walks + Hits per inning")
+            logger.info(f"      K/9: {vs_righty_k_per_9} | Strikeouts per 9 innings")
+            logger.info(f"      BB/9: {vs_righty_bb_per_9} | Walks per 9 innings")
+            logger.info(f"      HR/9: {vs_righty_hr_per_9} | Home runs per 9 innings")
+            logger.info(f"      Hits/9: {vs_righty_hits_per_9} | Hits allowed per 9 innings")
+            logger.info(f"      Wins: {vs_righty_wins} | Losses: {vs_righty_losses} (not in DB model)")
+            
             team_data = {
                 'abbreviation': abbr,
                 'name': name,
-                'vs_lefty_era': round(base_era * lefty_modifier, 2),
-                'vs_lefty_whip': round(base_whip * lefty_modifier, 3),
-                'vs_lefty_k_per_9': round(base_k_per_9 * lefty_modifier, 1),
-                'vs_lefty_bb_per_9': round(base_bb_per_9 * lefty_modifier, 1),
-                'vs_lefty_hr_per_9': round(base_hr_per_9 * lefty_modifier, 2),
-                'vs_lefty_hits_per_9': round(base_hits_per_9 * lefty_modifier, 1),
-                'vs_righty_era': round(base_era * righty_modifier, 2),
-                'vs_righty_whip': round(base_whip * righty_modifier, 3),
-                'vs_righty_k_per_9': round(base_k_per_9 * righty_modifier, 1),
-                'vs_righty_bb_per_9': round(base_bb_per_9 * righty_modifier, 1),
-                'vs_righty_hr_per_9': round(base_hr_per_9 * righty_modifier, 2),
-                'vs_righty_hits_per_9': round(base_hits_per_9 * righty_modifier, 1),
+                'vs_lefty_era': vs_lefty_era,
+                'vs_lefty_whip': vs_lefty_whip,
+                'vs_lefty_k_per_9': vs_lefty_k_per_9,
+                'vs_lefty_bb_per_9': vs_lefty_bb_per_9,
+                'vs_lefty_hr_per_9': vs_lefty_hr_per_9,
+                'vs_lefty_hits_per_9': vs_lefty_hits_per_9,
+                'vs_righty_era': vs_righty_era,
+                'vs_righty_whip': vs_righty_whip,
+                'vs_righty_k_per_9': vs_righty_k_per_9,
+                'vs_righty_bb_per_9': vs_righty_bb_per_9,
+                'vs_righty_hr_per_9': vs_righty_hr_per_9,
+                'vs_righty_hits_per_9': vs_righty_hits_per_9,
             }
             
             teams_data.append(team_data)
+        
+        logger.info(f"\n✅ Generated data for all {len(teams_data)} teams")
+        logger.info("=" * 80)
         
         return teams_data
     
@@ -178,4 +249,3 @@ def run_scraper():
 
 if __name__ == '__main__':
     run_scraper()
-
