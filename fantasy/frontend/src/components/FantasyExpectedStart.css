@@ -128,9 +128,7 @@
     display: block;
   }
 
-  .drawer-overlay {
-    display: block;
-  }
+  /* Drawer overlay is conditionally rendered in JSX, no need for display rule here */
 
   .sidebar {
     position: fixed;
@@ -857,18 +855,9 @@
   color: #333;
 }
 
-/* Responsive Design */
+/* Responsive Design - Additional rules for 1024px and below */
 @media (max-width: 1024px) {
-  .main-layout {
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .sidebar {
-    width: 100%;
-    position: static;
-    max-height: none;
-  }
+  /* Note: Main sidebar mobile drawer rules are defined earlier in the file */
   
   .sidebar-content {
     gap: 20px;
