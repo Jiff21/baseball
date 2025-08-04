@@ -417,25 +417,54 @@ const FantasyExpectedStart: React.FC = () => {
       }
 
       // Handle both array and object responses
-      const teamsArray = Array.isArray(debugData) ? debugData : Object.values(debugData);
+      let teamsArray = Array.isArray(debugData) ? debugData : Object.values(debugData);
+      
+      // If debugData has a 'teams' property, use that
+      if (debugData.teams && Array.isArray(debugData.teams)) {
+        teamsArray = debugData.teams;
+      }
       
       if (teamsArray.length === 0) {
         setError('No debug data available');
         return;
       }
 
-      // Get all unique keys from all teams to create headers
-      const allKeys = new Set<string>();
-      teamsArray.forEach((team: any) => {
-        Object.keys(team).forEach(key => allKeys.add(key));
-      });
-      const headers = Array.from(allKeys).sort();
+      // Create flattened headers for nested structure
+      const headers = [
+        'team_name',
+        'abbreviation',
+        'lefty_era',
+        'lefty_whip', 
+        'lefty_k_per_9',
+        'lefty_bb_per_9',
+        'lefty_hr_per_9',
+        'lefty_hits_per_9',
+        'righty_era',
+        'righty_whip',
+        'righty_k_per_9', 
+        'righty_bb_per_9',
+        'righty_hr_per_9',
+        'righty_hits_per_9'
+      ];
 
       const csvData = [
         headers,
-        ...teamsArray.map((team: any) => 
-          headers.map(header => team[header] || '')
-        )
+        ...teamsArray.map((team: any) => [
+          team.name || '',
+          team.abbreviation || '',
+          team.vs_lefty?.era || '',
+          team.vs_lefty?.whip || '',
+          team.vs_lefty?.k_per_9 || '',
+          team.vs_lefty?.bb_per_9 || '',
+          team.vs_lefty?.hr_per_9 || '',
+          team.vs_lefty?.hits_per_9 || '',
+          team.vs_righty?.era || '',
+          team.vs_righty?.whip || '',
+          team.vs_righty?.k_per_9 || '',
+          team.vs_righty?.bb_per_9 || '',
+          team.vs_righty?.hr_per_9 || '',
+          team.vs_righty?.hits_per_9 || ''
+        ])
       ];
 
       const csvContent = csvData.map(row => row.join(',')).join('\n');
