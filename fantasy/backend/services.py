@@ -119,38 +119,57 @@ class FantasyCalculatorService:
         logger.info(f"   Expected Triples: {expected_hits:.6f} * 0.03 = {expected_triples:.6f}")
         logger.info(f"   Expected Home Runs: {expected_home_runs:.6f} (from HR/9 stat)")
         
-        # Calculate fantasy points
-        batting_points = (
-            expected_singles * scoring_settings['batting'].get('S', 0) +
-            expected_doubles * scoring_settings['batting'].get('D', 0) +
-            expected_triples * scoring_settings['batting'].get('T', 0) +
-            expected_home_runs * scoring_settings['batting'].get('HR', 0) +
-            expected_walks * scoring_settings['batting'].get('BB', 0) +
-            expected_runs * scoring_settings['batting'].get('R', 0) +
-            expected_strikeouts * scoring_settings['batting'].get('SO', 0)
-        )
-        
         # For simplicity, assume RBI roughly equals runs
         expected_rbi = expected_runs
-        batting_points += expected_rbi * scoring_settings['batting'].get('RBI', 0)
+        
+        # Calculate wins and losses per game if data is available
+        wins_per_game = 0
+        losses_per_game = 0
+        if wins is not None and losses is not None:
+            total_games = wins + losses
+            if total_games > 0:
+                wins_per_game = wins / total_games
+                losses_per_game = losses / total_games
+        
+        # Calculate pitching fantasy points (matching frontend logic)
+        # Pitching points = expectedInnings * innings (from scoring settings)
+        pitching_innings_points = inning * scoring_settings['pitching'].get('INN', 0)
+        
+        # Add other pitching stats (scaled properly for expected innings)
+        pitching_points = (
+            pitching_innings_points +
+            expected_walks * scoring_settings['pitching'].get('BB', 0) +  # Walks for expected innings
+            expected_runs * scoring_settings['pitching'].get('ER', 0) +   # Earned runs for expected innings  
+            expected_hits * scoring_settings['pitching'].get('HA', 0) +   # Hits allowed for expected innings
+            expected_home_runs * scoring_settings['pitching'].get('HRA', 0) +  # HR allowed for expected innings
+            expected_strikeouts * scoring_settings['pitching'].get('K', 0) +   # Strikeouts for expected innings
+            (wins_per_game * inning / 9) * scoring_settings['pitching'].get('W', 0) +  # Wins scaled for expected innings
+            (losses_per_game * inning / 9) * scoring_settings['pitching'].get('L', 0)  # Losses scaled for expected innings
+        )
+        
+        # Only use pitching points for fantasy calculation (batting removed per request)
+        total_fantasy_points = pitching_points
         
         logger.info(f"\n💰 FANTASY POINTS CALCULATION:")
-        logger.info(f"   Scoring Settings: {scoring_settings['batting']}")
-        logger.info(f"   Singles: {expected_singles:.6f} * {scoring_settings['batting'].get('S', 0)} = {expected_singles * scoring_settings['batting'].get('S', 0):.6f}")
-        logger.info(f"   Doubles: {expected_doubles:.6f} * {scoring_settings['batting'].get('D', 0)} = {expected_doubles * scoring_settings['batting'].get('D', 0):.6f}")
-        logger.info(f"   Triples: {expected_triples:.6f} * {scoring_settings['batting'].get('T', 0)} = {expected_triples * scoring_settings['batting'].get('T', 0):.6f}")
-        logger.info(f"   Home Runs: {expected_home_runs:.6f} * {scoring_settings['batting'].get('HR', 0)} = {expected_home_runs * scoring_settings['batting'].get('HR', 0):.6f}")
-        logger.info(f"   Walks: {expected_walks:.6f} * {scoring_settings['batting'].get('BB', 0)} = {expected_walks * scoring_settings['batting'].get('BB', 0):.6f}")
-        logger.info(f"   Runs: {expected_runs:.6f} * {scoring_settings['batting'].get('R', 0)} = {expected_runs * scoring_settings['batting'].get('R', 0):.6f}")
-        logger.info(f"   Strikeouts: {expected_strikeouts:.6f} * {scoring_settings['batting'].get('SO', 0)} = {expected_strikeouts * scoring_settings['batting'].get('SO', 0):.6f}")
-        logger.info(f"   RBI: {expected_rbi:.6f} * {scoring_settings['batting'].get('RBI', 0)} = {expected_rbi * scoring_settings['batting'].get('RBI', 0):.6f}")
-        logger.info(f"   TOTAL BATTING POINTS: {batting_points:.6f}")
+        logger.info(f"   Pitching Scoring Settings: {scoring_settings['pitching']}")
+        logger.info(f"   Innings Points: {inning} * {scoring_settings['pitching'].get('INN', 0)} = {pitching_innings_points:.6f}")
+        logger.info(f"   Walks: {expected_walks:.6f} * {scoring_settings['pitching'].get('BB', 0)} = {(expected_walks * scoring_settings['pitching'].get('BB', 0)):.6f}")
+        logger.info(f"   Earned Runs: {expected_runs:.6f} * {scoring_settings['pitching'].get('ER', 0)} = {(expected_runs * scoring_settings['pitching'].get('ER', 0)):.6f}")
+        logger.info(f"   Hits Allowed: {expected_hits:.6f} * {scoring_settings['pitching'].get('HA', 0)} = {(expected_hits * scoring_settings['pitching'].get('HA', 0)):.6f}")
+        logger.info(f"   HR Allowed: {expected_home_runs:.6f} * {scoring_settings['pitching'].get('HRA', 0)} = {(expected_home_runs * scoring_settings['pitching'].get('HRA', 0)):.6f}")
+        logger.info(f"   Strikeouts: {expected_strikeouts:.6f} * {scoring_settings['pitching'].get('K', 0)} = {(expected_strikeouts * scoring_settings['pitching'].get('K', 0)):.6f}")
+        logger.info(f"   Wins: {(wins_per_game * inning / 9):.6f} * {scoring_settings['pitching'].get('W', 0)} = {((wins_per_game * inning / 9) * scoring_settings['pitching'].get('W', 0)):.6f}")
+        logger.info(f"   Losses: {(losses_per_game * inning / 9):.6f} * {scoring_settings['pitching'].get('L', 0)} = {((losses_per_game * inning / 9) * scoring_settings['pitching'].get('L', 0)):.6f}")
+        logger.info(f"   TOTAL PITCHING POINTS: {pitching_points:.6f}")
         
         return {
             'team_abbreviation': team_abbreviation,
             'handedness': handedness,
             'inning': inning,
-            'expected_fantasy_points': round(batting_points, 2),
+            'expected_fantasy_points': round(total_fantasy_points, 2),
+            'batting_points': 0,  # Batting calculations removed per request
+            'pitching_points': round(pitching_points, 2),
+            'pa_per_inning': round(innings_factor * 3.5, 3),  # Rough estimate of plate appearances per inning
             'expected_runs': round(expected_runs, 3),
             'expected_hits': round(expected_hits, 3),
             'expected_singles': round(expected_singles, 3),
@@ -160,13 +179,17 @@ class FantasyCalculatorService:
             'expected_walks': round(expected_walks, 3),
             'expected_strikeouts': round(expected_strikeouts, 3),
             'expected_rbi': round(expected_rbi, 3),
+            'expected_wins': round(wins_per_game * inning / 9, 3),
+            'expected_losses': round(losses_per_game * inning / 9, 3),
             'team_stats': {
                 'era': era,
                 'whip': whip,
                 'k_per_9': k_per_9,
                 'bb_per_9': bb_per_9,
                 'hr_per_9': hr_per_9,
-                'hits_per_9': hits_per_9
+                'hits_per_9': hits_per_9,
+                'wins': wins,
+                'losses': losses
             }
         }
     

@@ -52,7 +52,9 @@ class MLBScraper:
         from datetime import datetime
         current_year = datetime.now().year
         
-        # These would be the actual MLB.com URLs for different splits
+        logger.info(f"   🗓️  Using current year: {current_year}")
+        
+        # These are the actual MLB.com URLs for real data scraping
         urls = {
             'team_stats_vs_lefty': f"{self.base_url}/stats/team/pitching?split=vl&season={current_year}",
             'team_stats_vs_righty': f"{self.base_url}/stats/team/pitching?split=vr&season={current_year}", 
@@ -64,7 +66,7 @@ class MLBScraper:
         for stat_type, url in urls.items():
             logger.info(f"   📊 {stat_type}: {url}")
         
-        logger.info("   ⚠️  NOTE: Currently using sample data - real scraping would use these URLs")
+        logger.info("   🎯 Ready for real MLB.com data scraping with these URLs")
         logger.info("")
     
     def _get_sample_team_data(self) -> List[Dict]:

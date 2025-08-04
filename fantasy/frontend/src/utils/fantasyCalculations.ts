@@ -97,12 +97,26 @@ export class FantasyCalculations {
     // Calculate wins and losses per game if data is available
     let winsPerGame = 0;
     let lossesPerGame = 0;
-    if (stats.wins !== undefined && stats.losses !== undefined) {
-      const totalGames = stats.wins + stats.losses;
+    
+    // Get wins/losses from the correct nested structure based on handedness
+    const teamWins = handedness.toLowerCase() === 'lefty' ? teamStats.vs_lefty.wins : teamStats.vs_righty.wins;
+    const teamLosses = handedness.toLowerCase() === 'lefty' ? teamStats.vs_lefty.losses : teamStats.vs_righty.losses;
+    
+    if (teamWins !== undefined && teamLosses !== undefined) {
+      const totalGames = teamWins + teamLosses;
       if (totalGames > 0) {
-        winsPerGame = stats.wins / totalGames;
-        lossesPerGame = stats.losses / totalGames;
+        winsPerGame = teamWins / totalGames;
+        lossesPerGame = teamLosses / totalGames;
       }
+    }
+    
+    if (isDevelopment) {
+      console.log(`\n🏆 WINS/LOSSES CALCULATION:`);
+      console.log(`   Team Wins vs ${handedness}: ${teamWins}`);
+      console.log(`   Team Losses vs ${handedness}: ${teamLosses}`);
+      console.log(`   Total Games: ${teamWins + teamLosses}`);
+      console.log(`   Wins Per Game: ${winsPerGame.toFixed(6)}`);
+      console.log(`   Losses Per Game: ${lossesPerGame.toFixed(6)}`);
     }
     
     // Break down hits into singles, doubles, triples for display purposes only
