@@ -21,3 +21,4 @@ frontend/node_modules/*
 
 fantasy/frontend/package-lock.json
 fantasy/backend/fantasy_baseball.db
+old/fantasy_original/calculator/data/
