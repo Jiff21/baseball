@@ -467,6 +467,58 @@ def create_app(config_name='development'):
                 'error': str(e)
             }), 500
     
+    @app.route('/api/team-stats', methods=['GET'])
+    def get_all_team_stats():
+        """
+        Get basic team stats for all teams (vs lefty and righty).
+        This endpoint provides the raw data needed for frontend calculations.
+        Uses the new TeamHittingStats model.
+        """
+        try:
+            # Get all team hitting stats
+            hitting_stats = TeamHittingStats.query.all()
+            
+            if not hitting_stats:
+                return jsonify({'error': 'No team stats found'}), 404
+            
+            # Group by team abbreviation
+            teams_dict = {}
+            for stat in hitting_stats:
+                team_abbrev = stat.team_abbreviation
+                if team_abbrev not in teams_dict:
+                    teams_dict[team_abbrev] = {
+                        'abbreviation': team_abbrev,
+                        'name': team_abbrev,  # Using abbreviation as name for now
+                        'vs_lefty': {},
+                        'vs_righty': {}
+                    }
+                
+                # Map split_type to the expected format
+                split_key = 'vs_lefty' if stat.split_type == 'vs_LHP' else 'vs_righty'
+                
+                # Convert hitting stats to pitching perspective (what pitcher gives up)
+                teams_dict[team_abbrev][split_key] = {
+                    'era': None,  # Not directly available from hitting stats
+                    'whip': None,  # Not directly available from hitting stats
+                    'k_per_9': stat.strikeouts / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Strikeouts per 27 outs
+                    'bb_per_9': stat.walks / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Walks per 27 outs
+                    'hr_per_9': stat.home_runs / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # HR per 27 outs
+                    'hits_per_9': (stat.singles + stat.doubles + stat.triples + stat.home_runs) / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Hits per 27 outs
+                    'wins': None,  # Not available from hitting stats
+                    'losses': None  # Not available from hitting stats
+                }
+            
+            team_stats = list(teams_dict.values())
+            
+            return jsonify({
+                'teams': team_stats,
+                'count': len(team_stats)
+            })
+            
+        except Exception as e:
+            logger.error(f"Error fetching team stats: {e}")
+            return jsonify({'error': 'Internal server error'}), 500
+    
     logger.info(f"Flask app created with config: {config_name}")
     return app
 
