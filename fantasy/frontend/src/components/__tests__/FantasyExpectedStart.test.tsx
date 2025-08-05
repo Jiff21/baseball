@@ -133,6 +133,9 @@ describe('FantasyExpectedStart', () => {
             handedness: 'Righty',
             inning: 6,
             expected_fantasy_points: 5.5,
+            batting_points: 0,
+            pitching_points: 5.5,
+            pa_per_inning: 3.5,
             expected_runs: 1.2,
             expected_hits: 2.1,
             expected_singles: 1.5,
@@ -142,6 +145,8 @@ describe('FantasyExpectedStart', () => {
             expected_walks: 0.8,
             expected_strikeouts: 1.5,
             expected_rbi: 1.2,
+            expected_wins: 0.4,
+            expected_losses: 0.3,
             team_stats: {
               era: 3.50,
               whip: 1.20,
@@ -225,4 +230,3 @@ describe('FantasyExpectedStart', () => {
     expect(calculateButton).toBeDisabled();
   });
 });
-

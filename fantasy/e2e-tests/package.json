@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "End-to-end tests for Fantasy Baseball application using Playwright and Cucumber",
   "scripts": {
-    "test": "cucumber-js",
-    "test:headed": "cucumber-js --tags '@headed'",
-    "test:debug": "cucumber-js --tags '@debug'",
+    "test": "cucumber-js --require-module ts-node/register --require features/step_definitions/fantasy_baseball_steps.ts --require features/support/world.ts --require features/support/hooks.ts",
+    "test:headed": "cucumber-js --require-module ts-node/register --require features/step_definitions/fantasy_baseball_steps.ts --require features/support/world.ts --require features/support/hooks.ts --tags '@headed'",
+    "test:debug": "cucumber-js --require-module ts-node/register --require features/step_definitions/fantasy_baseball_steps.ts --require features/support/world.ts --require features/support/hooks.ts --tags '@debug'",
+    "test:typescript": "cucumber-js --require-module ts-node/register --require features/step_definitions/fantasy_baseball_steps.ts --require features/support/world.ts --require features/support/hooks.ts --tags '@typescript'",
     "install-browsers": "playwright install",
     "report": "allure serve allure-results"
   },

@@ -1,10 +1,10 @@
 const config = {
   require: [
-    'features/step_definitions/**/*.ts',
-    'features/support/**/*.ts'
+    'features/step_definitions/fantasy_baseball_steps.ts',
+    'features/support/world.ts',
+    'features/support/hooks.ts'
   ],
   requireModule: ['ts-node/register'],
-  loader: ['ts-node/esm'],
   format: [
     'progress-bar',
     'json:reports/cucumber_report.json',

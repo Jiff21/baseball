@@ -38,6 +38,27 @@ def run_backend_tests():
         print(f"❌ Error running backend tests: {e}")
         return False
 
+def check_typescript_compilation():
+    """Check TypeScript compilation before running tests."""
+    print("\n🔍 Checking TypeScript compilation...")
+    print("=" * 40)
+    
+    try:
+        result = subprocess.run([
+            sys.executable, 'check_typescript.py'
+        ], check=False)
+        
+        if result.returncode == 0:
+            print("✅ TypeScript compilation check passed!")
+            return True
+        else:
+            print("❌ TypeScript compilation check failed!")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Error running TypeScript check: {e}")
+        return False
+
 def run_frontend_tests():
     """Run frontend React tests."""
     frontend_dir = Path(__file__).parent / 'frontend'
@@ -91,15 +112,22 @@ def main():
         print("❌ Test dependency check failed")
         sys.exit(1)
     
+    # Check TypeScript compilation first
+    typescript_passed = check_typescript_compilation()
+    if not typescript_passed:
+        print("❌ TypeScript compilation failed - stopping tests")
+        sys.exit(1)
+    
     backend_passed = run_backend_tests()
     frontend_passed = run_frontend_tests()
     
     print("\n" + "=" * 40)
     print("📊 Test Results Summary:")
-    print(f"   Backend:  {'✅ PASSED' if backend_passed else '❌ FAILED'}")
-    print(f"   Frontend: {'✅ PASSED' if frontend_passed else '❌ FAILED'}")
+    print(f"   TypeScript: {'✅ PASSED' if typescript_passed else '❌ FAILED'}")
+    print(f"   Backend:    {'✅ PASSED' if backend_passed else '❌ FAILED'}")
+    print(f"   Frontend:   {'✅ PASSED' if frontend_passed else '❌ FAILED'}")
     
-    if backend_passed and frontend_passed:
+    if typescript_passed and backend_passed and frontend_passed:
         print("\n🎉 All tests passed!")
         sys.exit(0)
     else:
@@ -108,4 +136,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

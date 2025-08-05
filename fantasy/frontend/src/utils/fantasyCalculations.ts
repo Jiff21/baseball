@@ -112,9 +112,9 @@ export class FantasyCalculations {
     
     if (isDevelopment) {
       console.log(`\n🏆 WINS/LOSSES CALCULATION:`);
-      console.log(`   Team Wins vs ${handedness}: ${teamWins}`);
-      console.log(`   Team Losses vs ${handedness}: ${teamLosses}`);
-      console.log(`   Total Games: ${teamWins + teamLosses}`);
+      console.log(`   Team Wins vs ${handedness}: ${teamWins ?? 'undefined'}`);
+      console.log(`   Team Losses vs ${handedness}: ${teamLosses ?? 'undefined'}`);
+      console.log(`   Total Games: ${(teamWins ?? 0) + (teamLosses ?? 0)}`);
       console.log(`   Wins Per Game: ${winsPerGame.toFixed(6)}`);
       console.log(`   Losses Per Game: ${lossesPerGame.toFixed(6)}`);
     }

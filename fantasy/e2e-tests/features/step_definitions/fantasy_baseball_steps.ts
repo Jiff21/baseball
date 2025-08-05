@@ -331,3 +331,80 @@ Then('team rows should be sortable by points and team name', async function (thi
   await sortByTeam.click();
   await this.page.waitForTimeout(500);
 });
+
+// TypeScript error checking steps
+Then('the application should load without TypeScript errors', async function (this: CustomWorld) {
+  // Wait for the page to fully load
+  await this.page.waitForLoadState('networkidle');
+  
+  // Check that the main React app has rendered without crashing
+  await expect(this.page.locator('h1')).toContainText('Fantasy Expected Start');
+  
+  // Verify that key components are rendered (indicating successful compilation)
+  await expect(this.page.locator('#leagueType')).toBeVisible();
+  await expect(this.page.locator('#handedness')).toBeVisible();
+  await expect(this.page.locator('button:has-text("Calculate Expected Points")')).toBeVisible();
+});
+
+Then('the browser console should not contain any TypeScript errors', async function (this: CustomWorld) {
+  // Listen for console errors
+  const consoleErrors: string[] = [];
+  
+  this.page.on('console', msg => {
+    if (msg.type() === 'error') {
+      const errorText = msg.text();
+      // Filter for TypeScript-related errors
+      if (errorText.includes('TS') || 
+          errorText.includes('TypeScript') || 
+          errorText.includes('possibly \'undefined\'') ||
+          errorText.includes('Type \'') ||
+          errorText.includes('Cannot read properties of undefined')) {
+        consoleErrors.push(errorText);
+      }
+    }
+  });
+  
+  // Reload the page to trigger any compilation errors
+  await this.page.reload();
+  await this.page.waitForLoadState('networkidle');
+  
+  // Wait a bit for any async errors to surface
+  await this.page.waitForTimeout(2000);
+  
+  // Check that no TypeScript errors were logged
+  if (consoleErrors.length > 0) {
+    console.log('TypeScript errors found in console:', consoleErrors);
+    expect(consoleErrors.length).toBe(0);
+  }
+});
+
+Then('the page should render all main components', async function (this: CustomWorld) {
+  // Verify all main UI components are present and functional
+  await expect(this.page.locator('h1')).toContainText('Fantasy Expected Start');
+  await expect(this.page.locator('.form-container')).toBeVisible();
+  await expect(this.page.locator('#leagueType')).toBeVisible();
+  await expect(this.page.locator('#handedness')).toBeVisible();
+  await expect(this.page.locator('button:has-text("Calculate Expected Points")')).toBeVisible();
+  
+  // Test that dropdowns are functional (no TypeScript errors preventing interaction)
+  await this.page.selectOption('#leagueType', 'Custom');
+  await this.page.waitForTimeout(1000);
+  
+  // Verify scoring settings load without errors
+  await expect(this.page.locator('h3:has-text("Scoring Settings")')).toBeVisible();
+});
+
+Then('I should see the league type dropdown', async function (this: CustomWorld) {
+  await expect(this.page.locator('#leagueType')).toBeVisible();
+  await expect(this.page.locator('#leagueType')).toBeEnabled();
+});
+
+Then('I should see the handedness dropdown', async function (this: CustomWorld) {
+  await expect(this.page.locator('#handedness')).toBeVisible();
+  await expect(this.page.locator('#handedness')).toBeEnabled();
+});
+
+Then('I should see the {string} button', async function (this: CustomWorld, buttonText: string) {
+  await expect(this.page.locator(`button:has-text("${buttonText}")`)).toBeVisible();
+  await expect(this.page.locator(`button:has-text("${buttonText}")`)).toBeEnabled();
+});

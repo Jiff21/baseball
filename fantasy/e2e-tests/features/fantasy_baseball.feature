@@ -7,6 +7,16 @@ Feature: Fantasy Baseball Application
     Given I navigate to the Fantasy Baseball application
     And the application loads successfully
 
+  @smoke @typescript
+  Scenario: Application loads without TypeScript compilation errors
+    Given I am on the Fantasy Baseball page
+    Then the application should load without TypeScript errors
+    And the browser console should not contain any TypeScript errors
+    And the page should render all main components
+    And I should see the league type dropdown
+    And I should see the handedness dropdown
+    And I should see the "Calculate Expected Points" button
+
   @smoke
   Scenario: Calculate Expected Points without errors
     Given I am on the Fantasy Baseball page
