@@ -17,7 +17,7 @@ def run_backend():
     
     print("🐍 Starting Flask backend server...")
     try:
-        subprocess.run([sys.executable, 'app.py'], check=True)
+        subprocess.run([sys.executable, 'app_new.py'], check=True)
     except KeyboardInterrupt:
         print("\n🛑 Backend server stopped")
     except subprocess.CalledProcessError as e:
@@ -97,4 +97,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
