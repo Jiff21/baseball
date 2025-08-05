@@ -79,6 +79,54 @@ class ScoringSettings:
             }
         }
 
+    @classmethod
+    def get_espn_settings(cls):
+        """Get ESPN scoring settings."""
+        return {
+            'batting': {
+                'S': 1, 'D': 2, 'T': 3, 'HR': 4, 'BB': 1, 'IBB': 0,
+                'HBP': 1, 'R': 1, 'RBI': 1, 'SB': 2, 'CS': -1, 'SO': -0.5,
+                'TB': 0.25,
+            },
+            'pitching': {
+                'BB': -1, 'IBB': 0, 'ER': -1, 'HA': -1, 'HB': 0, 'HRA': 0,
+                'INN': 3, 'K': 0.5, 'W': 7, 'L': -5, 'S': 5, 'BS': 0,
+                'QS': 3, 'TB': -0.25,
+            }
+        }
+
+    @classmethod
+    def get_cbs_settings(cls):
+        """Get CBS scoring settings."""
+        return {
+            'batting': {
+                'S': 1.0, 'D': 2.0, 'T': 3.0, 'HR': 4.0, 'BB': 1.0, 'IBB': 0.0,
+                'HBP': 1.0, 'R': 1.0, 'RBI': 1.0, 'SB': 2.0, 'CS': -1.0, 'SO': -0.5,
+                'TB': 0.25,
+            },
+            'pitching': {
+                'BB': -1.0, 'IBB': 0.0, 'ER': -1.0, 'HA': -1.0, 'HB': -1.0, 'HRA': 0.0,
+                'INN': 3.0, 'K': 0.5, 'W': 7.0, 'L': -5.0, 'S': 7.0, 'BS': 0.0,
+                'QS': 3.0, 'TB': -0.25,
+            }
+        }
+
+    @classmethod
+    def get_yahoo_settings(cls):
+        """Get Yahoo scoring settings."""
+        return {
+            'batting': {
+                'S': 2.6, 'D': 5.2, 'T': 7.8, 'HR': 10.4, 'BB': 2.6, 'IBB': 0.0,
+                'HBP': 2.6, 'R': 1.9, 'RBI': 1.9, 'SB': 4.2, 'CS': 0.0, 'SO': 0.0,
+                'TB': 0.65,
+            },
+            'pitching': {
+                'BB': -1.3, 'IBB': 0.0, 'ER': -3.0, 'HA': -1.3, 'HB': -1.3, 'HRA': 0.0,
+                'INN': 3.0, 'K': 3.0, 'W': 7.0, 'L': 0.0, 'S': 8.0, 'BS': 0.0,
+                'QS': 0.0, 'TB': -0.65,
+            }
+        }
+
 
 class TeamHittingStats(db.Model):
     """Model for storing raw hitting statistics by team and split type."""

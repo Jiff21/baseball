@@ -1,0 +1,237 @@
+/* Debug Panel Component Styles */
+
+.debug-panel {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+}
+
+.debug-panel-header {
+  margin-bottom: 25px;
+  text-align: center;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f39c12;
+}
+
+.debug-panel-header h3 {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.debug-panel-header p {
+  color: #7f8c8d;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.debug-message {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  animation: slideIn 0.3s ease;
+}
+
+.debug-message.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.debug-message.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.debug-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.debug-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+}
+
+.debug-section h4 {
+  color: #34495e;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.debug-button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 10px;
+  min-width: 200px;
+}
+
+.debug-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.debug-button.primary {
+  background: #3498db;
+  color: white;
+}
+
+.debug-button.primary:hover:not(:disabled) {
+  background: #2980b9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.debug-button.secondary {
+  background: #95a5a6;
+  color: white;
+}
+
+.debug-button.secondary:hover:not(:disabled) {
+  background: #7f8c8d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(149, 165, 166, 0.3);
+}
+
+.debug-button-group {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.debug-description {
+  color: #6c757d;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.debug-info {
+  background: #f1f3f4;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+}
+
+.debug-info h4 {
+  color: #34495e;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.debug-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.debug-info-item {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.debug-info-item strong {
+  color: #2c3e50;
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.debug-info-item ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #495057;
+}
+
+.debug-info-item li {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .debug-panel {
+    margin: 10px;
+    padding: 20px 15px;
+  }
+  
+  .debug-panel-header h3 {
+    font-size: 1.5rem;
+  }
+  
+  .debug-button-group {
+    flex-direction: column;
+  }
+  
+  .debug-button {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .debug-info-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .debug-section {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .debug-panel {
+    padding: 15px 10px;
+  }
+  
+  .debug-panel-header {
+    margin-bottom: 20px;
+  }
+  
+  .debug-actions {
+    gap: 20px;
+  }
+  
+  .debug-section h4 {
+    font-size: 1.1rem;
+  }
+  
+  .debug-button {
+    padding: 10px 16px;
+    font-size: 0.95rem;
+  }
+}
