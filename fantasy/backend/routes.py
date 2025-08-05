@@ -292,7 +292,9 @@ def get_all_team_stats():
                     'k_per_9': team.vs_lefty_k_per_9,
                     'bb_per_9': team.vs_lefty_bb_per_9,
                     'hr_per_9': team.vs_lefty_hr_per_9,
-                    'hits_per_9': team.vs_lefty_hits_per_9
+                    'hits_per_9': team.vs_lefty_hits_per_9,
+                    'wins': team.vs_lefty_wins,
+                    'losses': team.vs_lefty_losses
                 },
                 'vs_righty': {
                     'era': team.vs_righty_era,
@@ -300,7 +302,9 @@ def get_all_team_stats():
                     'k_per_9': team.vs_righty_k_per_9,
                     'bb_per_9': team.vs_righty_bb_per_9,
                     'hr_per_9': team.vs_righty_hr_per_9,
-                    'hits_per_9': team.vs_righty_hits_per_9
+                    'hits_per_9': team.vs_righty_hits_per_9,
+                    'wins': team.vs_righty_wins,
+                    'losses': team.vs_righty_losses
                 }
             }
             team_stats.append(team_data)

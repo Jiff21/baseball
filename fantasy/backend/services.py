@@ -68,6 +68,8 @@ class FantasyCalculatorService:
             bb_per_9 = team.vs_lefty_bb_per_9
             hr_per_9 = team.vs_lefty_hr_per_9
             hits_per_9 = team.vs_lefty_hits_per_9
+            team_wins = team.vs_lefty_wins
+            team_losses = team.vs_lefty_losses
             
             logger.info(f"📊 RAW TEAM STATS vs LEFTIES:")
             logger.info(f"   ERA: {era}")
@@ -76,7 +78,8 @@ class FantasyCalculatorService:
             logger.info(f"   BB/9: {bb_per_9}")
             logger.info(f"   HR/9: {hr_per_9}")
             logger.info(f"   Hits/9: {hits_per_9}")
-            logger.info(f"   ⚠️  NOTE: Wins/Losses vs lefties not available in database model")
+            logger.info(f"   Wins: {team_wins}")
+            logger.info(f"   Losses: {team_losses}")
         else:
             era = team.vs_righty_era
             whip = team.vs_righty_whip
@@ -84,6 +87,8 @@ class FantasyCalculatorService:
             bb_per_9 = team.vs_righty_bb_per_9
             hr_per_9 = team.vs_righty_hr_per_9
             hits_per_9 = team.vs_righty_hits_per_9
+            team_wins = team.vs_righty_wins
+            team_losses = team.vs_righty_losses
             
             logger.info(f"📊 RAW TEAM STATS vs RIGHTIES:")
             logger.info(f"   ERA: {era}")
@@ -92,7 +97,8 @@ class FantasyCalculatorService:
             logger.info(f"   BB/9: {bb_per_9}")
             logger.info(f"   HR/9: {hr_per_9}")
             logger.info(f"   Hits/9: {hits_per_9}")
-            logger.info(f"   ⚠️  NOTE: Wins/Losses vs righties not available in database model")
+            logger.info(f"   Wins: {team_wins}")
+            logger.info(f"   Losses: {team_losses}")
         
         # Calculate expected stats per inning
         innings_factor = inning / 9.0
