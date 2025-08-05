@@ -20,6 +20,7 @@ class MLBScraper:
     
     def __init__(self, season=None):
         self.base_url = "https://bdfed.stitch.mlbinfra.com/bdfed/stats/team"
+        self.standings_url = "https://bdfed.stitch.mlbinfra.com/bdfed/transform-mlb-standings"
         self.season = season or datetime.now().year
         self.session = requests.Session()
         self.session.headers.update({
@@ -38,7 +39,10 @@ class MLBScraper:
         teams_data = []
         
         try:
-            # Get overall team pitching stats (includes wins/losses)
+            # Get wins/losses splits from standings API
+            wins_losses_splits = self._fetch_wins_losses_splits()
+            
+            # Get overall team pitching stats
             overall_stats = self._fetch_overall_pitching_stats()
             
             # Get vs lefty pitching stats
@@ -48,7 +52,7 @@ class MLBScraper:
             vs_righty_stats = self._fetch_vs_righty_pitching_stats()
             
             # Combine all stats by team
-            teams_data = self._combine_team_stats(overall_stats, vs_lefty_stats, vs_righty_stats)
+            teams_data = self._combine_team_stats(overall_stats, vs_lefty_stats, vs_righty_stats, wins_losses_splits)
             
             logger.info(f"Successfully scraped statistics for {len(teams_data)} teams")
             return teams_data
@@ -142,17 +146,82 @@ class MLBScraper:
         logger.info(f"Fetched vs righty pitching stats for {len(team_stats)} teams")
         return team_stats
     
-    def _combine_team_stats(self, overall_stats: Dict, vs_lefty_stats: Dict, vs_righty_stats: Dict) -> List[Dict]:
+    def _fetch_wins_losses_splits(self) -> Dict:
+        """Fetch wins/losses splits vs lefty and righty batters from standings API."""
+        # Use current date for the API call
+        current_date = datetime.now().strftime('%Y-%m-%d')
+        
+        params = {
+            'splitPcts': 'false',
+            'numberPcts': 'false', 
+            'standingsView': 'division',
+            'sortTemplate': '3',
+            'season': str(self.season),
+            'leagueIds': ['103', '104'],  # AL and NL
+            'standingsTypes': 'regularSeason',
+            'contextTeamId': '',
+            'teamId': '',
+            'date': current_date,
+            'hydrateAlias': 'noSchedule',
+            'sortDivisions': '201,202,200,204,205,203',
+            'sortLeagues': '103,104,115,114',
+            'sortSports': '1'
+        }
+        
+        response = self.session.get(self.standings_url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        # Extract wins/losses splits by team abbreviation
+        wins_losses_data = {}
+        
+        if 'records' in data:
+            for record in data['records']:
+                if 'teamRecords' in record:
+                    for team_record in record['teamRecords']:
+                        team_info = team_record.get('team', {})
+                        team_abbrev = team_info.get('abbreviation')
+                        
+                        if team_abbrev:
+                            # Parse record_right (e.g., "45-32" -> wins=45, losses=32)
+                            record_right = team_record.get('record_right', '0-0')
+                            record_left = team_record.get('record_left', '0-0')
+                            
+                            try:
+                                right_wins, right_losses = map(int, record_right.split('-'))
+                                left_wins, left_losses = map(int, record_left.split('-'))
+                                
+                                wins_losses_data[team_abbrev] = {
+                                    'vs_righty_wins': right_wins,
+                                    'vs_righty_losses': right_losses,
+                                    'vs_lefty_wins': left_wins,
+                                    'vs_lefty_losses': left_losses
+                                }
+                            except (ValueError, AttributeError) as e:
+                                logger.warning(f"Could not parse wins/losses for {team_abbrev}: {e}")
+                                # Use defaults
+                                wins_losses_data[team_abbrev] = {
+                                    'vs_righty_wins': 0,
+                                    'vs_righty_losses': 0,
+                                    'vs_lefty_wins': 0,
+                                    'vs_lefty_losses': 0
+                                }
+        
+        logger.info(f"Fetched wins/losses splits for {len(wins_losses_data)} teams")
+        return wins_losses_data
+    
+    def _combine_team_stats(self, overall_stats: Dict, vs_lefty_stats: Dict, vs_righty_stats: Dict, wins_losses_splits: Dict) -> List[Dict]:
         """Combine all team stats into a unified format."""
         teams_data = []
         
         # Get all unique team abbreviations
-        all_teams = set(overall_stats.keys()) | set(vs_lefty_stats.keys()) | set(vs_righty_stats.keys())
+        all_teams = set(overall_stats.keys()) | set(vs_lefty_stats.keys()) | set(vs_righty_stats.keys()) | set(wins_losses_splits.keys())
         
         for team_abbrev in all_teams:
             overall = overall_stats.get(team_abbrev, {})
             vs_lefty = vs_lefty_stats.get(team_abbrev, {})
             vs_righty = vs_righty_stats.get(team_abbrev, {})
+            wins_losses = wins_losses_splits.get(team_abbrev, {})
             
             # Skip if we don't have overall stats (most important)
             if not overall:
@@ -170,8 +239,8 @@ class MLBScraper:
                 'vs_lefty_bb_per_9': self._calculate_per_9(vs_lefty.get('baseOnBalls', 0), vs_lefty.get('inningsPitched', '0')),
                 'vs_lefty_hr_per_9': self._calculate_per_9(vs_lefty.get('homeRuns', 0), vs_lefty.get('inningsPitched', '0')),
                 'vs_lefty_hits_per_9': self._calculate_per_9(vs_lefty.get('hits', 0), vs_lefty.get('inningsPitched', '0')),
-                'vs_lefty_wins': overall.get('wins', 0),  # Use overall wins for now
-                'vs_lefty_losses': overall.get('losses', 0),  # Use overall losses for now
+                'vs_lefty_wins': wins_losses.get('vs_lefty_wins', 0),
+                'vs_lefty_losses': wins_losses.get('vs_lefty_losses', 0),
                 
                 # Vs righty stats
                 'vs_righty_era': float(vs_righty.get('era', 0.0)),
@@ -180,8 +249,8 @@ class MLBScraper:
                 'vs_righty_bb_per_9': self._calculate_per_9(vs_righty.get('baseOnBalls', 0), vs_righty.get('inningsPitched', '0')),
                 'vs_righty_hr_per_9': self._calculate_per_9(vs_righty.get('homeRuns', 0), vs_righty.get('inningsPitched', '0')),
                 'vs_righty_hits_per_9': self._calculate_per_9(vs_righty.get('hits', 0), vs_righty.get('inningsPitched', '0')),
-                'vs_righty_wins': overall.get('wins', 0),  # Use overall wins for now
-                'vs_righty_losses': overall.get('losses', 0),  # Use overall losses for now
+                'vs_righty_wins': wins_losses.get('vs_righty_wins', 0),
+                'vs_righty_losses': wins_losses.get('vs_righty_losses', 0)
             }
             
             teams_data.append(team_data)
