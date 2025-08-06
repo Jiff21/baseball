@@ -55,16 +55,18 @@ export class FantasyCalculations {
     const inningsFactor = expectedInnings / 9.0;
     
     // Basic expected stats (simplified calculation) - all multiplied by expectedInnings
-    const expectedHits = (stats.hits_per_9 * inningsFactor);
-    const expectedWalks = (stats.bb_per_9 * inningsFactor);
-    const expectedStrikeouts = (stats.k_per_9 * inningsFactor);
-    const expectedHomeRuns = (stats.hr_per_9 * inningsFactor);
-    const expectedRuns = (stats.era * inningsFactor);
+    // Handle null/undefined values by defaulting to 0
+    const expectedHits = ((stats.hits_per_9 || 0) * inningsFactor);
+    const expectedWalks = ((stats.bb_per_9 || 0) * inningsFactor);
+    const expectedStrikeouts = ((stats.k_per_9 || 0) * inningsFactor);
+    const expectedHomeRuns = ((stats.hr_per_9 || 0) * inningsFactor);
+    const expectedRuns = ((stats.era || 0) * inningsFactor);
     
     // Calculate wins and losses per game if data is available
     let winsPerGame = 0;
     let lossesPerGame = 0;
-    if (stats.wins !== undefined && stats.losses !== undefined) {
+    if (stats.wins !== undefined && stats.wins !== null && 
+        stats.losses !== undefined && stats.losses !== null) {
       const totalGames = stats.wins + stats.losses;
       if (totalGames > 0) {
         winsPerGame = stats.wins / totalGames;

@@ -497,15 +497,22 @@ def create_app(config_name='development'):
                 split_key = 'vs_lefty' if stat.split_type == 'vs_LHP' else 'vs_righty'
                 
                 # Convert hitting stats to pitching perspective (what pitcher gives up)
+                # Calculate ERA approximation: runs per 27 outs (9 innings)
+                runs_per_27_outs = stat.runs / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0
+                
+                # Calculate WHIP approximation: (walks + hits) per 9 innings
+                total_hits = stat.singles + stat.doubles + stat.triples + stat.home_runs
+                whip_per_9 = (stat.walks + total_hits) / stat.plate_appearances * 27 / 3 if stat.plate_appearances > 0 else 0  # Divide by 3 to get per inning
+                
                 teams_dict[team_abbrev][split_key] = {
-                    'era': None,  # Not directly available from hitting stats
-                    'whip': None,  # Not directly available from hitting stats
+                    'era': runs_per_27_outs,  # Approximated from runs allowed per 27 outs
+                    'whip': whip_per_9,  # Approximated WHIP
                     'k_per_9': stat.strikeouts / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Strikeouts per 27 outs
                     'bb_per_9': stat.walks / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Walks per 27 outs
                     'hr_per_9': stat.home_runs / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # HR per 27 outs
-                    'hits_per_9': (stat.singles + stat.doubles + stat.triples + stat.home_runs) / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Hits per 27 outs
-                    'wins': None,  # Not available from hitting stats
-                    'losses': None  # Not available from hitting stats
+                    'hits_per_9': total_hits / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Hits per 27 outs
+                    'wins': 0,  # Default to 0 instead of null
+                    'losses': 0  # Default to 0 instead of null
                 }
             
             team_stats = list(teams_dict.values())
