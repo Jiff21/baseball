@@ -27,7 +27,7 @@ Feature: Pitcher Expected Stats Calculations
     And we have selected Starter Expected Innings: 5
     And the San Francisco Giants have scored 0.2 runs per plate appearance
     And the San Francisco Giants have averaged 1.1 plate appearances per inning 
-    Then the expected score added for pitching runs allowed is -0.24
+    Then the expected score added for pitching runs allowed is -12
 
   Scenario: The front end correctly calculates strikeout expectations
     Given we have selected Pitcher Handedness: Righty
