@@ -497,19 +497,38 @@ def create_app(config_name='development'):
                 split_key = 'vs_lefty' if stat.split_type == 'vs_LHP' else 'vs_righty'
                 
                 # Convert hitting stats to pitching perspective (what pitcher gives up)
-                # Calculate per-27-outs rates (equivalent to per-9-innings for pitching)
                 total_hits = stat.singles + stat.doubles + stat.triples + stat.home_runs
                 
+                # Calculate proper per-9-innings rates using actual games played
+                # Formula: (stat / plate_appearances) * (plate_appearances_per_game) * 9
+                pa_per_game = stat.plate_appearances / stat.games if stat.games > 0 else 0
+                pa_per_inning = pa_per_game / 9 if pa_per_game > 0 else 0
+                
+                # Calculate per-9-innings rates (standard pitching stats format)
+                if stat.plate_appearances > 0:
+                    runs_per_9 = (stat.runs / stat.plate_appearances) * pa_per_game * 9
+                    walks_per_9 = (stat.walks / stat.plate_appearances) * pa_per_game * 9
+                    strikeouts_per_9 = (stat.strikeouts / stat.plate_appearances) * pa_per_game * 9
+                    hr_per_9 = (stat.home_runs / stat.plate_appearances) * pa_per_game * 9
+                    hits_per_9 = (total_hits / stat.plate_appearances) * pa_per_game * 9
+                    whip_per_9 = ((stat.walks + total_hits) / stat.plate_appearances) * pa_per_game * 9 / 9  # WHIP is per inning
+                else:
+                    runs_per_9 = walks_per_9 = strikeouts_per_9 = hr_per_9 = hits_per_9 = whip_per_9 = 0
+                
                 teams_dict[team_abbrev][split_key] = {
-                    'era': stat.runs / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Runs per 27 outs
-                    'whip': (stat.walks + total_hits) / stat.plate_appearances * 27 / 3 if stat.plate_appearances > 0 else 0,  # WHIP approximation
-                    'k_per_9': stat.strikeouts / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Strikeouts per 27 outs
-                    'bb_per_9': stat.walks / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Walks per 27 outs
-                    'hr_per_9': stat.home_runs / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # HR per 27 outs
-                    'hits_per_9': total_hits / stat.plate_appearances * 27 if stat.plate_appearances > 0 else 0,  # Hits per 27 outs
-                    'wins': 0,  # Always 0 for team hitting stats
-                    'losses': 0  # Always 0 for team hitting stats
+                    'era': runs_per_9,  # Runs per 9 innings (proper calculation)
+                    'whip': whip_per_9,  # WHIP per inning
+                    'k_per_9': strikeouts_per_9,  # Strikeouts per 9 innings
+                    'bb_per_9': walks_per_9,  # Walks per 9 innings
+                    'hr_per_9': hr_per_9,  # HR per 9 innings
+                    'hits_per_9': hits_per_9,  # Hits per 9 innings
+                    'wins': stat.wins,  # Actual wins from standings data
+                    'losses': stat.losses  # Actual losses from standings data
                 }
+                
+                # Store PA per inning for frontend use
+                teams_dict[team_abbrev]['total_plate_appearances'] = stat.plate_appearances
+                teams_dict[team_abbrev]['games_played'] = stat.games
             
             team_stats = list(teams_dict.values())
             
