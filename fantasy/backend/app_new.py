@@ -494,7 +494,7 @@ def create_app(config_name='development'):
                     }
                 
                 # Map split_type to the expected format
-                split_key = 'vs_lefty' if stat.split_type == 'vs_LHP' else 'vs_righty'
+                split_key = 'vs_lefty' if stat.split_type == 'lefty' else 'vs_righty'
                 
                 # Convert hitting stats to pitching perspective (what pitcher gives up)
                 total_hits = stat.singles + stat.doubles + stat.triples + stat.home_runs
