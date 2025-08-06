@@ -5,6 +5,19 @@ import { CustomWorld } from '../support/world';
 // Storage for test results
 const storedResults: { [key: string]: any } = {};
 
+// Background steps
+Given('I am on the fantasy expected start page', async function (this: CustomWorld) {
+  await this.page.goto(this.baseUrl);
+  await expect(this.page.locator('h1')).toContainText('Fantasy Expected Start');
+  await this.page.waitForLoadState('networkidle');
+});
+
+Given('the team stats data is loaded', async function (this: CustomWorld) {
+  // Wait for the team data to load - look for the team matchup grid or calculate button
+  await this.page.waitForSelector('#calculate-button, .team-matchup-grid', { timeout: 10000 });
+  await this.page.waitForTimeout(1000); // Allow for data loading
+});
+
 // Given steps for setup
 Given('we have selected Pitcher Handedness: {string}', async function (this: CustomWorld, handedness: string) {
   await this.page.selectOption('#handedness', handedness);
@@ -14,6 +27,17 @@ Given('we have selected Pitcher Handedness: {string}', async function (this: Cus
 Given('we have selected League Type: {string}', async function (this: CustomWorld, leagueType: string) {
   await this.page.selectOption('#league-type', leagueType);
   await this.page.waitForTimeout(500); // Allow for state updates
+});
+
+// Additional Given steps for handedness and league type (without "we have")
+Given('Pitcher Handedness: {string}', async function (this: CustomWorld, handedness: string) {
+  await this.page.selectOption('#handedness', handedness);
+  await this.page.waitForTimeout(500);
+});
+
+Given('League Type: {string}', async function (this: CustomWorld, leagueType: string) {
+  await this.page.selectOption('#league-type', leagueType);
+  await this.page.waitForTimeout(500);
 });
 
 Given('we have selected Starter Expected Innings: {float}', async function (this: CustomWorld, innings: number) {
@@ -71,6 +95,17 @@ When('I select Pitcher Handedness: {string}', async function (this: CustomWorld,
 });
 
 When('I select League Type: {string}', async function (this: CustomWorld, leagueType: string) {
+  await this.page.selectOption('#league-type', leagueType);
+  await this.page.waitForTimeout(500);
+});
+
+// Additional When steps for handedness and league type (without "I select")
+When('Pitcher Handedness: {string}', async function (this: CustomWorld, handedness: string) {
+  await this.page.selectOption('#handedness', handedness);
+  await this.page.waitForTimeout(500);
+});
+
+When('League Type: {string}', async function (this: CustomWorld, leagueType: string) {
   await this.page.selectOption('#league-type', leagueType);
   await this.page.waitForTimeout(500);
 });
@@ -289,4 +324,23 @@ Then('the hits should be {float} times the {string} hits', async function (this:
   const expectedHits = storedData.hits * multiplier;
   
   expect(Math.abs(currentHits - expectedHits)).toBeLessThan(0.1);
+});
+
+Then('the results should not contain NaN', async function (this: CustomWorld) {
+  // Check that all displayed values are not NaN
+  const sfRow = await this.page.locator('.team-row').filter({ hasText: 'SF' }).first();
+  await expect(sfRow).toBeVisible();
+  
+  // Check fantasy points
+  const fantasyPointsText = await sfRow.locator('.fantasy-points').textContent();
+  const fantasyPoints = parseFloat(fantasyPointsText?.replace(' pts', '') || '0');
+  expect(fantasyPoints).not.toBeNaN();
+  
+  // Check individual stats
+  const statsElements = await sfRow.locator('.stat-value').all();
+  for (const statElement of statsElements) {
+    const statText = await statElement.textContent();
+    const statValue = parseFloat(statText || '0');
+    expect(statValue).not.toBeNaN();
+  }
 });
