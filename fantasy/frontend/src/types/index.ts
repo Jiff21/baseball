@@ -44,25 +44,38 @@ export interface Team {
   id: number;
   abbreviation: string;
   name: string;
+  // Optional plate appearances data for PA per inning calculation
+  total_plate_appearances?: number;
+  games_played?: number;
   vs_lefty: {
-    era: number;
-    whip: number;
-    k_per_9: number;
-    bb_per_9: number;
-    hr_per_9: number;
-    hits_per_9: number;
+    k_total: number;
+    bb_total: number;
+    hr_total: number;
+    hits_total: number;
     wins: number;
     losses: number;
+    game_player: number;
+    plate_appearances: number;
   };
   vs_righty: {
-    era: number;
-    whip: number;
-    k_per_9: number;
-    bb_per_9: number;
-    hr_per_9: number;
-    hits_per_9: number;
+    k_total: number;
+    bb_total: number;
+    hr_total: number;
+    hits_total: number;
     wins: number;
     losses: number;
+    game_player: number;
+    plate_appearances: number;
+  };
+  no_splits: {
+    k_total: number;
+    bb_total: number;
+    hr_total: number;
+    hits_total: number;
+    wins: number;
+    losses: number;
+    game_player: number;
+    plate_appearances: number;
   };
   created_at?: string;
   updated_at?: string;

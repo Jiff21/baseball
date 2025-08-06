@@ -10,24 +10,34 @@ export interface TeamStats {
   total_plate_appearances?: number;
   games_played?: number;
   vs_lefty: {
-    era: number;
-    whip: number;
-    k_per_9: number;
-    bb_per_9: number;
-    hr_per_9: number;
-    hits_per_9: number;
-    wins?: number;
-    losses?: number;
+    k_total: number;
+    bb_total: number;
+    hr_total: number;
+    hits_total: number;
+    wins: number;
+    losses: number;
+    game_player: number;
+    plate_appearances: number;
   };
   vs_righty: {
-    era: number;
-    whip: number;
-    k_per_9: number;
-    bb_per_9: number;
-    hr_per_9: number;
-    hits_per_9: number;
-    wins?: number;
-    losses?: number;
+    k_total: number;
+    bb_total: number;
+    hr_total: number;
+    hits_total: number;
+    wins: number;
+    losses: number;
+    game_player: number;
+    plate_appearances: number;
+  };
+  no_splits: {
+    k_total: number;
+    bb_total: number;
+    hr_total: number;
+    hits_total: number;
+    wins: number;
+    losses: number;
+    game_player: number;
+    plate_appearances: number;
   };
 }
 
@@ -44,41 +54,40 @@ export class FantasyCalculations {
     // Select appropriate stats based on handedness
     const stats = handedness.toLowerCase() === 'lefty' ? teamStats.vs_lefty : teamStats.vs_righty;
     
-    // Calculate PA per inning multiplier if data is available
+    // Calculate PA per inning from the actual data
     let paPerInning = 1.0; // Default multiplier
-    if (teamStats.total_plate_appearances && teamStats.games_played) {
+    if (stats.plate_appearances && stats.game_player) {
       // Formula: (Total plate appearances / games played) / 9
-      paPerInning = (teamStats.total_plate_appearances / teamStats.games_played) / 9;
+      paPerInning = (stats.plate_appearances / stats.game_player) / 9;
     }
     
     // Calculate expected plate appearances for the given innings
-    // Expected PA = (team total PA / games) / 9 * innings
+    // Expected PA = PA per inning * innings
     const expectedPlateAppearances = paPerInning * expectedInnings;
     
-    // Convert per-9 stats to per-PA rates, then calculate expected stats
-    // Per-PA rate = (per_9_stat / 9) / paPerInning
-    const walksPerPA = (stats.bb_per_9 / 9) / paPerInning;
-    const strikeoutsPerPA = (stats.k_per_9 / 9) / paPerInning;
-    const hitsPerPA = (stats.hits_per_9 / 9) / paPerInning;
-    const homeRunsPerPA = (stats.hr_per_9 / 9) / paPerInning;
-    const runsPerPA = (stats.era / 9) / paPerInning;
+    // Calculate per-PA rates from totals
+    const walksPerPA = stats.plate_appearances > 0 ? stats.bb_total / stats.plate_appearances : 0;
+    const strikeoutsPerPA = stats.plate_appearances > 0 ? stats.k_total / stats.plate_appearances : 0;
+    const hitsPerPA = stats.plate_appearances > 0 ? stats.hits_total / stats.plate_appearances : 0;
+    const homeRunsPerPA = stats.plate_appearances > 0 ? stats.hr_total / stats.plate_appearances : 0;
     
     // Calculate expected stats using per-PA rates and expected plate appearances
     const expectedWalks = walksPerPA * expectedPlateAppearances;
     const expectedStrikeouts = strikeoutsPerPA * expectedPlateAppearances;
     const expectedHits = hitsPerPA * expectedPlateAppearances;
     const expectedHomeRuns = homeRunsPerPA * expectedPlateAppearances;
-    const expectedRuns = runsPerPA * expectedPlateAppearances;
     
-    // Calculate wins and losses per game if data is available
+    // For runs, we need to estimate based on hits and other offensive stats
+    // Simple estimation: runs ≈ hits * 0.3 (rough approximation)
+    const expectedRuns = expectedHits * 0.3;
+    
+    // Calculate wins and losses per game
     let winsPerGame = 0;
     let lossesPerGame = 0;
-    if (stats.wins !== undefined && stats.losses !== undefined) {
-      const totalGames = stats.wins + stats.losses;
-      if (totalGames > 0) {
-        winsPerGame = stats.wins / totalGames;
-        lossesPerGame = stats.losses / totalGames;
-      }
+    const totalGames = stats.wins + stats.losses;
+    if (totalGames > 0) {
+      winsPerGame = stats.wins / totalGames;
+      lossesPerGame = stats.losses / totalGames;
     }
     
     // Break down hits into singles, doubles, triples for display purposes only
