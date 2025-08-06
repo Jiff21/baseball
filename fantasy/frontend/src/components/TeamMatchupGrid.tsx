@@ -122,10 +122,7 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
                   <span className="stat-label">Runs:</span>
                   <span className="stat-value">{result.expected_runs.toFixed(2)}</span>
                 </div>
-                <div className="stat-item">
-                  <span className="stat-label">RBI:</span>
-                  <span className="stat-value">{result.expected_rbi.toFixed(2)}</span>
-                </div>
+
                 <div className="stat-item">
                   <span className="stat-label">Walks:</span>
                   <span className="stat-value">{result.expected_walks.toFixed(2)}</span>
@@ -133,6 +130,14 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
                 <div className="stat-item">
                   <span className="stat-label">SO:</span>
                   <span className="stat-value">{result.expected_strikeouts.toFixed(2)}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Wins:</span>
+                  <span className="stat-value">{result.expected_wins.toFixed(3)}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Losses:</span>
+                  <span className="stat-value">{result.expected_losses.toFixed(3)}</span>
                 </div>
               </div>
             </div>

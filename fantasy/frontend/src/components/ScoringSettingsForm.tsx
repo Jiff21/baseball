@@ -87,25 +87,6 @@ const ScoringSettingsForm: React.FC<ScoringSettingsFormProps> = ({
       </div>
 
       <div className="settings-sections">
-        {/* Batting Settings */}
-        <div className="settings-section">
-          <h4 className="section-title">Batting</h4>
-          <div className="stats-inline-grid">
-            {renderStatInput('batting', 'S', 'Singles', scoringSettings.batting.S)}
-            {renderStatInput('batting', 'D', 'Doubles', scoringSettings.batting.D)}
-            {renderStatInput('batting', 'T', 'Triples', scoringSettings.batting.T)}
-            {renderStatInput('batting', 'HR', 'Home Runs', scoringSettings.batting.HR)}
-            {renderStatInput('batting', 'BB', 'Walks', scoringSettings.batting.BB)}
-            {renderStatInput('batting', 'IBB', 'Intentional Walks', scoringSettings.batting.IBB)}
-            {renderStatInput('batting', 'HBP', 'Hit By Pitch', scoringSettings.batting.HBP)}
-            {renderStatInput('batting', 'R', 'Runs', scoringSettings.batting.R)}
-            {renderStatInput('batting', 'RBI', 'Runs Batted In', scoringSettings.batting.RBI)}
-            {renderStatInput('batting', 'SB', 'Stolen Base', scoringSettings.batting.SB)}
-            {renderStatInput('batting', 'CS', 'Caught Stealing', scoringSettings.batting.CS)}
-            {renderStatInput('batting', 'SO', 'Strike Outs', scoringSettings.batting.SO)}
-          </div>
-        </div>
-
         {/* Pitching Settings */}
         <div className="settings-section">
           <h4 className="section-title">Pitching</h4>

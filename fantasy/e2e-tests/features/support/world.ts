@@ -12,6 +12,7 @@ export class CustomWorld extends World {
   public page!: Page;
   public baseUrl: string;
   public apiUrl: string;
+  public expectedData: { [key: string]: any } = {};
 
   constructor(options: CustomWorldOptions) {
     super(options);
@@ -51,4 +52,3 @@ export class CustomWorld extends World {
 }
 
 setWorldConstructor(CustomWorld);
-

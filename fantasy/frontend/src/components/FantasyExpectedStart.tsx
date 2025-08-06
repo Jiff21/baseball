@@ -586,7 +586,7 @@ const FantasyExpectedStart: React.FC = () => {
               <div className="form-grid">
                 {/* Handedness Dropdown */}
                 <div className="form-group">
-                  <label htmlFor="handedness">Batter Handedness:</label>
+                  <label htmlFor="handedness">Pitcher Handedness:</label>
                   <select
                     id="handedness"
                     value={handedness}
@@ -683,7 +683,7 @@ const FantasyExpectedStart: React.FC = () => {
               <h2>Team Matchup Analysis</h2>
               <div className="results-summary">
                 <p>
-                  <strong>Parameters:</strong> {results.parameters.handedness} batter, 
+                  <strong>Parameters:</strong> {results.parameters.handedness} pitcher, 
                   {results.parameters.inning} innings, {results.parameters.league_type} scoring
                 </p>
                 <p>

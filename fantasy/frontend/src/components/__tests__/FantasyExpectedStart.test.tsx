@@ -50,7 +50,7 @@ describe('FantasyExpectedStart', () => {
     render(<FantasyExpectedStart />);
     
     expect(screen.getByText('Fantasy Expected Start')).toBeInTheDocument();
-    expect(screen.getByLabelText(/Batter Handedness/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Pitcher Handedness/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/League Type/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Innings/i)).toBeInTheDocument();
     expect(screen.getByText('Calculate Expected Points')).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('FantasyExpectedStart', () => {
   test('has correct default values', () => {
     render(<FantasyExpectedStart />);
     
-    const handednessSelect = screen.getByLabelText(/Batter Handedness/i) as HTMLSelectElement;
+    const handednessSelect = screen.getByLabelText(/Pitcher Handedness/i) as HTMLSelectElement;
     const leagueSelect = screen.getByLabelText(/League Type/i) as HTMLSelectElement;
     const inningInput = screen.getByLabelText(/Innings/i) as HTMLInputElement;
     
@@ -71,7 +71,7 @@ describe('FantasyExpectedStart', () => {
   test('changes handedness selection', () => {
     render(<FantasyExpectedStart />);
     
-    const handednessSelect = screen.getByLabelText(/Batter Handedness/i) as HTMLSelectElement;
+    const handednessSelect = screen.getByLabelText(/Pitcher Handedness/i) as HTMLSelectElement;
     
     fireEvent.change(handednessSelect, { target: { value: 'Lefty' } });
     expect(handednessSelect.value).toBe('Lefty');
@@ -225,4 +225,3 @@ describe('FantasyExpectedStart', () => {
     expect(calculateButton).toBeDisabled();
   });
 });
-
