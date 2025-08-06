@@ -51,15 +51,24 @@ export class FantasyCalculations {
       paPerInning = (teamStats.total_plate_appearances / teamStats.games_played) / 9;
     }
     
-    // Calculate expected stats per inning using expectedInnings (from form)
-    const inningsFactor = expectedInnings / 9.0;
+    // Calculate expected plate appearances for the given innings
+    // Expected PA = (team total PA / games) / 9 * innings
+    const expectedPlateAppearances = paPerInning * expectedInnings;
     
-    // Basic expected stats (simplified calculation) - all multiplied by expectedInnings
-    const expectedHits = (stats.hits_per_9 * inningsFactor);
-    const expectedWalks = (stats.bb_per_9 * inningsFactor);
-    const expectedStrikeouts = (stats.k_per_9 * inningsFactor);
-    const expectedHomeRuns = (stats.hr_per_9 * inningsFactor);
-    const expectedRuns = (stats.era * inningsFactor);
+    // Convert per-9 stats to per-PA rates, then calculate expected stats
+    // Per-PA rate = (per_9_stat / 9) / paPerInning
+    const walksPerPA = (stats.bb_per_9 / 9) / paPerInning;
+    const strikeoutsPerPA = (stats.k_per_9 / 9) / paPerInning;
+    const hitsPerPA = (stats.hits_per_9 / 9) / paPerInning;
+    const homeRunsPerPA = (stats.hr_per_9 / 9) / paPerInning;
+    const runsPerPA = (stats.era / 9) / paPerInning;
+    
+    // Calculate expected stats using per-PA rates and expected plate appearances
+    const expectedWalks = walksPerPA * expectedPlateAppearances;
+    const expectedStrikeouts = strikeoutsPerPA * expectedPlateAppearances;
+    const expectedHits = hitsPerPA * expectedPlateAppearances;
+    const expectedHomeRuns = homeRunsPerPA * expectedPlateAppearances;
+    const expectedRuns = runsPerPA * expectedPlateAppearances;
     
     // Calculate wins and losses per game if data is available
     let winsPerGame = 0;
@@ -117,8 +126,8 @@ export class FantasyCalculations {
       expected_walks: Math.round(expectedWalks * 1000) / 1000,
       expected_strikeouts: Math.round(expectedStrikeouts * 1000) / 1000,
       expected_rbi: Math.round(expectedRbi * 1000) / 1000,
-      expected_wins: Math.round(winsPerGame * 1000) / 1000,
-      expected_losses: Math.round(lossesPerGame * 1000) / 1000,
+      expected_wins: Math.round((winsPerGame * expectedInnings / 9) * 1000) / 1000,
+      expected_losses: Math.round((lossesPerGame * expectedInnings / 9) * 1000) / 1000,
       team_stats: stats
     };
   }
