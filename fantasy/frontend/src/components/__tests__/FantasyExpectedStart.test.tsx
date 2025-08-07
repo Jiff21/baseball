@@ -133,6 +133,9 @@ describe('FantasyExpectedStart', () => {
             handedness: 'Righty',
             inning: 6,
             expected_fantasy_points: 5.5,
+            batting_points: 2.5,
+            pitching_points: 3.0,
+            pa_per_inning: 1.1,
             expected_runs: 1.2,
             expected_hits: 2.1,
             expected_singles: 1.5,
@@ -142,13 +145,17 @@ describe('FantasyExpectedStart', () => {
             expected_walks: 0.8,
             expected_strikeouts: 1.5,
             expected_rbi: 1.2,
+            expected_wins: 0.6,
+            expected_losses: 0.4,
             team_stats: {
-              era: 3.50,
-              whip: 1.20,
-              k_per_9: 9.0,
-              bb_per_9: 3.0,
-              hr_per_9: 1.0,
-              hits_per_9: 8.0
+              k_total: 180,
+              bb_total: 60,
+              hr_total: 20,
+              hits_total: 160,
+              wins: 15,
+              losses: 10,
+              game_player: 25,
+              plate_appearances: 1000
             },
             color_score: 0.7,
             color_category: 'good' as const

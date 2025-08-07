@@ -101,12 +101,14 @@ export interface FantasyExpectedStartScore {
   expected_wins: number;
   expected_losses: number;
   team_stats: {
-    era: number;
-    whip: number;
-    k_per_9: number;
-    bb_per_9: number;
-    hr_per_9: number;
-    hits_per_9: number;
+    k_total: number;
+    bb_total: number;
+    hr_total: number;
+    hits_total: number;
+    wins: number;
+    losses: number;
+    game_player: number;
+    plate_appearances: number;
   };
   color_score?: number;
   color_category?: 'good' | 'average' | 'bad';

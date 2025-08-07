@@ -225,28 +225,36 @@ const TeamMatchupGrid: React.FC<TeamMatchupGridProps> = ({ results }) => {
                     <h4>Team Pitching Stats (vs {details.handedness})</h4>
                     <div className="stats-grid-detailed">
                       <div className="stat-detailed">
-                        <span className="label">ERA:</span>
-                        <span className="value">{details.team_stats.era.toFixed(2)}</span>
+                        <span className="label">K Total:</span>
+                        <span className="value">{details.team_stats.k_total}</span>
                       </div>
                       <div className="stat-detailed">
-                        <span className="label">WHIP:</span>
-                        <span className="value">{details.team_stats.whip.toFixed(3)}</span>
+                        <span className="label">BB Total:</span>
+                        <span className="value">{details.team_stats.bb_total}</span>
                       </div>
                       <div className="stat-detailed">
-                        <span className="label">K/9:</span>
-                        <span className="value">{details.team_stats.k_per_9.toFixed(1)}</span>
+                        <span className="label">HR Total:</span>
+                        <span className="value">{details.team_stats.hr_total}</span>
                       </div>
                       <div className="stat-detailed">
-                        <span className="label">BB/9:</span>
-                        <span className="value">{details.team_stats.bb_per_9.toFixed(1)}</span>
+                        <span className="label">Hits Total:</span>
+                        <span className="value">{details.team_stats.hits_total}</span>
                       </div>
                       <div className="stat-detailed">
-                        <span className="label">HR/9:</span>
-                        <span className="value">{details.team_stats.hr_per_9.toFixed(2)}</span>
+                        <span className="label">Wins:</span>
+                        <span className="value">{details.team_stats.wins}</span>
                       </div>
                       <div className="stat-detailed">
-                        <span className="label">H/9:</span>
-                        <span className="value">{details.team_stats.hits_per_9.toFixed(1)}</span>
+                        <span className="label">Losses:</span>
+                        <span className="value">{details.team_stats.losses}</span>
+                      </div>
+                      <div className="stat-detailed">
+                        <span className="label">Games:</span>
+                        <span className="value">{details.team_stats.game_player}</span>
+                      </div>
+                      <div className="stat-detailed">
+                        <span className="label">PA:</span>
+                        <span className="value">{details.team_stats.plate_appearances}</span>
                       </div>
                     </div>
                   </div>
