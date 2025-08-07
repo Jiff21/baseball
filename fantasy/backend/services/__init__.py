@@ -5,6 +5,7 @@ Services module - provides both new and legacy service imports for compatibility
 # New services (refactored system)
 from .hitting_stats_service import HittingStatsService
 from .calculation_service import CalculationService
+from .mlb_stats_service import MLBStatsExtractor
 
 # Legacy services (imported directly to avoid circular imports)
 import logging
@@ -85,7 +86,8 @@ class TeamService:
 # Export all services
 __all__ = [
     'HittingStatsService',
-    'CalculationService', 
+    'CalculationService',
+    'MLBStatsExtractor',
     'FantasyCalculatorService',
     'TeamService'
 ]
