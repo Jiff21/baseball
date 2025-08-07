@@ -1,0 +1,133 @@
+<testsuite name="mlb_team_stats.MLB Team Statistics API" tests="12" errors="0" failures="0" skipped="0" time="0.016826" timestamp="2025-08-07T04:10:44.975763" hostname="modal"><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract wins against righties for teams -- @1.1 " status="passed" time="0.000967"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract wins against righties for teams -- @1.1 
+    Given I load the json from the mock api call ... passed in 0.001s
+    When I am getting expected wins against Righties for "SF" ... passed in 0.000s
+    Then the expected wins against Righties will be 61 for "SF" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract wins against righties for teams -- @1.2 " status="passed" time="0.000729"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract wins against righties for teams -- @1.2 
+    Given I load the json from the mock api call ... passed in 0.000s
+    When I am getting expected wins against Righties for "NYY" ... passed in 0.000s
+    Then the expected wins against Righties will be 73 for "NYY" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract losses against righties for teams -- @1.1 " status="passed" time="0.001696"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract losses against righties for teams -- @1.1 
+    Given I load the json from the mock api call ... passed in 0.001s
+    When I am getting expected losses against Righties for "SF" ... passed in 0.000s
+    Then the expected losses against Righties will be 57 for "SF" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract losses against righties for teams -- @1.2 " status="passed" time="0.000835"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract losses against righties for teams -- @1.2 
+    Given I load the json from the mock api call ... passed in 0.000s
+    When I am getting expected losses against Righties for "NYY" ... passed in 0.000s
+    Then the expected losses against Righties will be 45 for "NYY" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract wins against lefties for teams -- @1.1 " status="passed" time="0.002434"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract wins against lefties for teams -- @1.1 
+    Given I load the json from the mock api call ... passed in 0.002s
+    When I am getting expected wins against Lefties for "SF" ... passed in 0.001s
+    Then the expected wins against Lefties will be 19 for "SF" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract wins against lefties for teams -- @1.2 " status="passed" time="0.002925"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract wins against lefties for teams -- @1.2 
+    Given I load the json from the mock api call ... passed in 0.002s
+    When I am getting expected wins against Lefties for "NYY" ... passed in 0.001s
+    Then the expected wins against Lefties will be 21 for "NYY" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract losses against lefties for teams -- @1.1 " status="passed" time="0.001106"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract losses against lefties for teams -- @1.1 
+    Given I load the json from the mock api call ... passed in 0.001s
+    When I am getting expected losses against Lefties for "SF" ... passed in 0.000s
+    Then the expected losses against Lefties will be 25 for "SF" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract losses against lefties for teams -- @1.2 " status="passed" time="0.002561"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract losses against lefties for teams -- @1.2 
+    Given I load the json from the mock api call ... passed in 0.002s
+    When I am getting expected losses against Lefties for "NYY" ... passed in 0.001s
+    Then the expected losses against Lefties will be 23 for "NYY" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract total wins (no splits) for teams -- @1.1 " status="passed" time="0.001191"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract total wins (no splits) for teams -- @1.1 
+    Given I load the json from the mock api call ... passed in 0.001s
+    When I am getting expected wins with no splits for "SF" ... passed in 0.000s
+    Then the expected wins with no splits will be 80 for "SF" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract total wins (no splits) for teams -- @1.2 " status="passed" time="0.000795"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract total wins (no splits) for teams -- @1.2 
+    Given I load the json from the mock api call ... passed in 0.001s
+    When I am getting expected wins with no splits for "NYY" ... passed in 0.000s
+    Then the expected wins with no splits will be 94 for "NYY" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract total losses (no splits) for teams -- @1.1 " status="passed" time="0.000826"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract total losses (no splits) for teams -- @1.1 
+    Given I load the json from the mock api call ... passed in 0.001s
+    When I am getting expected losses with no splits for "SF" ... passed in 0.000s
+    Then the expected losses with no splits will be 82 for "SF" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="mlb_team_stats.MLB Team Statistics API" name="Extract total losses (no splits) for teams -- @1.2 " status="passed" time="0.000762"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Extract total losses (no splits) for teams -- @1.2 
+    Given I load the json from the mock api call ... passed in 0.001s
+    When I am getting expected losses with no splits for "NYY" ... passed in 0.000s
+    Then the expected losses with no splits will be 68 for "NYY" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>

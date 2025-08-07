@@ -1,0 +1,66 @@
+Feature: MLB Team Statistics API # features/mlb_team_stats.feature:1
+  As a fantasy baseball application
+  I want to extract team statistics from MLB standings data
+  So that I can calculate expected wins and losses for different scenarios
+  Background:   # features/mlb_team_stats.feature:6
+
+  Scenario Outline: Extract wins against righties for teams -- @1.1   # features/mlb_team_stats.feature:15
+    Given I load the json from the mock api call                      # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected wins against Righties for "SF"         # features/steps/mlb_team_stats_steps.py:94
+    Then the expected wins against Righties will be 61 for "SF"       # features/steps/mlb_team_stats_steps.py:100
+
+  Scenario Outline: Extract wins against righties for teams -- @1.2   # features/mlb_team_stats.feature:16
+    Given I load the json from the mock api call                      # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected wins against Righties for "NYY"        # features/steps/mlb_team_stats_steps.py:94
+    Then the expected wins against Righties will be 73 for "NYY"      # features/steps/mlb_team_stats_steps.py:100
+
+  Scenario Outline: Extract losses against righties for teams -- @1.1   # features/mlb_team_stats.feature:24
+    Given I load the json from the mock api call                        # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected losses against Righties for "SF"         # features/steps/mlb_team_stats_steps.py:107
+    Then the expected losses against Righties will be 57 for "SF"       # features/steps/mlb_team_stats_steps.py:113
+
+  Scenario Outline: Extract losses against righties for teams -- @1.2   # features/mlb_team_stats.feature:25
+    Given I load the json from the mock api call                        # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected losses against Righties for "NYY"        # features/steps/mlb_team_stats_steps.py:107
+    Then the expected losses against Righties will be 45 for "NYY"      # features/steps/mlb_team_stats_steps.py:113
+
+  Scenario Outline: Extract wins against lefties for teams -- @1.1   # features/mlb_team_stats.feature:33
+    Given I load the json from the mock api call                     # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected wins against Lefties for "SF"         # features/steps/mlb_team_stats_steps.py:120
+    Then the expected wins against Lefties will be 19 for "SF"       # features/steps/mlb_team_stats_steps.py:126
+
+  Scenario Outline: Extract wins against lefties for teams -- @1.2   # features/mlb_team_stats.feature:34
+    Given I load the json from the mock api call                     # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected wins against Lefties for "NYY"        # features/steps/mlb_team_stats_steps.py:120
+    Then the expected wins against Lefties will be 21 for "NYY"      # features/steps/mlb_team_stats_steps.py:126
+
+  Scenario Outline: Extract losses against lefties for teams -- @1.1   # features/mlb_team_stats.feature:42
+    Given I load the json from the mock api call                       # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected losses against Lefties for "SF"         # features/steps/mlb_team_stats_steps.py:133
+    Then the expected losses against Lefties will be 25 for "SF"       # features/steps/mlb_team_stats_steps.py:139
+
+  Scenario Outline: Extract losses against lefties for teams -- @1.2   # features/mlb_team_stats.feature:43
+    Given I load the json from the mock api call                       # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected losses against Lefties for "NYY"        # features/steps/mlb_team_stats_steps.py:133
+    Then the expected losses against Lefties will be 23 for "NYY"      # features/steps/mlb_team_stats_steps.py:139
+
+  Scenario Outline: Extract total wins (no splits) for teams -- @1.1   # features/mlb_team_stats.feature:51
+    Given I load the json from the mock api call                       # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected wins with no splits for "SF"            # features/steps/mlb_team_stats_steps.py:146
+    Then the expected wins with no splits will be 80 for "SF"          # features/steps/mlb_team_stats_steps.py:152
+
+  Scenario Outline: Extract total wins (no splits) for teams -- @1.2   # features/mlb_team_stats.feature:52
+    Given I load the json from the mock api call                       # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected wins with no splits for "NYY"           # features/steps/mlb_team_stats_steps.py:146
+    Then the expected wins with no splits will be 94 for "NYY"         # features/steps/mlb_team_stats_steps.py:152
+
+  Scenario Outline: Extract total losses (no splits) for teams -- @1.1   # features/mlb_team_stats.feature:60
+    Given I load the json from the mock api call                         # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected losses with no splits for "SF"            # features/steps/mlb_team_stats_steps.py:159
+    Then the expected losses with no splits will be 82 for "SF"          # features/steps/mlb_team_stats_steps.py:165
+
+  Scenario Outline: Extract total losses (no splits) for teams -- @1.2   # features/mlb_team_stats.feature:61
+    Given I load the json from the mock api call                         # features/steps/mlb_team_stats_steps.py:79
+    When I am getting expected losses with no splits for "NYY"           # features/steps/mlb_team_stats_steps.py:159
+    Then the expected losses with no splits will be 68 for "NYY"         # features/steps/mlb_team_stats_steps.py:165
+
